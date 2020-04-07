@@ -91,11 +91,11 @@ int ft_command(shell *st)
 //	else if (!ft_strncmp(&st->line[i], "ls", 2))
 //		ft_ls(st);
 	else if (!ft_strncmp(&st->line[i], "export", 6))
-		write(1, "loading", 7);
+		write(1, "loading . . .", 13);
 	else if (!ft_strncmp(&st->line[i], "unset", 5))
-		write(1, "loading", 7);
+		write(1, "loading . . .", 13);
 	else if (!ft_strncmp(&st->line[i], "env", 3))
-		write(1, "loading", 7);
+		write(1, "loading . . .", 13);
 	else if (!(ft_strncmp(&st->line[i], "exit", 4)))
 		return (1);
 	else
