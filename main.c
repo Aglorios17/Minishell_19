@@ -8,7 +8,16 @@ char *ft_pwd(shell *st)
 	st->pwd = getcwd(buf, 65535);
 	return (st->pwd);
 }
+/*
+int ft_ls(shell *st)
+{
+	struct stat buffer;
+	int status;
 
+	status = lstat(ft_pwd(st), &buffer);
+	return (0);
+}
+*/
 int ft_cd(shell *st)
 {
 	int i;
@@ -79,6 +88,8 @@ int ft_command(shell *st)
 			return (1);
 		}
 	}
+//	else if (!ft_strncmp(&st->line[i], "ls", 2))
+//		ft_ls(st);
 	else if (!ft_strncmp(&st->line[i], "export", 6))
 		write(1, "loading", 7);
 	else if (!ft_strncmp(&st->line[i], "unset", 5))
