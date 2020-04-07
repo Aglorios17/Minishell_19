@@ -6,4 +6,11 @@
 # include <string.h>
 # include "libft/libft.h"
 
+typedef struct	mini
+{
+	char *line;
+	char *pwd;
+	int ret;
+}		shell;
+
 #endif
