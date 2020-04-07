@@ -1,30 +1,4 @@
 #include "minishell.h"
-/*
-int check(char *s1, char *s2)
-{
-	int i;
-	int a;
-
-	i = 0;
-	a = ft_strlen(s2);
-	while (s1[i] && s2[i])
-	{
-		if (s1[i] == ' ')
-		{
-			if (s1[i] == s2[i])
-			{
-				if (!ft_strncmp(s1[i], s2[i], a))
-					return (i);
-				i++;
-			}
-			i++;
-		}
-		else
-			return (-1);
-	}
-	return (-1);
-}
-*/
 
 char *ft_pwd(shell *st)
 {
@@ -33,6 +7,36 @@ char *ft_pwd(shell *st)
 	buf = NULL;
 	st->pwd = getcwd(buf, 65535);
 	return (st->pwd);
+}
+
+int ft_cd(shell *st)
+{
+	int i;
+	char *tmp;
+
+	i = 0;
+	while (st->line[i] == ' ')
+		i++;
+	i += 2;
+	while (st->line[i] == ' ')
+		i++;
+	if (!(ft_strncmp(&st->line[i], "..", 2)))
+	{
+		tmp = ft_strjoin(st->pwd, "/");
+		st->pwd = ft_strjoin(tmp, &st->line[i]);
+		free(tmp);
+	}
+	else if (!st->line[i])
+		st->pwd = st->home;
+	else
+	{
+		tmp = ft_strjoin(st->pwd, "/");
+		st->pwd = ft_strjoin(tmp, &st->line[i]);
+		free(tmp);	
+	}
+	if (chdir(st->pwd) < 0)
+		return (0);
+	return (1);
 }
 
 int ft_command(shell *st)
@@ -67,7 +71,14 @@ int ft_command(shell *st)
 	else if (!ft_strncmp(&st->line[i], "pwd", 3))
 		write(1, ft_pwd(st), ft_strlen(ft_pwd(st)));
 	else if (!ft_strncmp(&st->line[i], "cd", 2))
-		write(1, "loading", 7);
+	{
+		st->ret = 1;
+		if (!ft_cd(st))
+		{
+			write(1, "NOP", 3);
+			return (1);
+		}
+	}
 	else if (!ft_strncmp(&st->line[i], "export", 6))
 		write(1, "loading", 7);
 	else if (!ft_strncmp(&st->line[i], "unset", 5))
@@ -94,9 +105,11 @@ int main()
 	st.line = NULL;
 	echo = NULL;
 	st.pwd = NULL;
+	st.home = NULL;
 	write(1,"\n",1);
 	write(1,"by Aglorios and Gverhelp\n",25);
 	write(1,"\n",1);
+	st.home = ft_pwd(&st);
 	while(bcl == 1)
 	{
 		write(1,"#",1);
