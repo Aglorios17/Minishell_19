@@ -10,10 +10,10 @@
 
 typedef struct	mini
 {
-	char *line;
-	char *pwd;
-	char *home;
-	int ret;
+	char	*line;
+	char	*pwd;
+	char	*home;
+	int		ret;
 }		shell;
 
 #endif

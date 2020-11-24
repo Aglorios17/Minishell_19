@@ -8,16 +8,7 @@ char *ft_pwd(shell *st)
 	st->pwd = getcwd(buf, 65535);
 	return (st->pwd);
 }
-/*
-int ft_ls(shell *st)
-{
-	struct stat buffer;
-	int status;
 
-	status = lstat(ft_pwd(st), &buffer);
-	return (0);
-}
-*/
 int ft_cd(shell *st)
 {
 	int i;
@@ -35,6 +26,8 @@ int ft_cd(shell *st)
 		st->pwd = ft_strjoin(tmp, &st->line[i]);
 		free(tmp);
 	}
+	else if (!(ft_strncmp(&st->line[i], "/", 1)))
+		st->pwd = "/";
 	else if (!st->line[i])
 		st->pwd = st->home;
 	else
@@ -45,6 +38,26 @@ int ft_cd(shell *st)
 	}
 	if (chdir(st->pwd) < 0)
 		return (0);
+	return (1);
+}
+
+int ft_echo(shell *st, int a, int i)
+{
+	a = i + 4;
+	while (st->line[a] == ' ')
+		a++;
+	if (!(ft_strncmp(&st->line[a], "-n", 2)))
+	{
+		st->ret = 1;
+		a += 2;
+	}
+	while (st->line[a] == ' ')
+		a++;
+	while (st->line[a])
+	{
+		write(1, &st->line[a], 1);
+		a++;
+	}
 	return (1);
 }
 
@@ -60,23 +73,7 @@ int ft_command(shell *st)
 	while (st->line[i] == ' ')
 		i++;
 	if (!(ft_strncmp(&st->line[i], "echo", 4)))
-	{
-		a = i + 4;
-		while (st->line[a] == ' ')
-			a++;
-		if (!(ft_strncmp(&st->line[a], "-n", 2)))
-		{
-			st->ret = 1;
-			a += 2;
-		}
-		while (st->line[a] == ' ')
-			a++;
-		while (st->line[a])
-		{
-			write(1, &st->line[a], 1);
-			a++;
-		}
-	}
+		ft_echo(st, a, i);
 	else if (!ft_strncmp(&st->line[i], "pwd", 3))
 		write(1, ft_pwd(st), ft_strlen(ft_pwd(st)));
 	else if (!ft_strncmp(&st->line[i], "cd", 2))
@@ -84,12 +81,10 @@ int ft_command(shell *st)
 		st->ret = 1;
 		if (!ft_cd(st))
 		{
-			write(1, "NOP", 3);
-			return (1);
+		//	write(1, "", 3);
+			return (0);
 		}
 	}
-//	else if (!ft_strncmp(&st->line[i], "ls", 2))
-//		ft_ls(st);
 	else if (!ft_strncmp(&st->line[i], "export", 6))
 		write(1, "loading . . .", 13);
 	else if (!ft_strncmp(&st->line[i], "unset", 5))
@@ -99,18 +94,17 @@ int ft_command(shell *st)
 	else if (!(ft_strncmp(&st->line[i], "exit", 4)))
 		return (1);
 	else
-		write(1, "NOP", 3);
+		st->ret = 1;	
+//		write(1, "NOP", 3);
 	return (0);
 }
 
 int main()
 {
-	int bcl;
 	int y;
 	char *echo;
 	shell st;
 
-	bcl = 1;
 	y = 0;
 	st.ret = 0;
 	st.line = NULL;
@@ -121,16 +115,21 @@ int main()
 	write(1,"by Aglorios and Gverhelp\n",25);
 	write(1,"\n",1);
 	st.home = ft_pwd(&st);
-	while(bcl == 1)
-	{
-		write(1,"#",1);
-		while (get_next_line3d(0, &st.line) != 1)
+//	if (argc == 3 && ft_strncmp(argv[1],"-c", 3))
+//	{
+		while(1)
 		{
+			write(1,">>",2);
+			if (get_next_line3d(0, &st.line) != 1)
+			{
+				write(1, "exit\n", 5);
+				return(0);
+			}
+			if (ft_command(&st))
+				return (0);
+			if (!st.ret && st.line[0] != 0)
+				write(1,"\n",1);
 		}
-		if (ft_command(&st))
-			return (0);
-		if (!st.ret)
-			write(1,"\n",1);
-	}
+//	}
 	return (0);
 }
