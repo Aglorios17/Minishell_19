@@ -15,6 +15,7 @@ typedef struct	mini
 	char		*home;
 	int			ret;
 	t_list		*tokens;
+	t_list		*firsttok;
 }				shell;
 
 #endif

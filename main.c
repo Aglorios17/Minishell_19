@@ -50,6 +50,8 @@ int ft_echo(shell *st)
 	i = 0;
 	tmp = 0;
 	tm = 0;
+//	printf("||%s||\n", st->tokens->content);
+//	write(1,"1\n",2);
 	while (st->tokens->next != NULL)
 	{
 		tmp = st->tokens->next;
@@ -69,11 +71,11 @@ int ft_echo(shell *st)
 			}
 			else
 				i = 0;
-			free(tm);
+//			free(tm);
 		}
 		else
 			break;
-		free(tmp);
+//		free(tmp);
 	}
 //	printf("%s\n", (char *)st->tokens->content);
 	st->tokens = st->tokens->next;
@@ -142,32 +144,72 @@ int ft_tokens(shell *st)
 	int i;
 
 	i = 0;
+	if (st->line[0] == '\0')
+		return (1);
 	while (st->line[i])
 	{
-		if (st->line[i] == ' ' && st->line[i + 1] == '\0')
-			return (0);
 		while (st->line[i] == ' ')
+		{
+			if (st->line[i + 1] == '\0')
+				return (0);
 			i++;
+		}
 		ft_lstadd_back(&st->tokens, ft_lstnew(ft_substr(st->line, i, ft_checkspace(&st->line[i]))));
 		i += ft_checkspace(&st->line[i]);
 //		i++;
 	}
-//	while (st->tokens != NULL)
-//	{
-//		printf("%s\n", (char *)st->tokens->content);
-//		st->tokens = st->tokens->next;
-//	}
+	st->firsttok = st->tokens;
+/*	while (st->tokens != NULL)
+	{
+		printf("%s\n", (char *)st->tokens->content);
+		st->tokens = st->tokens->next;
+	}*/
+	return (0);
+}
+
+int	ft_cleartokens(shell *st)
+{
+	char *tmp;
+	char *new;
+	int i;
+	int a;
+
+//	write(1,"1\n",2);
+	new = 0;
+	i = 0;
+	a = 0;
+	st->tokens = st->tokens->next;
+	while (st->tokens)
+	{
+		tmp = (char *)st->tokens->content;
+//		printf("%s\n", tmp);
+		new = 0;
+		i = 0;
+		a = 0;
+		if (tmp[i] == '\'')
+		{
+			new = ft_substr(tmp, 1, ft_strlen(tmp) - 2);
+//			printf("||%s||\n", new);
+			st->tokens->content = new;
+//			printf("||%s||\n", (char *)st->tokens->content);
+		}
+		st->tokens = st->tokens->next;
+	}
+	st->tokens = st->firsttok;
 	return (0);
 }
 
 int main(int argc, char **argv, char **envp)
 {
-	shell st;
+	shell	st;
+	t_list	*tmp;
 
 	st.ret = 0;
 	st.line = NULL;
 	st.pwd = NULL;
 	st.home = NULL;
+	st.firsttok = NULL;
+	tmp = NULL;
 //	write(1,"\n",1);
 //	write(1,"by Aglorios and Gverhelp\n",25);
 //	write(1,"\n",1);
@@ -179,8 +221,10 @@ int main(int argc, char **argv, char **envp)
 	if  (argc > 1 && !ft_strncmp(argv[1], "-c", 2))
 	{
 		st.line = ft_strdup(argv[2]);
-//		write(1,"1\n",2);
-		ft_tokens(&st);
+	//	write(1,"1\n",2);
+		if (ft_tokens(&st))
+			return (0);
+		ft_cleartokens(&st);
 //		write(1,"2\n",2);
 //		printf("%s", st.line);
 		if (ft_command(&st, envp))
@@ -197,8 +241,20 @@ int main(int argc, char **argv, char **envp)
 				return(0);
 			}
 			ft_tokens(&st);
+			ft_cleartokens(&st);
 			if (ft_command(&st, envp))
 				return (0);
+			free(st.line);
+			st.tokens = st.firsttok;
+			while (st.tokens != NULL)
+			{
+				free(st.tokens->content);
+				st.tokens->content = NULL;
+				tmp = st.tokens;
+				st.tokens = st.tokens->next;
+				free(tmp);
+				tmp = NULL;
+			}
 		}
 	}
 	return (0);
