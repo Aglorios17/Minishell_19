@@ -41,24 +41,52 @@ int ft_cd(shell *st)
 	return (1);
 }
 
-int ft_echo(shell *st, int a, int i)
+int ft_echo(shell *st)
 {
-	a = i + 4;
-	while (st->line[a] == ' ')
-		a++;
-	if (!(ft_strncmp(&st->line[a], "-n", 2)))
+	t_list	*tmp;
+	char 	*tm;
+	int		i;
+
+	i = 0;
+	tmp = 0;
+	tm = 0;
+	while (st->tokens->next != NULL)
 	{
-		st->ret = 1;
-		a += 2;
+		tmp = st->tokens->next;
+		if (!(ft_strncmp((char *)tmp->content, "-n", 2)))
+		{
+			i = 1;
+			tm = (char *)tmp->content;
+			while (tm[i] == 'n')
+			{
+				i++;
+			}
+			if (i == (int)ft_strlen((char *)tmp->content))
+			{
+			//	write(1, "1\n", 1);
+				st->tokens = tmp;
+				i = 1;
+			}
+			else
+				i = 0;
+			free(tm);
+		}
+		else
+			break;
+		free(tmp);
 	}
-	while (st->line[a] == ' ')
-		a++;
-	while (st->line[a])
+//	printf("%s\n", (char *)st->tokens->content);
+	st->tokens = st->tokens->next;
+	while (st->tokens != NULL)
 	{
-		write(1, &st->line[a], 1);
-		a++;
+		ft_putstr((char *)st->tokens->content);
+		st->tokens = st->tokens->next;
+		if (st->tokens != NULL)
+			write(1, " ", 1);
 	}
-	return (1);
+	if (i == 0)
+		write(1, "\n", 1);
+	return (0);
 }
 
 int ft_command(shell *st, char **envp)
@@ -68,17 +96,13 @@ int ft_command(shell *st, char **envp)
 
 	a = 0;
 	i = 0;
-	if (st->ret)
-		st->ret = 0;
-	while (st->line[i] == ' ')
-		i++;
-	if (!(ft_strncmp(&st->line[i], "echo ", 5)))
-		ft_echo(st, a, i);
+//	printf("%s\n", (char *)st->tokens->content);
+	if (!(ft_strncmp((char *)st->tokens->content, "echo", 4)))
+		ft_echo(st);
 	else if (!ft_strncmp(&st->line[i], "pwd", 4))
 		write(1, ft_pwd(st), ft_strlen(ft_pwd(st)));
 	else if (!ft_strncmp(&st->line[i], "cd", 2))
 	{
-		st->ret = 1;
 		if (!ft_cd(st))
 			return (0);
 	}
@@ -120,17 +144,19 @@ int ft_tokens(shell *st)
 	i = 0;
 	while (st->line[i])
 	{
+		if (st->line[i] == ' ' && st->line[i + 1] == '\0')
+			return (0);
 		while (st->line[i] == ' ')
 			i++;
 		ft_lstadd_back(&st->tokens, ft_lstnew(ft_substr(st->line, i, ft_checkspace(&st->line[i]))));
 		i += ft_checkspace(&st->line[i]);
-		i++;
+//		i++;
 	}
-	while (st->tokens != NULL)
-	{
-		printf("%s\n", (char *)st->tokens->content);
-		st->tokens = st->tokens->next;
-	}
+//	while (st->tokens != NULL)
+//	{
+//		printf("%s\n", (char *)st->tokens->content);
+//		st->tokens = st->tokens->next;
+//	}
 	return (0);
 }
 
@@ -157,10 +183,8 @@ int main(int argc, char **argv, char **envp)
 		ft_tokens(&st);
 //		write(1,"2\n",2);
 //		printf("%s", st.line);
-//		if (ft_command(&st, envp))
-//			return (0);
-//		if (!st.ret && st.line[0] != 0)
-//			write(1,"\n",1);
+		if (ft_command(&st, envp))
+			return (0);
 	}
 	else
 	{
@@ -175,8 +199,6 @@ int main(int argc, char **argv, char **envp)
 			ft_tokens(&st);
 			if (ft_command(&st, envp))
 				return (0);
-			if (!st.ret && st.line[0] != 0)
-				write(1,"\n",1);
 		}
 	}
 	return (0);
