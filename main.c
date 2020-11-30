@@ -132,10 +132,31 @@ int ft_command(shell *st, char **envp)
 int	ft_checkspace(char *line)
 {
 	int i;
-
 	i = 0;
-	while (line[i] && line[i] != ' ')
-		i++;
+	//printf("|%c|", line[i]);
+	while (line[i])
+	{
+		if (line[i] != ' ' && line[i] != '\'' && line[i] != '"')
+			i++;
+		else if (line[i] == '\'')
+		{
+			i++;
+			while (line[i] && line[i] != '\'')
+				i++;
+			if (line[i + 1] == ' ' || line[i + 1] == '\0')
+				return i + 1;
+		}
+		else if (line[i] == '"')
+		{
+			i++;
+			while (line[i] && line[i] != '"')
+				i++;
+			if (line[i + 1] == ' ' || line[i + 1] == '\0')
+				return i + 1;
+		}
+		else if (line[i] == ' ')
+			return i;
+	}
 	return i;
 }
 
@@ -156,10 +177,9 @@ int ft_tokens(shell *st)
 		}
 		ft_lstadd_back(&st->tokens, ft_lstnew(ft_substr(st->line, i, ft_checkspace(&st->line[i]))));
 		i += ft_checkspace(&st->line[i]);
-//		i++;
 	}
-	st->firsttok = st->tokens;
-/*	while (st->tokens != NULL)
+/*	st->firsttok = st->tokens;
+	while (st->tokens != NULL)
 	{
 		printf("%s\n", (char *)st->tokens->content);
 		st->tokens = st->tokens->next;
@@ -174,11 +194,11 @@ int	ft_cleartokens(shell *st)
 	int i;
 	int a;
 
-//	write(1,"1\n",2);
 	new = 0;
 	i = 0;
 	a = 0;
-	st->tokens = st->tokens->next;
+	if (st->tokens->next)
+		st->tokens = st->tokens->next;
 	while (st->tokens)
 	{
 		tmp = (char *)st->tokens->content;
@@ -221,10 +241,11 @@ int main(int argc, char **argv, char **envp)
 	if  (argc > 1 && !ft_strncmp(argv[1], "-c", 2))
 	{
 		st.line = ft_strdup(argv[2]);
-	//	write(1,"1\n",2);
+//		write(1,"1\n",2);
 		if (ft_tokens(&st))
 			return (0);
-		ft_cleartokens(&st);
+//		write(1,"1\n",2);
+//		ft_cleartokens(&st);
 //		write(1,"2\n",2);
 //		printf("%s", st.line);
 		if (ft_command(&st, envp))
@@ -241,7 +262,7 @@ int main(int argc, char **argv, char **envp)
 				return(0);
 			}
 			ft_tokens(&st);
-			ft_cleartokens(&st);
+	//		ft_cleartokens(&st);
 			if (ft_command(&st, envp))
 				return (0);
 			free(st.line);
