@@ -187,32 +187,50 @@ int ft_tokens(shell *st)
 	return (0);
 }
 
-int	ft_cleartokens(shell *st)
+int	ft_checkcommand(shell *st)
+{
+	char *tmp;
+
+	tmp = (char *)st->tokens->content;
+	if (!ft_strcmp(tmp, "echo") || !ft_strcmp(tmp, "cd") || !ft_strcmp(tmp, "pwd") ||
+		!ft_strcmp(tmp, "env") || !ft_strcmp(tmp, "export") ||
+		!ft_strcmp(tmp, "unset") || !ft_strcmp(tmp, "exit") || !ft_strcmp(tmp, "exec"))
+		return (1);
+	else
+		return (0);
+}
+
+int	ft_cleantokens(shell *st)
 {
 	char *tmp;
 	char *new;
-	int i;
-	int a;
+	int	i;
 
-	new = 0;
+	tmp = 0;
+	new = ft_strdup(""); ////////////////////////////////// gros leaks de ouf
 	i = 0;
-	a = 0;
-	if (st->tokens->next)
-		st->tokens = st->tokens->next;
+	st->firsttok = st->tokens;
+	if (!ft_checkcommand(st))
+	{
+		write(1, "minishell: ", 12);
+		write(1, (char *)st->tokens->content, ft_strlen((char *)st->tokens->content));
+		write(1, ": command not found\n", 21);
+	}
+	if (!st->tokens->next)
+		return (0);
+	st->tokens = st->tokens->next;
 	while (st->tokens)
 	{
 		tmp = (char *)st->tokens->content;
-//		printf("%s\n", tmp);
-		new = 0;
 		i = 0;
-		a = 0;
-		if (tmp[i] == '\'')
+		while (tmp[i])
 		{
-			new = ft_substr(tmp, 1, ft_strlen(tmp) - 2);
-//			printf("||%s||\n", new);
-			st->tokens->content = new;
-//			printf("||%s||\n", (char *)st->tokens->content);
+			new = ft_strjoin(new, &tmp[i]);
+			i++;
 		}
+		new[i] = '\0';
+//		printf("|%s|", new);
+		st->tokens->content = new;
 		st->tokens = st->tokens->next;
 	}
 	st->tokens = st->firsttok;
@@ -245,7 +263,7 @@ int main(int argc, char **argv, char **envp)
 		if (ft_tokens(&st))
 			return (0);
 //		write(1,"1\n",2);
-//		ft_cleartokens(&st);
+//		ft_cleantokens(&st);
 //		write(1,"2\n",2);
 //		printf("%s", st.line);
 		if (ft_command(&st, envp))
@@ -262,7 +280,8 @@ int main(int argc, char **argv, char **envp)
 				return(0);
 			}
 			ft_tokens(&st);
-	//		ft_cleartokens(&st);
+			if (st.tokens)
+				ft_cleantokens(&st);
 			if (ft_command(&st, envp))
 				return (0);
 			free(st.line);
