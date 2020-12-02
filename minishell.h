@@ -14,6 +14,7 @@ typedef struct	mini
 	char		*pwd;
 	char		*home;
 	int			ret;
+	int			quotes;
 	t_list		*tokens;
 	t_list		*firsttok;
 }				shell;

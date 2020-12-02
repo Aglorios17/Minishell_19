@@ -136,7 +136,7 @@ int	ft_checkspace(char *line)
 	//printf("|%c|", line[i]);
 	while (line[i])
 	{
-		if (line[i] != ' ' && line[i] != '\'' && line[i] != '"')
+		if (line[i] != ' ' && line[i] != '\t' && line[i] != '\'' && line[i] != '"')
 			i++;
 		else if (line[i] == '\'')
 		{
@@ -154,7 +154,7 @@ int	ft_checkspace(char *line)
 			if (line[i + 1] == ' ' || line[i + 1] == '\0')
 				return i + 1;
 		}
-		else if (line[i] == ' ')
+		else if (line[i] == ' ' || line[i] == '\t')
 			return i;
 	}
 	return i;
@@ -169,7 +169,7 @@ int ft_tokens(shell *st)
 		return (1);
 	while (st->line[i])
 	{
-		while (st->line[i] == ' ')
+		while (st->line[i] == ' ' || st->line[i] == '\t')
 		{
 			if (st->line[i + 1] == '\0')
 				return (0);
@@ -178,12 +178,14 @@ int ft_tokens(shell *st)
 		ft_lstadd_back(&st->tokens, ft_lstnew(ft_substr(st->line, i, ft_checkspace(&st->line[i]))));
 		i += ft_checkspace(&st->line[i]);
 	}
-/*	st->firsttok = st->tokens;
-	while (st->tokens != NULL)
+	st->firsttok = st->tokens;
+/*	while (st->tokens != NULL)
 	{
-		printf("%s\n", (char *)st->tokens->content);
+		printf("tokens|%s|\n", (char *)st->tokens->content);
 		st->tokens = st->tokens->next;
-	}*/
+	}
+	st->tokens = st->firsttok;
+*/
 	return (0);
 }
 
@@ -200,36 +202,115 @@ int	ft_checkcommand(shell *st)
 		return (0);
 }
 
+int	ft_countquote(shell *st, char *new)
+{
+	int	i;
+	int	countq;
+	int a;
+
+	i = 0;
+	countq = 0;
+	a = 0;
+	while (new[i])
+	{
+		if (new[i] == '\'' || new[i] == '"')
+		{
+			if (new[i - 1] == '\\' && new[i] == '"')
+				(void)a;
+			else
+			{
+				countq++;
+				a = 1;
+			}
+		}
+		i++;
+	}
+	if (a == 0)
+		return (0);
+	if (countq % 2 == 0)
+	{
+		st->quotes = 1;
+		return (0);
+	}
+	return (1);
+}
+
+int	ft_doublequote(shell *st, char *tmp, int i)
+{
+//	printf("2|%c|\n", tmp[i]);
+//	write(1,"1\n",2);
+	if (tmp[i - 1] != '\\' && tmp[i] == '"' && tmp[i + 1] == '"')
+	{
+//		write(1,"2\n",2);
+		i += 2;
+	}
+	else if (tmp[i] == '\\')
+	{
+//		write(1,"3\n",2);
+		if (tmp[i + 1] == '"' || st->quotes == 0)
+			i++;
+	}
+	else if (tmp[i] == '"')
+	{
+//		write(1,"4\n",2);
+		if (tmp[i - 1] != '\\')
+			i++;
+	}
+	return (i);
+}
+
 int	ft_cleantokens(shell *st)
 {
 	char *tmp;
 	char *new;
+	char *join;
 	int	i;
 
 	tmp = 0;
 	new = ft_strdup(""); ////////////////////////////////// gros leaks de ouf
 	i = 0;
+	join = ft_strdup(""); ////////////////////////////////// gros leaks de ouf
+	join[0] = 0;
+	join[1] = '\0';
 	st->firsttok = st->tokens;
 	if (!ft_checkcommand(st))
 	{
-		write(1, "minishell: ", 12);
+		write(1, "minishell: ", 11);
 		write(1, (char *)st->tokens->content, ft_strlen((char *)st->tokens->content));
-		write(1, ": command not found\n", 21);
+		write(1, ": command not found\n", 20);
+		st->ret = 1;
+		return (0);
 	}
 	if (!st->tokens->next)
 		return (0);
 	st->tokens = st->tokens->next;
+//	write(1,"1\n",2);
 	while (st->tokens)
 	{
+//	write(1,"2\n",2);
 		tmp = (char *)st->tokens->content;
 		i = 0;
+		new = ft_strdup(""); ////////////////////////////////// gros leaks de ouf
+		join[0] = 0;
+		st->quotes = 0;
+		if (ft_countquote(st, tmp))
+		{
+//	write(1,"3\n",2);
+			return (0);
+		}
 		while (tmp[i])
 		{
-			new = ft_strjoin(new, &tmp[i]);
+//			printf("1|%c|\n", tmp[i]);
+			while (tmp[i] == '\'')
+				i++;
+			i = ft_doublequote(st, tmp, i);
+			join[0] = tmp[i];
+			new = ft_strjoin(new, join);
 			i++;
 		}
+//	write(1,"4\n",2);
 		new[i] = '\0';
-//		printf("|%s|", new);
+	//	printf("|%s|\n", new);
 		st->tokens->content = new;
 		st->tokens = st->tokens->next;
 	}
@@ -243,6 +324,7 @@ int main(int argc, char **argv, char **envp)
 	t_list	*tmp;
 
 	st.ret = 0;
+	st.quotes = 0;
 	st.line = NULL;
 	st.pwd = NULL;
 	st.home = NULL;
@@ -263,11 +345,18 @@ int main(int argc, char **argv, char **envp)
 		if (ft_tokens(&st))
 			return (0);
 //		write(1,"1\n",2);
-//		ft_cleantokens(&st);
+		if (st.tokens)
+			ft_cleantokens(&st);
 //		write(1,"2\n",2);
 //		printf("%s", st.line);
 		if (ft_command(&st, envp))
 			return (0);
+//		write(1,"3\n",2);
+		if (st.ret == 1)
+		{
+//			write(1,"4\n",2);
+			return (127);
+		}
 	}
 	else
 	{
@@ -295,6 +384,8 @@ int main(int argc, char **argv, char **envp)
 				free(tmp);
 				tmp = NULL;
 			}
+	//		if (st.ret == 1)
+	//			return (127);
 		}
 	}
 	return (0);
