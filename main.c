@@ -210,7 +210,6 @@ int ft_double_quote(shell *st, char *tmp, int a)
 
 	tmp2 = NULL;
 	st->tmpq = ft_strdup("");
-//	if (tmp[a - 1] != '\\')
 	b = a;
 	c = 0;
 	a++;
@@ -233,7 +232,7 @@ int ft_double_quote(shell *st, char *tmp, int a)
 //	printf("tmp2 : %s\n", tmp2);
 	while (tmp2[b])
 	{
-		if (tmp2[b] == '\\')
+		if (tmp2[b] == '\\' && tmp2[b + 1] == '"')
 			b++;
 		st->tmpq = ft_charjoin(st->tmpq, tmp2[b]);
 		b++;
@@ -276,6 +275,9 @@ int    ft_cleantokens(shell *st)
     tmp = 0;
     i = 0;
     st->firsttok = st->tokens;
+	tmp = (char*)st->tokens->content;
+	if ((tmp[0] == '"' && tmp[ft_strlen(tmp) - 1] == '"') || (tmp[0] == '\'' && tmp[ft_strlen(tmp) - 1] == '\''))
+		st->tokens->content = ft_substr(tmp, 1, ft_strlen(tmp) - 2);
     if (!ft_checkcommand(st))
     {
         write(1, "minishell: ", 11);
@@ -284,6 +286,7 @@ int    ft_cleantokens(shell *st)
         st->ret = 1;
         return (0);
     }
+	tmp = 0;
     if (!st->tokens->next)
         return (0);
     st->tokens = st->tokens->next;
