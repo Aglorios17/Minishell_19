@@ -90,5 +90,6 @@ char				*ft_strdup_gnl(char *s1);
 char				*ft_substr_gnl(char const *s, int start, int len);
 int					ft_strlen_gnl(const char *str);
 int					get_next_line3d(const int fd, char **line);
+char				*ft_charjoin(char const *s1, char c);
 
 #endif

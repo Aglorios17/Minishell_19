@@ -15,6 +15,11 @@ typedef struct	mini
 	char		*home;
 	int			ret;
 	int			quotes;
+	int			flagsq;
+	int			flagdq;
+	int			flagq;
+	char		*new;
+	char		*tmpq;
 	t_list		*tokens;
 	t_list		*firsttok;
 }				shell;

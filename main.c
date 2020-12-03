@@ -202,120 +202,125 @@ int	ft_checkcommand(shell *st)
 		return (0);
 }
 
-int	ft_countquote(shell *st, char *new)
+int ft_double_quote(shell *st, char *tmp, int a)
 {
-	int	i;
-	int	countq;
-	int a;
+	char	*tmp2;
+	int 	b;
+	int		c;
 
-	i = 0;
-	countq = 0;
-	a = 0;
-	while (new[i])
+	tmp2 = NULL;
+	st->tmpq = ft_strdup("");
+//	if (tmp[a - 1] != '\\')
+	b = a;
+	c = 0;
+	a++;
+//	printf("ok\n");
+	while (tmp[a])
 	{
-		if (new[i] == '\'' || new[i] == '"')
+//		printf("tmp[a] : %c\n", tmp[a]);
+		if (tmp[a] == '"' && tmp[a - 1] != '\\')
 		{
-			if (new[i - 1] == '\\' && new[i] == '"')
-				(void)a;
+//			printf("ok2\n");
+			tmp2 = ft_substr(tmp, b + 1, c);
+//			printf("tmp2 : %s\n", tmp2);
+			break;
+		}
+		c++;
+		a++;
+	}
+	b = 0;
+//	printf("ok3\n");
+//	printf("tmp2 : %s\n", tmp2);
+	while (tmp2[b])
+	{
+		if (tmp2[b] == '\\')
+			b++;
+		st->tmpq = ft_charjoin(st->tmpq, tmp2[b]);
+		b++;
+	}
+	return (a);
+}
+
+int ft_simple_quote(shell *st, char *tmp, int a)
+{
+	int b;
+	int c;
+
+	b = a;
+	c = 0;
+	st->tmpq = NULL;
+//	printf("ok\n");
+	a++;
+	while (tmp[a])
+	{
+//		printf("ok2\n");
+		if (tmp[a] == '\'')
+		{
+//			printf("ok3\n");
+			st->tmpq = ft_substr(tmp, b + 1, c);
+//			printf("tmp[i] 2 : %c\n", tmp[a + 1]);
+			return (a);
+//			printf("ok4\n");
+		}
+		c++;
+		a++;
+	}
+	return (a);
+}
+
+int    ft_cleantokens(shell *st)
+{
+    char *tmp;
+    int    i;
+
+    tmp = 0;
+    i = 0;
+    st->firsttok = st->tokens;
+    if (!ft_checkcommand(st))
+    {
+        write(1, "minishell: ", 11);
+        write(1, (char *)st->tokens->content, ft_strlen((char *)st->tokens->content));
+        write(1, ": command not found\n", 20);
+        st->ret = 1;
+        return (0);
+    }
+    if (!st->tokens->next)
+        return (0);
+    st->tokens = st->tokens->next;
+    while (st->tokens)
+    {
+        tmp = (char *)st->tokens->content;
+        st->new = ft_strdup("");
+        i = 0;
+ //      if (ft_ifquote(st, tmp) == 1)
+ //           return (0);
+        while (tmp[i])
+        {
+//			printf("tmp[i] : %c\n", tmp[i]);
+			if (tmp[i] == '"')
+			{
+				i = ft_double_quote(st, tmp, i);
+				st->new = ft_strjoin(st->new, st->tmpq);
+			}
+			else if (tmp[i] == '\'')
+			{
+                i = ft_simple_quote(st, tmp, i);
+				st->new = ft_strjoin(st->new, st->tmpq);
+			}
 			else
 			{
-				countq++;
-				a = 1;
+				if (tmp[i] == '\\')
+					i++;
+				st->new = ft_charjoin(st->new, tmp[i]);
 			}
-		}
-		i++;
-	}
-	if (a == 0)
-		return (0);
-	if (countq % 2 == 0)
-	{
-		st->quotes = 1;
-		return (0);
-	}
-	return (1);
-}
-
-int	ft_doublequote(shell *st, char *tmp, int i)
-{
-//	printf("2|%c|\n", tmp[i]);
-//	write(1,"1\n",2);
-	if (tmp[i - 1] != '\\' && tmp[i] == '"' && tmp[i + 1] == '"')
-	{
-//		write(1,"2\n",2);
-		i += 2;
-	}
-	else if (tmp[i] == '\\')
-	{
-//		write(1,"3\n",2);
-		if (tmp[i + 1] == '"' || st->quotes == 0)
-			i++;
-	}
-	else if (tmp[i] == '"')
-	{
-//		write(1,"4\n",2);
-		if (tmp[i - 1] != '\\')
-			i++;
-	}
-	return (i);
-}
-
-int	ft_cleantokens(shell *st)
-{
-	char *tmp;
-	char *new;
-	char *join;
-	int	i;
-
-	tmp = 0;
-	new = ft_strdup(""); ////////////////////////////////// gros leaks de ouf
-	i = 0;
-	join = ft_strdup(""); ////////////////////////////////// gros leaks de ouf
-	join[0] = 0;
-	join[1] = '\0';
-	st->firsttok = st->tokens;
-	if (!ft_checkcommand(st))
-	{
-		write(1, "minishell: ", 11);
-		write(1, (char *)st->tokens->content, ft_strlen((char *)st->tokens->content));
-		write(1, ": command not found\n", 20);
-		st->ret = 1;
-		return (0);
-	}
-	if (!st->tokens->next)
-		return (0);
-	st->tokens = st->tokens->next;
-//	write(1,"1\n",2);
-	while (st->tokens)
-	{
-//	write(1,"2\n",2);
-		tmp = (char *)st->tokens->content;
-		i = 0;
-		new = ft_strdup(""); ////////////////////////////////// gros leaks de ouf
-		join[0] = 0;
-		st->quotes = 0;
-		if (ft_countquote(st, tmp))
-		{
-//	write(1,"3\n",2);
-			return (0);
-		}
-		while (tmp[i])
-		{
-//			printf("1|%c|\n", tmp[i]);
-			while (tmp[i] == '\'')
-				i++;
-			i = ft_doublequote(st, tmp, i);
-			join[0] = tmp[i];
-			new = ft_strjoin(new, join);
-			i++;
-		}
-//	write(1,"4\n",2);
-		new[i] = '\0';
-	//	printf("|%s|\n", new);
-		st->tokens->content = new;
-		st->tokens = st->tokens->next;
-	}
-	st->tokens = st->firsttok;
-	return (0);
+            i++;
+        }
+        st->new[i] = '\0';
+        st->tokens->content = st->new;
+        st->tokens = st->tokens->next;
+    }
+    st->tokens = st->firsttok;
+    return (0);
 }
 
 int main(int argc, char **argv, char **envp)
@@ -329,6 +334,7 @@ int main(int argc, char **argv, char **envp)
 	st.pwd = NULL;
 	st.home = NULL;
 	st.firsttok = NULL;
+	st.tmpq = NULL;
 	tmp = NULL;
 //	write(1,"\n",1);
 //	write(1,"by Aglorios and Gverhelp\n",25);
