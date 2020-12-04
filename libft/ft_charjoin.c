@@ -16,11 +16,9 @@ char	*ft_charjoin(char const *s1, char c)
 {
 	int		size;
 	int		a;
-	int		b;
 	char	*str;
 
 	a = 0;
-	b = 0;
 	if (s1 == NULL)
 		return (NULL);
 	size = ft_strlen((char*)s1);

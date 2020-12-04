@@ -93,13 +93,11 @@ int ft_echo(shell *st)
 
 int ft_command(shell *st, char **envp)
 {
-	int a;
 	int i;
 
-	a = 0;
 	i = 0;
 //	printf("%s\n", (char *)st->tokens->content);
-	if (!(ft_strncmp((char *)st->tokens->content, "echo", 4)))
+	if ((st->ret == 0) && !(ft_strncmp((char *)st->tokens->content, "echo", 4)))
 		ft_echo(st);
 	else if (!ft_strncmp(&st->line[i], "pwd", 4))
 		write(1, ft_pwd(st), ft_strlen(ft_pwd(st)));
@@ -141,6 +139,17 @@ int	ft_checkspace(char *line)
 		else if (line[i] == '\'')
 		{
 			i++;
+			while (line[i] == '\'')
+			{
+				i++;
+				while (line[i] && line[i] != '\'')
+				{
+					if (line[i] == ' ')
+						return (i);
+					i++;
+				}
+				i++;
+			}
 			while (line[i] && line[i] != '\'')
 				i++;
 			if (line[i + 1] == ' ' || line[i + 1] == '\0')
@@ -149,6 +158,17 @@ int	ft_checkspace(char *line)
 		else if (line[i] == '"')
 		{
 			i++;
+			while (line[i] == '"')
+			{
+				i++;
+				while (line[i] && line[i] != '"')
+				{
+					if (line[i] == ' ')
+						return (i);
+					i++;
+				}
+				i++;
+			}
 			while (line[i] && line[i] != '"')
 				i++;
 			if (line[i + 1] == ' ' || line[i + 1] == '\0')
@@ -267,6 +287,52 @@ int ft_simple_quote(shell *st, char *tmp, int a)
 	return (a);
 }
 
+char *ft_clean_firsttoken(shell *st, char *tmp)
+{
+	int a;
+	char *new;
+
+	a = 0;
+	new = ft_strdup("");
+	st->tmpq = NULL;
+	while(tmp[a])
+	{
+//		printf("ok\n");
+		if (tmp[a] == '\'')
+		{
+			a = ft_simple_quote(st, tmp, a);
+			new = ft_strjoin(new, st->tmpq);
+		}
+		else if (tmp[a] == '"')
+		{
+			a = ft_double_quote(st, tmp, a);
+			new = ft_strjoin(new, st->tmpq);
+		}
+		else
+		{
+			if (tmp[a] == '\\')
+				a++;
+			new = ft_charjoin(new, tmp[a]);
+		}	
+		a++;
+	}
+	new[a] = '\0';
+/*	
+	a = 0;
+	tmp = ft_strdup("");
+	while (new[a])
+	{
+		while (new[a] == ' ')
+			a++;
+		tmp = ft_charjoin(tmp, new[a]);
+//		printf("tmp : %s\n", tmp);
+		a++;
+	}
+//	printf("new : %s\n", new);
+*/
+	return (new);
+}
+
 int    ft_cleantokens(shell *st)
 {
     char *tmp;
@@ -276,8 +342,7 @@ int    ft_cleantokens(shell *st)
     i = 0;
     st->firsttok = st->tokens;
 	tmp = (char*)st->tokens->content;
-	if ((tmp[0] == '"' && tmp[ft_strlen(tmp) - 1] == '"') || (tmp[0] == '\'' && tmp[ft_strlen(tmp) - 1] == '\''))
-		st->tokens->content = ft_substr(tmp, 1, ft_strlen(tmp) - 2);
+	st->tokens->content = ft_clean_firsttoken(st, tmp);
     if (!ft_checkcommand(st))
     {
         write(1, "minishell: ", 11);
@@ -287,6 +352,7 @@ int    ft_cleantokens(shell *st)
         return (0);
     }
 	tmp = 0;
+	st->tmpq = NULL;
     if (!st->tokens->next)
         return (0);
     st->tokens = st->tokens->next;
@@ -295,8 +361,6 @@ int    ft_cleantokens(shell *st)
         tmp = (char *)st->tokens->content;
         st->new = ft_strdup("");
         i = 0;
- //      if (ft_ifquote(st, tmp) == 1)
- //           return (0);
         while (tmp[i])
         {
 //			printf("tmp[i] : %c\n", tmp[i]);
@@ -339,6 +403,7 @@ int main(int argc, char **argv, char **envp)
 	st.firsttok = NULL;
 	st.tmpq = NULL;
 	tmp = NULL;
+	st.tokens = NULL;
 //	write(1,"\n",1);
 //	write(1,"by Aglorios and Gverhelp\n",25);
 //	write(1,"\n",1);
