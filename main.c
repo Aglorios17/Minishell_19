@@ -97,6 +97,8 @@ int ft_command(shell *st, char **envp)
 
 	i = 0;
 //	printf("%s\n", (char *)st->tokens->content);
+	if (!st->tokens)
+		return (0);
 	if ((st->ret == 0) && !(ft_strncmp((char *)st->tokens->content, "echo", 4)))
 		ft_echo(st);
 	else if (!ft_strncmp(&st->line[i], "pwd", 4))
@@ -442,11 +444,15 @@ int main(int argc, char **argv, char **envp)
 				write(1, "exit\n", 5);
 				return(0);
 			}
+//			write(1,"1\n",2);
 			ft_tokens(&st);
+//			write(1,"2\n",2);
 			if (st.tokens)
 				ft_cleantokens(&st);
+//			write(1,"3\n",2);
 			if (ft_command(&st, envp))
 				return (0);
+//			write(1,"4\n",2);
 			free(st.line);
 			st.tokens = st.firsttok;
 			while (st.tokens != NULL)
