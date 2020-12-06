@@ -12,13 +12,16 @@
 
 NAME 			= minishell
 LIBFT_PATH 		= ./libft
-SRCS 			= main.c
+SRCS 			= main.c \
+					tokens.c \
+					quotes.c \
+					command.c \
 
 OBJS			= ${SRCS:.c=.o}
 INCLUDE 		= minishell.h
 #FOLDER			= srcs
 LIBFT 			= libft
-CC				= gcc -Wall -Wextra -Werror # -fsanitize=address
+CC				= gcc -Wall -Wextra -Werror -g # -fsanitize=address
 RM				= rm -f
 LIBFLAGS 		= -I ./libft -L ./libft -L . ./libft/*.c 
 # -I Add the directory dir to the list of directories to be searched for header files
