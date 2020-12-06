@@ -3,10 +3,12 @@
 int ft_double_quote(shell *st, char *tmp, int a)
 {
 	char	*tmp2;
+	char	*fri;
 	int 	b;
 	int		c;
 
 	tmp2 = NULL;
+	fri = NULL;
 	st->tmpq = ft_strdup("");
 	b = a;
 	c = 0;
@@ -32,7 +34,9 @@ int ft_double_quote(shell *st, char *tmp, int a)
 	{
 		if (tmp2[b] == '\\' && tmp2[b + 1] == '"')
 			b++;
-		st->tmpq = ft_charjoin(st->tmpq, tmp2[b]);
+		fri = st->tmpq;
+		st->tmpq = ft_charjoin(fri, tmp2[b]);
+		free(fri);
 		b++;
 	}
 	return (a);
@@ -69,8 +73,10 @@ char *ft_clean_firsttoken(shell *st, char *tmp)
 {
 	int a;
 	char *new;
+	char *fri;
 
 	a = 0;
+	fri = NULL;
 	new = ft_strdup("");
 	st->tmpq = NULL;
 	while(tmp[a])
@@ -79,18 +85,24 @@ char *ft_clean_firsttoken(shell *st, char *tmp)
 		if (tmp[a] == '\'')
 		{
 			a = ft_simple_quote(st, tmp, a);
+			fri = new;
 			new = ft_strjoin(new, st->tmpq);
+			free(fri);
 		}
 		else if (tmp[a] == '"')
 		{
 			a = ft_double_quote(st, tmp, a);
+			fri = new;
 			new = ft_strjoin(new, st->tmpq);
+			free(fri);
 		}
 		else
 		{
 			if (tmp[a] == '\\')
 				a++;
-			new = ft_charjoin(new, tmp[a]);
+			fri = new;
+			new = ft_charjoin(fri, tmp[a]);
+			free(fri);
 		}	
 		a++;
 	}
@@ -114,9 +126,11 @@ char *ft_clean_firsttoken(shell *st, char *tmp)
 int    ft_cleantokens(shell *st)
 {
     char *tmp;
+	char *fri;
     int    i;
 
     tmp = 0;
+	fri = NULL;
     i = 0;
     st->firsttok = st->tokens;
 	tmp = (char*)st->tokens->content;
@@ -137,10 +151,11 @@ int    ft_cleantokens(shell *st)
     while (st->tokens)
     {
         tmp = (char *)st->tokens->content;
-        st->new = "";
+        st->new = ft_strdup("");
         i = 0;
         while (tmp[i])
         {
+			fri = st->new;
 //			printf("tmp[i] : %c\n", tmp[i]);
 			if (tmp[i] == '"')
 			{
@@ -156,8 +171,9 @@ int    ft_cleantokens(shell *st)
 			{
 				if (tmp[i] == '\\')
 					i++;
-				st->new = ft_charjoin(st->new, tmp[i]);
+				st->new = ft_charjoin(fri, tmp[i]);
 			}
+			free(fri);
             i++;
         }
 //        st->new[i] = '\0';

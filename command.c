@@ -122,7 +122,7 @@ int ft_command(shell *st, char **envp)
 			i++;
 		}
 	}
-	else if (!(ft_strncmp(&st->line[i], "exit", 4)))
+	else if (!(ft_strncmp((char *)st->tokens->content, "exit", 5)))
 		return (1);
 	else
 		st->ret = 1;	
