@@ -57,11 +57,9 @@ int ft_tokens(shell *st)
 {
 	int i;
 	char *fri;
-//	char *tmp;
 
 	i = 0;
 	fri = NULL;
-//	tmp = NULL;
 	if (st->line[0] == '\0')
 		return (1);
 	while (st->line[i])
@@ -73,9 +71,9 @@ int ft_tokens(shell *st)
 			i++;
 		}
 		fri = ft_substr(st->line, i, ft_checkspace(&st->line[i]));
-		ft_lstadd_back(&st->tokens, ft_lstnew(ft_strdup(fri)));
-		free(fri);
-		fri = NULL;
+		ft_lstadd_back(&st->tokens, ft_lstnew(fri));
+//		free(fri);
+//		fri = NULL;
 		i += ft_checkspace(&st->line[i]);
 	}
 	st->firsttok = st->tokens;

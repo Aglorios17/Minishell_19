@@ -35,10 +35,11 @@ int ft_double_quote(shell *st, char *tmp, int a)
 		if (tmp2[b] == '\\' && tmp2[b + 1] == '"')
 			b++;
 		fri = st->tmpq;
-		st->tmpq = ft_charjoin(fri, tmp2[b]);
+		st->tmpq = ft_charjoin(st->tmpq, tmp2[b]);
 		free(fri);
 		b++;
 	}
+	free(tmp2);
 	return (a);
 }
 
@@ -82,31 +83,26 @@ char *ft_clean_firsttoken(shell *st, char *tmp)
 	while(tmp[a])
 	{
 //		printf("ok\n");
+		fri = new;
 		if (tmp[a] == '\'')
 		{
 			a = ft_simple_quote(st, tmp, a);
-			fri = new;
 			new = ft_strjoin(new, st->tmpq);
-			free(fri);
 		}
 		else if (tmp[a] == '"')
 		{
 			a = ft_double_quote(st, tmp, a);
-			fri = new;
 			new = ft_strjoin(new, st->tmpq);
-			free(fri);
 		}
 		else
 		{
 			if (tmp[a] == '\\')
 				a++;
-			fri = new;
 			new = ft_charjoin(fri, tmp[a]);
-			free(fri);
-		}	
+		}
+		free(fri);
 		a++;
 	}
-//	new[a] = '\0';
 /*	
 	a = 0;
 	tmp = ft_strdup("");
@@ -176,7 +172,6 @@ int    ft_cleantokens(shell *st)
 			free(fri);
             i++;
         }
-//        st->new[i] = '\0';
         st->tokens->content = st->new;
         st->tokens = st->tokens->next;
     }

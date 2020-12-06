@@ -15,9 +15,17 @@ void ft_init_struct(shell *st)
 
 int	ft_exfree(shell *st, t_list *tmp)
 {
-	free(st->line);
+	if (st->tmpq)
+	{
+		free(st->tmpq);
+		st->tmpq = NULL;
+	}
+	if (st->line)
+	{
+		free(st->line);
+		st->line = NULL;
+	}
 //	free(st->pwd);
-	st->line = NULL;
 	st->tokens = st->firsttok;
 	st->firsttok = NULL;
 	while (st->tokens != NULL)
@@ -60,8 +68,9 @@ int main(int argc, char **argv, char **envp)
 //		write(1,"2\n",2);
 //		printf("%s", st.line);
 		if (ft_command(&st, envp))
-			return (0);
+			return (ft_exfree(&st, tmp));
 //		write(1,"3\n",2);
+		ft_exfree(&st, tmp);
 		if (st.ret == 1)
 		{
 //			write(1,"4\n",2);
