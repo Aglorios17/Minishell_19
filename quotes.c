@@ -1,28 +1,56 @@
 #include "minishell.h"
 
+int	ft_back(char *tmp, int a)
+{
+	int i;
+
+	i = 0;
+	while (tmp && tmp[a])
+	{
+		while (tmp[a] == '\\')
+		{
+			i++;
+			a++;
+		}
+		if (tmp[a] == '"')
+			return (i);
+		a++;
+	}
+	return (i);
+}
+
 int ft_double_quote(shell *st, char *tmp, int a)
 {
 	char	*tmp2;
 	char	*fri;
 	int 	b;
 	int		c;
+	int		bol;
+	int		back;
 
 	tmp2 = NULL;
 	fri = NULL;
 	st->tmpq = ft_strdup("");
 	b = a;
 	c = 0;
+	back = 0;
+	bol = a;
 	a++;
-//	printf("ok\n");
+	st->quotes++;
 	while (tmp[a])
 	{
 //		printf("tmp[a] : %c\n", tmp[a]);
-		if (tmp[a] == '"' && tmp[a - 1] != '\\')
+		if (tmp[a] == '"' /*&& tmp[a - 1] != '\\'*/)
 		{
-//			printf("ok2\n");
-			tmp2 = ft_substr(tmp, b + 1, c);
-//			printf("tmp2 : %s\n", tmp2);
-			break;
+			back = ft_back(tmp, bol + 1);
+//			printf("back : %i\n", back);
+			if (back%2 == 0 || tmp[a - 1] != '\\')
+			{
+				tmp2 = ft_substr(tmp, b + 1, c);
+				st->quotes++;
+//				printf("quotes : %i\n", st->quotes);
+				break;
+			}
 		}
 		c++;
 		a++;
@@ -30,9 +58,10 @@ int ft_double_quote(shell *st, char *tmp, int a)
 	b = 0;
 //	printf("ok3\n");
 //	printf("tmp2 : %s\n", tmp2);
-	while (tmp2[b])
+//	printf("a : %i\n", a);
+	while (tmp2 && tmp2[b])
 	{
-		if (tmp2[b] == '\\' && tmp2[b + 1] == '"')
+		if (tmp2[b] == '\\' && ft_strchr("\\$\"", tmp2[b + 1]))
 			b++;
 		fri = st->tmpq;
 		st->tmpq = ft_charjoin(st->tmpq, tmp2[b]);
@@ -53,6 +82,7 @@ int ft_simple_quote(shell *st, char *tmp, int a)
 	st->tmpq = NULL;
 //	printf("ok\n");
 	a++;
+	st->quotes2++;
 	while (tmp[a])
 	{
 //		printf("ok2\n");
@@ -60,6 +90,7 @@ int ft_simple_quote(shell *st, char *tmp, int a)
 		{
 //			printf("ok3\n");
 			st->tmpq = ft_substr(tmp, b + 1, c);
+			st->quotes2++;
 //			printf("tmp[i] 2 : %c\n", tmp[a + 1]);
 			return (a);
 //			printf("ok4\n");
@@ -80,6 +111,7 @@ char *ft_clean_firsttoken(shell *st, char *tmp)
 	fri = NULL;
 	new = ft_strdup("");
 	st->tmpq = NULL;
+//	printf("tmp : %s\n", tmp);
 	while(tmp[a])
 	{
 //		printf("ok\n");
@@ -96,26 +128,13 @@ char *ft_clean_firsttoken(shell *st, char *tmp)
 		}
 		else
 		{
-			if (tmp[a] == '\\')
+			if (tmp[a] == '\\' && tmp[a + 1] != '\0')
 				a++;
 			new = ft_charjoin(fri, tmp[a]);
 		}
 		free(fri);
 		a++;
 	}
-/*	
-	a = 0;
-	tmp = ft_strdup("");
-	while (new[a])
-	{
-		while (new[a] == ' ')
-			a++;
-		tmp = ft_charjoin(tmp, new[a]);
-//		printf("tmp : %s\n", tmp);
-		a++;
-	}
-//	printf("new : %s\n", new);
-*/
 	return (new);
 }
 
@@ -125,6 +144,7 @@ int    ft_cleantokens(shell *st)
 	char *fri;
     int    i;
 
+	st->quotes = 0;
     tmp = 0;
 	fri = NULL;
     i = 0;
@@ -155,8 +175,11 @@ int    ft_cleantokens(shell *st)
 //			printf("tmp[i] : %c\n", tmp[i]);
 			if (tmp[i] == '"')
 			{
+			//	printf("1\n");
 				i = ft_double_quote(st, tmp, i);
+			//	printf("2\n");
 				st->new = ft_strjoin(st->new, st->tmpq);
+			//	printf("3\n");
 			}
 			else if (tmp[i] == '\'')
 			{
@@ -175,6 +198,20 @@ int    ft_cleantokens(shell *st)
         st->tokens->content = st->new;
         st->tokens = st->tokens->next;
     }
+	if (st->quotes%2 == 1)
+	{
+		fri = ft_strdup("minishell: unexpected EOF while looking for matching `\"\'\n");
+       	write(1, fri, ft_strlen(fri));
+		free(fri);
+		return (-1);
+	}
+	if (st->quotes2%2 == 1)
+	{
+		fri = ft_strdup("minishell: unexpected EOF while looking for matching `\'\'\n");
+       	write(1, fri, ft_strlen(fri));
+		free(fri);
+		return (-1);
+	}
     st->tokens = st->firsttok;
     return (0);
 }

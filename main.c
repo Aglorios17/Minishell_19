@@ -4,6 +4,7 @@ void ft_init_struct(shell *st)
 {
 	st->ret = 0;
 	st->quotes = 0;
+	st->quotes2 = 0;
 	st->line = NULL;
 	st->pwd = NULL;
 	st->home = NULL;
@@ -64,7 +65,13 @@ int main(int argc, char **argv, char **envp)
 			return (0);
 //		write(1,"1\n",2);
 		if (st.tokens)
-			ft_cleantokens(&st);
+		{
+			if (ft_cleantokens(&st) != 0)
+			{
+				ft_exfree(&st, tmp);
+				return (2);
+			}
+		}
 //		write(1,"2\n",2);
 //		printf("%s", st.line);
 		if (ft_command(&st, envp))

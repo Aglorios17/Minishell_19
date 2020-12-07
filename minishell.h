@@ -15,6 +15,7 @@ typedef struct	mini
 	char		*home;
 	int			ret;
 	int			quotes;
+	int			quotes2;
 	int			flagsq;
 	int			flagdq;
 	int			flagq;

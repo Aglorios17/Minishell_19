@@ -14,7 +14,8 @@ int	ft_checkspace(char *line)
 			i++;
 			while (line[i] == '\'')
 			{
-				i++;
+				if (line[i + 1] != '\'')
+					i++;
 				while (line[i] && line[i] != '\'')
 				{
 					if (line[i] == ' ')
@@ -33,7 +34,8 @@ int	ft_checkspace(char *line)
 			i++;
 			while (line[i] == '"')
 			{
-				i++;
+				if (line[i + 1] != '"')
+					i++;
 				while (line[i] && line[i] != '"')
 				{
 					if (line[i] == ' ')
@@ -48,7 +50,12 @@ int	ft_checkspace(char *line)
 				return i + 1;
 		}
 		else if (line[i] == ' ' || line[i] == '\t')
-			return i;
+		{
+			if (line[i - 1] == '\\')
+				i++;
+			else
+				return i;
+		}
 	}
 	return i;
 }
@@ -77,7 +84,8 @@ int ft_tokens(shell *st)
 		i += ft_checkspace(&st->line[i]);
 	}
 	st->firsttok = st->tokens;
-/*	while (st->tokens != NULL)
+/*	
+	while (st->tokens != NULL)
 	{
 		printf("tokens|%s|\n", (char *)st->tokens->content);
 		st->tokens = st->tokens->next;
