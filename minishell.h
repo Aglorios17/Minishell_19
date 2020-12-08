@@ -42,5 +42,6 @@ char *ft_pwd(shell *st);
 ////////// export //////////////
 
 int ft_export(shell *st, char **envp);
+int ft_dollars(shell *st);
 
 #endif

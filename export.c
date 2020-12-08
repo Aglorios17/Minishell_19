@@ -1,5 +1,11 @@
 #include "minishell.h"
 
+int ft_dollars(shell *st)
+{
+    (void)st;
+    return (0);
+}
+
 int ft_export(shell *st, char **envp)
 {
     char **tmp;
@@ -11,9 +17,11 @@ int ft_export(shell *st, char **envp)
         return (-1);
     st->tokens = st->tokens->next;
     tmp = envp;
-    a = ft_strlen(tmp[a]);
+    while (tmp[a])
+        a++;
     tmp[a] = ft_strdup(st->tokens->content);
     tmp[a + 1] = '\0';
+    envp = tmp;
     st->tokens = st->firsttok;
     return (0);
 }
