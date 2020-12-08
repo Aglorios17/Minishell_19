@@ -16,9 +16,6 @@ typedef struct	mini
 	int			ret;
 	int			quotes;
 	int			quotes2;
-	int			flagsq;
-	int			flagdq;
-	int			flagq;
 	char		*new;
 	char		*tmpq;
 	t_list		*tokens;
@@ -41,5 +38,9 @@ int	ft_checkcommand(shell *st);
 int ft_echo(shell *st);
 int ft_cd(shell *st);
 char *ft_pwd(shell *st);
+
+////////// export //////////////
+
+int ft_export(shell *st, char **envp);
 
 #endif

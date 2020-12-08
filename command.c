@@ -108,11 +108,11 @@ int ft_command(shell *st, char **envp)
 		if (!ft_cd(st))
 			return (0);
 	}
-	else if (!ft_strncmp(&st->line[i], "export", 7))
-		write(1, "loading . . .", 13);
+	else if (!ft_strncmp((char *)st->tokens->content, "export", 7))
+		ft_export(st, envp);
 	else if (!ft_strncmp(&st->line[i], "unset", 6))
 		write(1, "loading . . .", 13);
-	else if (!ft_strncmp(&st->line[i], "env", 4))
+	else if (!ft_strncmp((char *)st->tokens->content, "env", 4))
 	{
 		i = 0;
 		while (envp[i])
