@@ -19,7 +19,9 @@ typedef struct	mini
 	char		*new;
 	char		*tmpq;
 	t_list		*tokens;
+	t_list		*envv;
 	t_list		*firsttok;
+	t_list		*firstenv;
 }				shell;
 
 //////////// tokens /////////////
@@ -42,6 +44,7 @@ char *ft_pwd(shell *st);
 ////////// export //////////////
 
 int ft_export(shell *st, char **envp);
-int ft_dollars(shell *st);
+int ft_envv(shell *st, char **envp);
+char *ft_dollars(shell *st, char *tmp, int i);
 
 #endif

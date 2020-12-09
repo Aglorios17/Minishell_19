@@ -114,13 +114,13 @@ int ft_command(shell *st, char **envp)
 		write(1, "loading . . .", 13);
 	else if (!ft_strncmp((char *)st->tokens->content, "env", 4))
 	{
-		i = 0;
-		while (envp[i])
+		while (st->envv)
 		{
-			write(1, envp[i], ft_strlen(envp[i]));
+			write(1, (char *)st->envv->content, ft_strlen((char *)st->envv->content));
 			write(1, "\n", 1);
-			i++;
+			st->envv = st->envv->next;
 		}
+		st->envv = st->firstenv;
 	}
 	else if (!(ft_strncmp((char *)st->tokens->content, "exit", 5)))
 		return (1);

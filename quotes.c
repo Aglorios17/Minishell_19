@@ -169,7 +169,7 @@ int    ft_cleantokens(shell *st)
         tmp = (char *)st->tokens->content;
         st->new = ft_strdup("");
         i = 0;
-        while (tmp[i])
+        while (tmp && tmp[i])
         {
 			fri = st->new;
 //			printf("tmp[i] : %c\n", tmp[i]);
@@ -190,7 +190,15 @@ int    ft_cleantokens(shell *st)
 			{
 				if (tmp[i] == '\\')
 					i++;
-				st->new = ft_charjoin(fri, tmp[i]);
+				if (tmp[i] == '$')
+				{
+					st->new = ft_strjoin(fri, ft_dollars(st, tmp, i));
+					i = ft_strlen(ft_dollars(st, tmp, i));
+			//		printf("i|%i|\n", i);
+			//		printf("new|%li|\n", ft_strlen(st->new));
+				}
+				else
+					st->new = ft_charjoin(fri, tmp[i]);
 			}
 			free(fri);
             i++;
