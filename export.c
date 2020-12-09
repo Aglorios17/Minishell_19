@@ -16,13 +16,18 @@ int ft_export(shell *st, char **envp)
     if (!st->tokens->next)
         return (-1);
     st->tokens = st->tokens->next;
-//	tmp = malloc(sizeof(envp) + 1);
-    tmp = envp;
-    while (tmp[a])
+    while (envp[a])
         a++;
-    tmp[a] = ft_strdup((char *)st->tokens->content);
+    if (!(tmp = malloc(sizeof(char *) * (a + 2))))
+        return (-1);
+    a = 0;
+    while (envp[a])
+    {
+        tmp[a] = envp[a];
+        a++;
+    }
+    tmp[a] = ft_strdup(st->tokens->content);
     tmp[a + 1] = NULL;
-    envp = tmp;
     st->tokens = st->firsttok;
     return (0);
 }
