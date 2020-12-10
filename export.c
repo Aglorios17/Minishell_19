@@ -12,6 +12,7 @@ int	ft_dollars(shell *st, char *tmp, int i)
 		new = ft_charjoin(new, tmp[i]);
 		i++;
 	}
+	new = ft_charjoin(new, '=');
 //	printf("new|%s|\n", new);
 	tmp = NULL;
 	while (st->envv)
@@ -37,6 +38,31 @@ int	ft_dollars(shell *st, char *tmp, int i)
 	}
 	st->envv = st->firstenv;
 	return (ft_strlen(new));
+}
+
+int	ft_cutline(shell *st)
+{
+	int a;
+	char **line;
+	a = 0;
+
+	line = ft_split(st->line, ';');
+	while (line[a])
+	{
+		ft_lstadd_back(&st->cutline, ft_lstnew(ft_strdup(line[a])));
+		a++;
+	}
+//	printf("envv1|%s|\n", (char *)st->envv->content);
+	st->firstcut = st->cutline;
+/*
+	while (st->cutline != NULL)
+	{
+		printf("cut|%s|\n", (char *)st->cutline->content);
+		st->cutline = st->cutline->next;
+	}
+	st->cutline = st->firstcut;
+*/
+    return (0);
 }
 
 int	ft_envv(shell *st, char **envp)
@@ -71,22 +97,26 @@ int ft_export(shell *st, char **envp)
 	if (!st->tokens->next)
 		return (0);
 	st->tokens = st->tokens->next;
-	tmp = (char *)st->tokens->content; 
-//	printf("ok\n");
-//	printf("tmp|%s|\n", tmp);
-//	printf("tmp|%c|\n", tmp[i]);
-//	printf("ok1\n");
-	if (ft_strchr(tmp, '\\') || ft_strchr(tmp, '\'') || ft_strchr(tmp, '"') || ft_strchr(tmp, '$') || ft_strchr(tmp, '|') || ft_strchr(tmp, ';') || ft_strchr(tmp, '&') || ft_strchr(tmp, '!') ||  ft_strchr(tmp, '@'))
+	while (st->tokens)
 	{
-		write(1, "minishell: export: `", 20);
-		write(1, tmp, ft_strlen(tmp));
-		write(1, "': not a valid identifier\n", 26);
-		st->status = 1;
-		return (0);
+		tmp = (char *)st->tokens->content; 
+//		printf("ok\n");
+//		printf("tmp|%s|\n", tmp);
+//		printf("tmp|%c|\n", tmp[i]);
+//		printf("ok1\n");
+		if (ft_strchr(tmp, '\\') || ft_strchr(tmp, '\'') || ft_strchr(tmp, '"') || ft_strchr(tmp, '$') || ft_strchr(tmp, '|') || ft_strchr(tmp, ';') || ft_strchr(tmp, '&') || ft_strchr(tmp, '!') ||  ft_strchr(tmp, '@'))
+		{
+			write(1, "minishell: export: `", 20);
+			write(1, tmp, ft_strlen(tmp));
+			write(1, "': not a valid identifier\n", 26);
+			st->status = 1;
+			return (0);
+		}
+		if (!ft_strchr(tmp, '='))
+			return (0);
+		ft_lstadd_back(&st->envv, ft_lstnew(ft_strdup(tmp)));
+		st->tokens = st->tokens->next;
 	}
-	if (!ft_strchr(tmp, '='))
-		return (0);
-	ft_lstadd_back(&st->envv, ft_lstnew(ft_strdup(tmp)));
 	st->tokens = st->firsttok;
 /*
 	while (st->envv != NULL)

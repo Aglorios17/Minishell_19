@@ -64,24 +64,28 @@ int ft_tokens(shell *st)
 {
 	int i;
 	char *fri;
+	char *tmp;
 
 	i = 0;
 	fri = NULL;
-	if (st->line[0] == '\0')
+	tmp = NULL;
+	tmp = (char *)st->cutline->content;
+//	printf("|%s|\n", (char *)st->cutline->content);
+	if (tmp[0] == '\0')
 		return (1);
-	while (st->line[i])
+	while (tmp[i])
 	{
-		while (st->line[i] == ' ' || st->line[i] == '\t')
+		while (tmp[i] == ' ' || tmp[i] == '\t')
 		{
-			if (st->line[i + 1] == '\0')
+			if (tmp[i + 1] == '\0')
 				return (0);
 			i++;
 		}
-		fri = ft_substr(st->line, i, ft_checkspace(&st->line[i]));
+		fri = ft_substr(tmp, i, ft_checkspace(&tmp[i]));
 		ft_lstadd_back(&st->tokens, ft_lstnew(fri));
 //		free(fri);
 //		fri = NULL;
-		i += ft_checkspace(&st->line[i]);
+		i += ft_checkspace(&tmp[i]);
 	}
 	st->firsttok = st->tokens;
 /*	

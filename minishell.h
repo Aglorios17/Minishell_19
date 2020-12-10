@@ -23,6 +23,8 @@ typedef struct	mini
 	t_list		*envv;
 	t_list		*firsttok;
 	t_list		*firstenv;
+	t_list		*cutline;
+	t_list		*firstcut;
 }				shell;
 
 //////////// tokens /////////////
@@ -47,5 +49,9 @@ char *ft_pwd(shell *st);
 int ft_export(shell *st, char **envp);
 int ft_envv(shell *st, char **envp);
 int	ft_dollars(shell *st, char *tmp, int i);
+
+////////// cut ////////////////
+
+int ft_cutline(shell *st);
 
 #endif

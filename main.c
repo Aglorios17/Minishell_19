@@ -15,6 +15,7 @@ void ft_init_struct(shell *st)
 	st->firstenv = NULL;
 	st->home = ft_pwd(st);
 	st->status = 0;
+	st->cutline = 0;
 }
 
 int	ft_exfree2(shell *st, t_list *tmp)
@@ -105,6 +106,24 @@ int	ft_exfree(shell *st, t_list *tmp)
 	return (0);
 }
 
+int	ft_freecutline(shell *st, t_list *tmp)
+{
+	st->cutline = st->firstcut;
+	st->firstcut = NULL;
+	while (st->cutline != NULL)
+	{
+//		printf("|%s|", (char *)st->tokens->content);
+		free(st->cutline->content);
+		st->cutline->content = NULL;
+		tmp = st->cutline;
+		st->cutline = st->cutline->next;
+		free(tmp);
+		tmp = NULL;
+	}
+	st->cutline = NULL;
+	return (0);
+}
+
 int main(int argc, char **argv, char **envp)
 {
 	shell	st;
@@ -124,28 +143,34 @@ int main(int argc, char **argv, char **envp)
 	{
 		st.line = ft_strdup(argv[2]);
 //		write(1,"1\n",2);
-		if (ft_tokens(&st))
-			return (0);
-//		write(1,"1\n",2);
-		if (st.tokens)
+		ft_cutline(&st);
+		while (st.cutline)
 		{
-			if (ft_cleantokens(&st) != 0)
+			if (ft_tokens(&st))
+				return (0);
+//			write(1,"1\n",2);
+			if (st.tokens)
 			{
-				ft_exfree2(&st, tmp);
-				return (2);
+				if (ft_cleantokens(&st) != 0)
+				{
+					ft_exfree2(&st, tmp);
+					return (2);
+				}
 			}
+//			write(1,"2\n",2);
+//			printf("%s", st.line);
+			if (ft_command(&st, envp))
+				return (ft_exfree2(&st, tmp));
+//			write(1,"3\n",2);
+			ft_exfree(&st, tmp);
+			if (st.ret == 1)
+			{
+//				write(1,"4\n",2);
+				return (127);
+			}
+			st.cutline = st.cutline->next;
 		}
-//		write(1,"2\n",2);
-//		printf("%s", st.line);
-		if (ft_command(&st, envp))
-			return (ft_exfree2(&st, tmp));
-//		write(1,"3\n",2);
-		ft_exfree(&st, tmp);
-		if (st.ret == 1)
-		{
-//			write(1,"4\n",2);
-			return (127);
-		}
+		ft_freecutline(&st, tmp);
 	}
 	else
 	{
@@ -157,22 +182,29 @@ int main(int argc, char **argv, char **envp)
 				write(1, "exit\n", 5);
 				return(0);
 			}
+			ft_cutline(&st);
 //			write(1,"1\n",2);
-			ft_tokens(&st);
-//			ft_envv(&st, envp);
-//			write(1,"2\n",2);
-			if (st.tokens)
-				ft_cleantokens(&st);
-//			write(1,"3\n",2);
-			if (ft_command(&st, envp))
+			while (st.cutline)
 			{
-				free(st.home);
-				return (ft_exfree2(&st, tmp));
+//				write(1,"1\n",2);
+				ft_tokens(&st);
+//				ft_envv(&st, envp);
+//				write(1,"2\n",2);
+				if (st.tokens)
+					ft_cleantokens(&st);
+//				write(1,"3\n",2);
+				if (ft_command(&st, envp))
+				{
+					free(st.home);
+					return (ft_exfree2(&st, tmp));
+				}
+//				write(1,"4\n",2);
+				ft_exfree(&st, tmp);
+	//			if (st.ret == 1)
+	//				return (127);
+				st.cutline = st.cutline->next;
 			}
-//			write(1,"4\n",2);
-			ft_exfree(&st, tmp);
-	//		if (st.ret == 1)
-	//			return (127);
+			ft_freecutline(&st, tmp);
 		}
 	}
 	free(st.home);
