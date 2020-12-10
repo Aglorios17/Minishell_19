@@ -4,8 +4,8 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
-#include <sys/types.h>
-#include <sys/stat.h>
+# include <sys/types.h>
+# include <sys/stat.h>
 # include "libft/libft.h"
 
 typedef struct	mini
@@ -14,6 +14,7 @@ typedef struct	mini
 	char		*pwd;
 	char		*home;
 	int			ret;
+	int			status;
 	int			quotes;
 	int			quotes2;
 	char		*new;

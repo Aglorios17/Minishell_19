@@ -68,9 +68,29 @@ int	ft_envv(shell *st, char **envp)
 
 int ft_export(shell *st, char **envp)
 {
+	char *tmp;
 	(void)envp;
+
+	tmp = NULL;
+	if (!st->tokens->next)
+		return (0);
 	st->tokens = st->tokens->next;
-	ft_lstadd_back(&st->envv, ft_lstnew(ft_strdup((char *)st->tokens->content)));
+	tmp = (char *)st->tokens->content; 
+//	printf("ok\n");
+//	printf("tmp|%s|\n", tmp);
+//	printf("tmp|%c|\n", tmp[i]);
+//	printf("ok1\n");
+	if (ft_strchr(tmp, '\\') || ft_strchr(tmp, '\'') || ft_strchr(tmp, '"') || ft_strchr(tmp, '$') || ft_strchr(tmp, '|') || ft_strchr(tmp, ';') || ft_strchr(tmp, '&') || ft_strchr(tmp, '!') ||  ft_strchr(tmp, '@'))
+	{
+		write(1, "minishell: export: `", 20);
+		write(1, tmp, ft_strlen(tmp));
+		write(1, "': not a valid identifier\n", 26);
+		st->status = 1;
+		return (0);
+	}
+	if (!ft_strchr(tmp, '='))
+		return (0);
+	ft_lstadd_back(&st->envv, ft_lstnew(ft_strdup(tmp)));
 	st->tokens = st->firsttok;
 /*
 	while (st->envv != NULL)

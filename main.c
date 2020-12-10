@@ -14,6 +14,7 @@ void ft_init_struct(shell *st)
 	st->envv = NULL;
 	st->firstenv = NULL;
 	st->home = ft_pwd(st);
+	st->status = 0;
 }
 
 int	ft_exfree2(shell *st, t_list *tmp)
@@ -55,6 +56,8 @@ int	ft_exfree2(shell *st, t_list *tmp)
 		tmp = NULL;
 	}
 	st->envv = NULL;
+	if (st->status != 0)
+		return (st->status);
 	return (0);
 }
 
@@ -97,7 +100,8 @@ int	ft_exfree(shell *st, t_list *tmp)
 		tmp = NULL;
 	}
 	st->envv = NULL;
-*/
+*/	if (st->status != 0)
+		return (st->status);	
 	return (0);
 }
 
@@ -172,5 +176,7 @@ int main(int argc, char **argv, char **envp)
 		}
 	}
 	free(st.home);
+	if (st.status != 0)
+		return (st.status);
 	return (0);
 }

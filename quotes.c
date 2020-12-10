@@ -190,15 +190,20 @@ int    ft_cleantokens(shell *st)
 			{
 				if (tmp[i] == '\\')
 					i++;
-				if (tmp[i] == '$')
+	/*			if (tmp[i] == '$')
 				{
 					st->new = ft_strjoin(fri, ft_dollars(st, tmp, i));
 					i = ft_strlen(ft_dollars(st, tmp, i));
 			//		printf("i|%i|\n", i);
 			//		printf("new|%li|\n", ft_strlen(st->new));
+					break;
 				}
 				else
-					st->new = ft_charjoin(fri, tmp[i]);
+				{
+		*/
+			//		printf("new\n");
+				st->new = ft_charjoin(fri, tmp[i]);
+		//		}
 			}
 			free(fri);
             i++;
