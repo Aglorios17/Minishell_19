@@ -61,11 +61,16 @@ int ft_double_quote(shell *st, char *tmp, int a)
 //	printf("a : %i\n", a);
 	while (tmp2 && tmp2[b])
 	{
-		if (tmp2[b] == '\\' && ft_strchr("\\$\"", tmp2[b + 1]))
-			b++;
-		fri = st->tmpq;
-		st->tmpq = ft_charjoin(st->tmpq, tmp2[b]);
-		free(fri);
+		if (tmp2[b] == '$')
+			b = ft_dollars(st, tmp2, b);
+		else
+		{
+			if (tmp2[b] == '\\' && ft_strchr("\\$\"", tmp2[b + 1]))
+				b++;
+			fri = st->tmpq;
+			st->tmpq = ft_charjoin(st->tmpq, tmp2[b]);
+			free(fri);
+		}
 		b++;
 	}
 	free(tmp2);
@@ -166,13 +171,13 @@ int    ft_cleantokens(shell *st)
     st->tokens = st->tokens->next;
     while (st->tokens)
     {
-        tmp = (char *)st->tokens->content;
+        tmp = ft_strdup((char *)st->tokens->content);
         st->new = ft_strdup("");
         i = 0;
-        while (tmp && tmp[i])
+        while (tmp[i] && tmp[i] != '\0')
         {
 			fri = st->new;
-//			printf("tmp[i] : %c\n", tmp[i]);
+		//	printf("boucle\n");
 			if (tmp[i] == '"')
 			{
 			//	printf("1\n");
@@ -186,24 +191,31 @@ int    ft_cleantokens(shell *st)
                 i = ft_simple_quote(st, tmp, i);
 				st->new = ft_strjoin(st->new, st->tmpq);
 			}
+	//		else if (tmp[i] == '$')
+	//		{
+	//			i = ft_dollars(st, tmp, i);
+	//			st->new = ft_strjoin(st->new, st->tmpq);
+			//		printf("i|%i|\n", i);
+			//	printf("st->tempq|%s|\n", st->tmpq);
+			//	printf("new|%s|\n", st->new);
+			//	printf("i|%i|\n", i);
+			//	printf("1\n");
+			//		break;
+	//		}
 			else
 			{
+			//	printf("2\n");
 				if (tmp[i] == '\\')
 					i++;
-	/*			if (tmp[i] == '$')
+					
+				if (tmp[i] == '$')
 				{
-					st->new = ft_strjoin(fri, ft_dollars(st, tmp, i));
-					i = ft_strlen(ft_dollars(st, tmp, i));
-			//		printf("i|%i|\n", i);
-			//		printf("new|%li|\n", ft_strlen(st->new));
-					break;
+					i = ft_dollars(st, tmp, i);
+					st->new = ft_strjoin(st->new, st->tmpq);
+			//		printf("tmp[i]|%c|\n", tmp[i]);
 				}
 				else
-				{
-		*/
-			//		printf("new\n");
-				st->new = ft_charjoin(fri, tmp[i]);
-		//		}
+					st->new = ft_charjoin(fri, tmp[i]);
 			}
 			free(fri);
             i++;
@@ -211,6 +223,7 @@ int    ft_cleantokens(shell *st)
         st->tokens->content = st->new;
         st->tokens = st->tokens->next;
     }
+	free(tmp);
 	if (st->quotes%2 == 1)
 	{
 		fri = ft_strdup("minishell: unexpected EOF while looking for matching `\"\'\n");

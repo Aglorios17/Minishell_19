@@ -1,46 +1,42 @@
 #include "minishell.h"
 
-char *ft_dollars(shell *st, char *tmp, int i)
+int	ft_dollars(shell *st, char *tmp, int i)
 {
-	char *tok;
-	char *tmp2;
-	int	 a;
+	char *new;
 
-	tok = ft_strdup("");
-	tmp2 = NULL;
-	a = 0;
+	new = ft_strdup("");
+	st->tmpq = ft_strdup("");
 	i++;
-	while (tmp[i])
+	while (tmp[i] && (tmp[i] != '\'' || tmp[i] != '"' || tmp[i] != '\0'))
 	{
-//		tmp2 = tok;
-		tok = ft_charjoin(tok, tmp[i]);
-//		free(tmp2);
+		new = ft_charjoin(new, tmp[i]);
 		i++;
 	}
-	tmp2 = NULL;
+//	printf("new|%s|\n", new);
+	tmp = NULL;
 	while (st->envv)
 	{
-		tmp2 = (char *)st->envv->content;	
-		if (!ft_strncmp(tok, tmp2, ft_strlen(tok)))
+		tmp = (char *)st->envv->content;
+//		printf("tmp|%s|\n", tmp);
+		if (!ft_strncmp(new, tmp, ft_strlen(new)))
 		{
-			a = 0;
-			while(tmp2[a] && tmp2[a] != '=')
-				a++;
-			if (tmp2[a] == '=')
-				a++;
-//			printf("a|%i\n|", a);
-//			printf("tmp2|%s|\n", tmp2);
-			tok = ft_substr(tmp2, a, (ft_strlen(tmp2) - a));
-//			printf("tok|%s|\n", tok);
-//			free(tmp2);
+			i = 0;
+			while (tmp[i] && tmp[i] != '=')
+				i++;
+			i++;
+			while (tmp[i] != '\0')
+			{
+				st->tmpq = ft_charjoin(st->tmpq, tmp[i]);
+				i++;
+			}
+		//	printf("st->tmpq|%s|\n", st->tmpq);
 			st->envv = st->firstenv;
-			return (tok);
+			return (ft_strlen(st->tmpq));
 		}
 		st->envv = st->envv->next;
 	}
-	tok = NULL;
 	st->envv = st->firstenv;
-	return (tok);
+	return (ft_strlen(new));
 }
 
 int	ft_envv(shell *st, char **envp)

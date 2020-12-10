@@ -46,6 +46,6 @@ char *ft_pwd(shell *st);
 
 int ft_export(shell *st, char **envp);
 int ft_envv(shell *st, char **envp);
-char *ft_dollars(shell *st, char *tmp, int i);
+int	ft_dollars(shell *st, char *tmp, int i);
 
 #endif
