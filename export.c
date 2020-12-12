@@ -1,5 +1,53 @@
 #include "minishell.h"
 
+int ft_unset(shell *st)
+{
+	t_list *tmp;
+	t_list *previous;
+	char *un;
+
+	tmp = NULL;
+	previous = NULL;
+	un = (char *)st->tokens->next->content;
+	if (ft_strchr(un, '=') || ft_strchr(un, ' '))
+	{
+		write(1, "minishell: unset: `", 19);
+		write(1, un, ft_strlen(un));
+		write(1, "': not a valid identifier\n", 26);
+		if (!ft_strchr(un, ' '))
+			st->status = 1;
+		return (0);
+	}
+	un = ft_charjoin(un, '=');
+	previous = st->envv;
+	if (!ft_strncmp(un, (char *)previous->content, ft_strlen(un)))
+	{
+		st->envv = previous->next;
+		free(previous);
+		st->firstenv = st->envv;
+		st->tokens = st->firsttok;
+		return (0);
+	}
+	previous = st->envv;
+	tmp = previous->next;
+	while (tmp)
+	{
+		if (!ft_strncmp(un, (char *)tmp->content, ft_strlen(un)))
+		{
+			previous->next = tmp->next;
+			free(tmp);
+			st->envv = st->firstenv;
+			st->tokens = st->firsttok;
+			return (0);
+		}
+		previous = tmp;
+		tmp = tmp->next;
+	}
+	st->envv = st->firstenv;
+	st->tokens = st->firsttok;
+	return (0);
+}
+
 int	ft_dollars(shell *st, char *tmp, int i)
 {
 	char *new;
@@ -7,7 +55,7 @@ int	ft_dollars(shell *st, char *tmp, int i)
 	new = ft_strdup("");
 	st->tmpq = ft_strdup("");
 	i++;
-	while (tmp[i] && (tmp[i] != '\'' || tmp[i] != '"' || tmp[i] != '\0'))
+	while (tmp[i] && !ft_strchr("\'\"", tmp[i]) && tmp[i] != '\0')
 	{
 		new = ft_charjoin(new, tmp[i]);
 		i++;
@@ -24,7 +72,8 @@ int	ft_dollars(shell *st, char *tmp, int i)
 			i = 0;
 			while (tmp[i] && tmp[i] != '=')
 				i++;
-			i++;
+			if (tmp[i] == '=')
+				i++;
 			while (tmp[i] != '\0')
 			{
 				st->tmpq = ft_charjoin(st->tmpq, tmp[i]);
@@ -91,9 +140,15 @@ int	ft_envv(shell *st, char **envp)
 int ft_export(shell *st, char **envp)
 {
 	char *tmp;
-	(void)envp;
+	char *tmp2;
+	int	a;
+	int	i;
 
 	tmp = NULL;
+	tmp2 = NULL;
+	a = 0;
+	i = 0;
+	(void)envp;
 	if (!st->tokens->next)
 		return (0);
 	st->tokens = st->tokens->next;
@@ -114,7 +169,25 @@ int ft_export(shell *st, char **envp)
 		}
 		if (!ft_strchr(tmp, '='))
 			return (0);
-		ft_lstadd_back(&st->envv, ft_lstnew(ft_strdup(tmp)));
+		a = 0;
+		while (st->envv != NULL)
+		{
+			tmp2 = (char *)st->envv->content;
+			i = 0;
+			while (tmp2[i] != '=')
+				i++;
+			if (tmp2[i] == '=')
+				i++;
+			if (!ft_strncmp(tmp, tmp2, i))
+			{
+				st->envv->content = ft_strdup(tmp);
+				a = 1;
+			}
+			st->envv = st->envv->next;
+		}
+		st->envv = st->firstenv;
+		if (a == 0)
+			ft_lstadd_back(&st->envv, ft_lstnew(ft_strdup(tmp)));
 		st->tokens = st->tokens->next;
 	}
 	st->tokens = st->firsttok;

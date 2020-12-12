@@ -177,7 +177,6 @@ int    ft_cleantokens(shell *st)
         while (tmp[i] && tmp[i] != '\0')
         {
 			fri = st->new;
-		//	printf("boucle\n");
 			if (tmp[i] == '"')
 			{
 			//	printf("1\n");
@@ -191,17 +190,6 @@ int    ft_cleantokens(shell *st)
                 i = ft_simple_quote(st, tmp, i);
 				st->new = ft_strjoin(st->new, st->tmpq);
 			}
-	//		else if (tmp[i] == '$')
-	//		{
-	//			i = ft_dollars(st, tmp, i);
-	//			st->new = ft_strjoin(st->new, st->tmpq);
-			//		printf("i|%i|\n", i);
-			//	printf("st->tempq|%s|\n", st->tmpq);
-			//	printf("new|%s|\n", st->new);
-			//	printf("i|%i|\n", i);
-			//	printf("1\n");
-			//		break;
-	//		}
 			else
 			{
 			//	printf("2\n");
@@ -212,7 +200,6 @@ int    ft_cleantokens(shell *st)
 				{
 					i = ft_dollars(st, tmp, i);
 					st->new = ft_strjoin(st->new, st->tmpq);
-			//		printf("tmp[i]|%c|\n", tmp[i]);
 				}
 				else
 					st->new = ft_charjoin(fri, tmp[i]);

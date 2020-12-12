@@ -47,11 +47,13 @@ char *ft_pwd(shell *st);
 ////////// export //////////////
 
 int ft_export(shell *st, char **envp);
+int ft_unset(shell *st);
 int ft_envv(shell *st, char **envp);
 int	ft_dollars(shell *st, char *tmp, int i);
 
 ////////// cut ////////////////
 
 int ft_cutline(shell *st);
+char **ft_splitms(char const *str, char c);
 
 #endif

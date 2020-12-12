@@ -17,6 +17,7 @@ SRCS 			= main.c \
 					quotes.c \
 					command.c \
 					export.c \
+					ft_splitms.c \
 
 OBJS			= ${SRCS:.c=.o}
 INCLUDE 		= minishell.h
