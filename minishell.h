@@ -19,6 +19,8 @@ typedef struct	mini
 	int			quotes2;
 	char		*new;
 	char		*tmpq;
+	int			pass;
+	int			flagdq;
 	t_list		*tokens;
 	t_list		*envv;
 	t_list		*firsttok;

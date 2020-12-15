@@ -48,18 +48,43 @@ int ft_unset(shell *st)
 	return (0);
 }
 
+/*
+char *ft_pass_space(char *tmp, int i)
+{
+	char *new;
+
+	new = ft_strdup("");
+	printf("tmp %s\n", tmp);
+	while (tmp[i] == ' ')
+	{
+		printf("OK\n");
+		i++;
+	}
+	while (tmp[i])
+	{
+		while (tmp[i] == ' ' && tmp[i + 1] == ' ')
+			i++;
+		new = ft_charjoin(new, tmp[i]);
+		i++;
+	}
+	return (new);
+}
+*/
+
 int	ft_dollars(shell *st, char *tmp, int i)
 {
 	char *new;
 
 	new = ft_strdup("");
 	st->tmpq = ft_strdup("");
+	st->pass = 0;
 	i++;
 	while (tmp[i] && !ft_strchr("\'\"", tmp[i]) && tmp[i] != '\0')
 	{
 		new = ft_charjoin(new, tmp[i]);
 		i++;
 	}
+	st->pass = i - 1;
 	new = ft_charjoin(new, '=');
 //	printf("new|%s|\n", new);
 	tmp = NULL;
@@ -74,11 +99,36 @@ int	ft_dollars(shell *st, char *tmp, int i)
 				i++;
 			if (tmp[i] == '=')
 				i++;
-			while (tmp[i] != '\0')
+			while (tmp[i] == ' ' && st->flagdq == 0)
 			{
+//				printf("OK1\n");
+//				printf("tmp |%s|\n", tmp);
+				if (tmp[i + 1] == '\0')
+				{
+//					printf("OK2\n");
+//					printf("tmpq 1 |%s|\n", st->tmpq);
+					st->tmpq = ft_charjoin(st->tmpq, ' ');
+					st->envv = st->firstenv;
+					return (ft_strlen(st->tmpq));
+//					printf("tmpq 2 |%s|\n", st->tmpq);
+				}
+//				printf("i 1 |%d|\n", i);
+				i++;
+//				printf("i 2 |%d|\n", i);
+			}
+//			printf("tmp[i] |%d|\n", tmp[i]);
+//			printf("i 3 |%d|\n", i);
+			while (tmp[i])
+			{
+//				printf("OK2\n");
+				while (tmp[i] == ' ' && tmp[i + 1] == ' ' && st->flagdq == 0)
+					i++;
 				st->tmpq = ft_charjoin(st->tmpq, tmp[i]);
 				i++;
 			}
+//			}
+//				st->tmpq = ft_charjoin(st->tmpq, tmp[i]);
+//				i++;
 		//	printf("st->tmpq|%s|\n", st->tmpq);
 			st->envv = st->firstenv;
 			return (ft_strlen(st->tmpq));

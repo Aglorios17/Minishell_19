@@ -62,7 +62,10 @@ int ft_double_quote(shell *st, char *tmp, int a)
 	while (tmp2 && tmp2[b])
 	{
 		if (tmp2[b] == '$')
-			b = ft_dollars(st, tmp2, b);
+		{
+			ft_dollars(st, tmp2, b);
+			b = st->pass;
+		}
 		else
 		{
 			if (tmp2[b] == '\\' && ft_strchr("\\$\"", tmp2[b + 1]))
@@ -176,13 +179,19 @@ int    ft_cleantokens(shell *st)
         i = 0;
         while (tmp[i] && tmp[i] != '\0')
         {
+			st->flagdq = 0;
 			fri = st->new;
+//			printf("i1 : |%d|\n", i);
 			if (tmp[i] == '"')
 			{
 			//	printf("1\n");
+//				printf("i2 : |%d|\n", i);
+				st->flagdq = 1;
 				i = ft_double_quote(st, tmp, i);
+//				printf("i3 : |%d|\n", i);
 			//	printf("2\n");
 				st->new = ft_strjoin(st->new, st->tmpq);
+//				printf("new 1 : |%s|\n", st->new);
 			//	printf("3\n");
 			}
 			else if (tmp[i] == '\'')
@@ -190,22 +199,33 @@ int    ft_cleantokens(shell *st)
                 i = ft_simple_quote(st, tmp, i);
 				st->new = ft_strjoin(st->new, st->tmpq);
 			}
-			else
+			else if (tmp[i] != '\0')
 			{
 			//	printf("2\n");
+//				printf("tmp : |%s|\n", tmp);
 				if (tmp[i] == '\\')
-					i++;
-					
+					i++;	
 				if (tmp[i] == '$')
 				{
-					i = ft_dollars(st, tmp, i);
+//					printf("i4 : |%d|\n", i);
+					ft_dollars(st, tmp, i);
+					i = st->pass;
+//					printf("i5 : |%d|\n", i);
+//					printf("new 2 : |%s|\n", st->new);
 					st->new = ft_strjoin(st->new, st->tmpq);
+//					printf("new 3 : |%s|\n", st->new);
 				}
 				else
+				{
+//					printf("new 4 : |%s|\n", st->new);
 					st->new = ft_charjoin(fri, tmp[i]);
+//					printf("new 5 : |%s|\n", st->new);
+				}
 			}
 			free(fri);
             i++;
+//			printf("len tmp : |%ld|\n", ft_strlen(tmp));
+//			printf("tmp[i] : |%c|\n", tmp[i]);
         }
         st->tokens->content = st->new;
         st->tokens = st->tokens->next;
