@@ -207,6 +207,7 @@ int    ft_cleantokens(shell *st)
 					i++;	
 				if (tmp[i] == '$')
 				{
+
 //					printf("i4 : |%d|\n", i);
 					ft_dollars(st, tmp, i);
 					i = st->pass;

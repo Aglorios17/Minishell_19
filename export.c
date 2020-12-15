@@ -121,7 +121,7 @@ int	ft_dollars(shell *st, char *tmp, int i)
 			while (tmp[i])
 			{
 //				printf("OK2\n");
-				while (tmp[i] == ' ' && tmp[i + 1] == ' ' && st->flagdq == 0)
+				while (tmp[i] == ' ' && st->flagdq == 0 && (tmp[i + 1] == ' ' || tmp[i + 1] == '\0'))
 					i++;
 				st->tmpq = ft_charjoin(st->tmpq, tmp[i]);
 				i++;
