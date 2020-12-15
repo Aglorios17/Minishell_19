@@ -71,7 +71,9 @@ int ft_double_quote(shell *st, char *tmp, int a)
 			if (tmp2[b] == '\\' && ft_strchr("\\$\"", tmp2[b + 1]))
 				b++;
 			fri = st->tmpq;
+//			printf("tmp2[b] : %c\n", tmp2[b]);
 			st->tmpq = ft_charjoin(st->tmpq, tmp2[b]);
+//			printf("tmpq : %s\n", st->tmpq);
 			free(fri);
 		}
 		b++;
@@ -186,7 +188,6 @@ int    ft_cleantokens(shell *st)
 			{
 			//	printf("1\n");
 //				printf("i2 : |%d|\n", i);
-				st->flagdq = 1;
 				i = ft_double_quote(st, tmp, i);
 //				printf("i3 : |%d|\n", i);
 			//	printf("2\n");
@@ -205,10 +206,12 @@ int    ft_cleantokens(shell *st)
 //				printf("tmp : |%s|\n", tmp);
 				if (tmp[i] == '\\')
 					i++;	
-				if (tmp[i] == '$')
+				if (tmp[i] == '$' && tmp[i - 1] != '\\')
 				{
 
 //					printf("i4 : |%d|\n", i);
+					st->flagdq = 1;
+					st->tmpq = ft_strdup("");
 					ft_dollars(st, tmp, i);
 					i = st->pass;
 //					printf("i5 : |%d|\n", i);

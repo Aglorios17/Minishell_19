@@ -52,38 +52,58 @@ int ft_unset(shell *st)
 char *ft_pass_space(char *tmp, int i)
 {
 	char *new;
+	int a;
 
+	a = i + 1;
 	new = ft_strdup("");
-	printf("tmp %s\n", tmp);
 	while (tmp[i] == ' ')
-	{
-		printf("OK\n");
 		i++;
-	}
-	while (tmp[i])
+	if (tmp[i] == '\0')
 	{
-		while (tmp[i] == ' ' && tmp[i + 1] == ' ')
+		i = 0;
+		while (tmp[i] <= a)
+		{
+			new = ft_charjoin(new, tmp[i]);
 			i++;
-		new = ft_charjoin(new, tmp[i]);
-		i++;
+		}
+		new = ft_charjoin(new, ' ');
+		return (new);
 	}
-	return (new);
+	return (tmp);
 }
 */
 
 int	ft_dollars(shell *st, char *tmp, int i)
 {
 	char *new;
+	int a;
+	int b;
 
 	new = ft_strdup("");
-	st->tmpq = ft_strdup("");
 	st->pass = 0;
+	a = 0;
+	b = 0;
+//	if (tmp[i - 1])
+//		a = 1;
+	if (tmp[i + 1] == '\0' || tmp[i + 1] == '\\')
+	{
+		st->tmpq = ft_charjoin(st->tmpq, '$');
+		st->pass = i;
+		return (0);
+	}
 	i++;
+	b = i;
 	while (tmp[i] && !ft_strchr("\'\"", tmp[i]) && tmp[i] != '\0')
 	{
+		if (!ft_isalpha(tmp[i]))
+			break;
 		new = ft_charjoin(new, tmp[i]);
 		i++;
 	}
+//	printf("new|%s|\n", new);
+//	printf("tmp|%s|\n", &tmp[b]);
+	if (ft_strlen(new) == ft_strlen(&tmp[b]))
+		a = 1;
 	st->pass = i - 1;
 	new = ft_charjoin(new, '=');
 //	printf("new|%s|\n", new);
@@ -99,36 +119,19 @@ int	ft_dollars(shell *st, char *tmp, int i)
 				i++;
 			if (tmp[i] == '=')
 				i++;
-			while (tmp[i] == ' ' && st->flagdq == 0)
-			{
-//				printf("OK1\n");
-//				printf("tmp |%s|\n", tmp);
-				if (tmp[i + 1] == '\0')
-				{
-//					printf("OK2\n");
-//					printf("tmpq 1 |%s|\n", st->tmpq);
-					st->tmpq = ft_charjoin(st->tmpq, ' ');
-					st->envv = st->firstenv;
-					return (ft_strlen(st->tmpq));
-//					printf("tmpq 2 |%s|\n", st->tmpq);
-				}
-//				printf("i 1 |%d|\n", i);
-				i++;
-//				printf("i 2 |%d|\n", i);
-			}
-//			printf("tmp[i] |%d|\n", tmp[i]);
-//			printf("i 3 |%d|\n", i);
+//			tmp = ft_pass_space(tmp, i);
+			while (st->flagdq == 1 && tmp[i] == ' ') ////////// wtf diff a==0 et a==1
+					i++;
 			while (tmp[i])
 			{
-//				printf("OK2\n");
-				while (tmp[i] == ' ' && st->flagdq == 0 && (tmp[i + 1] == ' ' || tmp[i + 1] == '\0'))
+				if (a == 1 && st->flagdq == 1 && (tmp[i] == ' ' && (tmp[i + 1] == ' ' || tmp[i + 1] == '\0')))
 					i++;
-				st->tmpq = ft_charjoin(st->tmpq, tmp[i]);
-				i++;
+				else
+				{
+					st->tmpq = ft_charjoin(st->tmpq, tmp[i]);
+					i++;
+				}
 			}
-//			}
-//				st->tmpq = ft_charjoin(st->tmpq, tmp[i]);
-//				i++;
 		//	printf("st->tmpq|%s|\n", st->tmpq);
 			st->envv = st->firstenv;
 			return (ft_strlen(st->tmpq));
