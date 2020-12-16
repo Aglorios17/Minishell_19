@@ -140,7 +140,20 @@ char *ft_clean_firsttoken(shell *st, char *tmp)
 		{
 			if (tmp[a] == '\\' && tmp[a + 1] != '\0')
 				a++;
-			new = ft_charjoin(fri, tmp[a]);
+			if (tmp[a] == '$' && tmp[a - 1] != '\\')
+			{
+//				printf("i4 : |%d|\n", i);
+				st->flagdq = 1;
+				st->tmpq = ft_strdup("");
+				ft_dollars(st, tmp, a);
+				a = st->pass;
+//				printf("i5 : |%d|\n", i);
+//				printf("new 2 : |%s|\n", st->new);
+				new = ft_strjoin(new, st->tmpq);
+//				printf("new 3 : |%s|\n", st->new);
+			}
+			else
+				new = ft_charjoin(fri, tmp[a]);
 		}
 		free(fri);
 		a++;
@@ -188,6 +201,7 @@ int    ft_cleantokens(shell *st)
 			{
 			//	printf("1\n");
 //				printf("i2 : |%d|\n", i);
+				st->flagdq = 1;
 				i = ft_double_quote(st, tmp, i);
 //				printf("i3 : |%d|\n", i);
 			//	printf("2\n");
@@ -210,7 +224,6 @@ int    ft_cleantokens(shell *st)
 				{
 
 //					printf("i4 : |%d|\n", i);
-					st->flagdq = 1;
 					st->tmpq = ft_strdup("");
 					ft_dollars(st, tmp, i);
 					i = st->pass;

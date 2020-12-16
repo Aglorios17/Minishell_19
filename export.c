@@ -76,15 +76,11 @@ char *ft_pass_space(char *tmp, int i)
 int	ft_dollars(shell *st, char *tmp, int i)
 {
 	char *new;
-	int a;
-	int b;
+	char **trad;
 
 	new = ft_strdup("");
 	st->pass = 0;
-	a = 0;
-	b = 0;
-//	if (tmp[i - 1])
-//		a = 1;
+	trad = NULL;
 	if (tmp[i + 1] == '\0' || tmp[i + 1] == '\\')
 	{
 		st->tmpq = ft_charjoin(st->tmpq, '$');
@@ -92,7 +88,6 @@ int	ft_dollars(shell *st, char *tmp, int i)
 		return (0);
 	}
 	i++;
-	b = i;
 	while (tmp[i] && !ft_strchr("\'\"", tmp[i]) && tmp[i] != '\0')
 	{
 		if (!ft_isalpha(tmp[i]))
@@ -101,9 +96,6 @@ int	ft_dollars(shell *st, char *tmp, int i)
 		i++;
 	}
 //	printf("new|%s|\n", new);
-//	printf("tmp|%s|\n", &tmp[b]);
-	if (ft_strlen(new) == ft_strlen(&tmp[b]))
-		a = 1;
 	st->pass = i - 1;
 	new = ft_charjoin(new, '=');
 //	printf("new|%s|\n", new);
@@ -120,15 +112,23 @@ int	ft_dollars(shell *st, char *tmp, int i)
 			if (tmp[i] == '=')
 				i++;
 //			tmp = ft_pass_space(tmp, i);
-			while (st->flagdq == 1 && tmp[i] == ' ') ////////// wtf diff a==0 et a==1
-					i++;
-			while (tmp[i])
+			if (st->flagdq)
 			{
-				if (a == 1 && st->flagdq == 1 && (tmp[i] == ' ' && (tmp[i + 1] == ' ' || tmp[i + 1] == '\0')))
-					i++;
-				else
+				while (tmp[i])
 				{
 					st->tmpq = ft_charjoin(st->tmpq, tmp[i]);
+					i++;
+				}
+			}
+			else
+			{
+				trad = ft_split(&tmp[i], ' ');
+				i = 0;
+				while (trad[i])
+				{
+					st->tmpq = ft_strjoin(st->tmpq, trad[i]);
+					if (trad[i + 1])
+						st->tmpq = ft_charjoin(st->tmpq, ' ');
 					i++;
 				}
 			}
