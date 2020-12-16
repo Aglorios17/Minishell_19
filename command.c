@@ -13,27 +13,29 @@ int ft_cd(shell *st)
 {
 	int i;
 	char *tmp;
+	char *line;
 
 	i = 0;
-	while (st->line[i] == ' ')
+	line = st->tokens->next->content;
+	while (line[i] == ' ')
 		i++;
 	i += 2;
-	while (st->line[i] == ' ')
+	while (line[i] == ' ')
 		i++;
-	if (!(ft_strncmp(&st->line[i], "..", 2)))
+	if (!(ft_strncmp(&line[i], "..", 2)))
 	{
 		tmp = ft_strjoin(st->pwd, "/");
-		st->pwd = ft_strjoin(tmp, &st->line[i]);
+		st->pwd = ft_strjoin(tmp, &line[i]);
 		free(tmp);
 	}
-	else if (!(ft_strncmp(&st->line[i], "/", 1)))
+	else if (!(ft_strncmp(&line[i], "/", 1)))
 		st->pwd = "/";
-	else if (!st->line[i])
+	else if (!line[i])
 		st->pwd = st->home;
 	else
 	{
 		tmp = ft_strjoin(st->pwd, "/");
-		st->pwd = ft_strjoin(tmp, &st->line[i]);
+		st->pwd = ft_strjoin(tmp, &line[i]);
 		free(tmp);	
 	}
 	if (chdir(st->pwd) < 0)
@@ -93,17 +95,20 @@ int ft_echo(shell *st)
 
 int ft_command(shell *st, char **envp)
 {
-	int i;
+//	int i;
 
-	i = 0;
+//	i = 0;
 //	printf("%s\n", (char *)st->tokens->content);
 	if (!st->tokens)
 		return (0);
-	if ((st->ret == 0) && !(ft_strncmp((char *)st->tokens->content, "echo", 5)))
+	if (!(ft_strncmp((char *)st->tokens->content, "echo", 5)))
 		ft_echo(st);
-	else if (!ft_strncmp(&st->line[i], "pwd", 4))
+	else if (!ft_strncmp((char *)st->tokens->content, "pwd", 4))
+	{
 		write(1, ft_pwd(st), ft_strlen(ft_pwd(st)));
-	else if (!ft_strncmp(&st->line[i], "cd", 3))
+		write(1, "\n", 1);
+	}
+	else if (!ft_strncmp((char *)st->tokens->content, "cd", 3))
 	{
 		if (!ft_cd(st))
 			return (0);
@@ -125,7 +130,10 @@ int ft_command(shell *st, char **envp)
 	else if (!(ft_strncmp((char *)st->tokens->content, "exit", 5)))
 		return (1);
 	else
-		st->ret = 1;	
+	{
+		if (!ft_exec(st))
+			st->ret = 1;	
+	}
 	return (0);
 }
 
@@ -134,6 +142,8 @@ int	ft_checkcommand(shell *st)
 	char *tmp;
 
 	tmp = (char *)st->tokens->content;
+	if (check_path(st) == 1)
+		return (1);
 	if (!ft_strcmp(tmp, "echo") || !ft_strcmp(tmp, "cd") || !ft_strcmp(tmp, "pwd") ||
 		!ft_strcmp(tmp, "env") || !ft_strcmp(tmp, "export") ||
 		!ft_strcmp(tmp, "unset") || !ft_strcmp(tmp, "exit") || !ft_strcmp(tmp, "exec"))

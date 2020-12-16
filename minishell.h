@@ -6,6 +6,7 @@
 # include <string.h>
 # include <sys/types.h>
 # include <sys/stat.h>
+# include <sys/wait.h>
 # include "libft/libft.h"
 
 typedef struct	mini
@@ -57,5 +58,10 @@ int	ft_dollars(shell *st, char *tmp, int i);
 
 int ft_cutline(shell *st);
 char **ft_splitms(char const *str, char c);
+
+////////// exec ////////////////
+
+int ft_exec(shell *st);
+int check_path(shell *st);
 
 #endif
