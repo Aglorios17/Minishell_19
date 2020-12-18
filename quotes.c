@@ -116,11 +116,13 @@ char *ft_clean_firsttoken(shell *st, char *tmp)
 	int a;
 	char *new;
 	char *fri;
+	char *tmp2;
 
 	a = 0;
 	fri = NULL;
 	new = ft_strdup("");
 	st->tmpq = NULL;
+	tmp2 = NULL;
 //	printf("tmp : %s\n", tmp);
 	while(tmp[a])
 	{
@@ -158,17 +160,33 @@ char *ft_clean_firsttoken(shell *st, char *tmp)
 		free(fri);
 		a++;
 	}
+	if (!st->tokens->next)
+	{
+		while (st->envv)
+		{
+			tmp2 = (char *)st->envv->content;
+			if (!ft_strncmp("_=", tmp2, 2))
+			{
+				st->envv->content = ft_strjoin("_=", tmp);
+				break;
+			}
+			st->envv = st->envv->next;
+		}
+		st->envv = st->firstenv;
+	}
 	return (new);
 }
 
 int    ft_cleantokens(shell *st)
 {
     char *tmp;
+    char *tmp2;
 	char *fri;
     int    i;
 
 	st->quotes = 0;
     tmp = 0;
+    tmp2 = 0;
 	fri = NULL;
     i = 0;
     st->firsttok = st->tokens;
@@ -245,6 +263,7 @@ int    ft_cleantokens(shell *st)
 //			printf("tmp[i] : |%c|\n", tmp[i]);
         }
         st->tokens->content = st->new;
+		tmp2 = (char *)st->tokens->content;
         st->tokens = st->tokens->next;
     }
 	free(tmp);
@@ -262,6 +281,18 @@ int    ft_cleantokens(shell *st)
 		free(fri);
 		return (-1);
 	}
+	while (st->envv)
+	{
+		tmp = (char *)st->envv->content;
+		if (!ft_strncmp("_=", tmp, 2))
+		{
+//			printf("tmp2 ||%s||\n", tmp2);
+			st->envv->content = ft_strjoin("_=", tmp2);
+			break;
+		}
+		st->envv = st->envv->next;
+	}
+	st->envv = st->firstenv;
     st->tokens = st->firsttok;
     return (0);
 }

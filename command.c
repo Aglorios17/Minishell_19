@@ -116,7 +116,15 @@ int ft_command(shell *st, char **envp)
 	else if (!ft_strncmp((char *)st->tokens->content, "export", 7))
 		ft_export(st, envp);
 	else if (!ft_strncmp((char *)st->tokens->content, "unset", 6))
-		ft_unset(st);
+	{
+		st->tokens = st->tokens->next;
+		while (st->tokens)
+		{
+			ft_unset(st);
+			st->tokens = st->tokens->next;
+		}
+		st->tokens = st->firsttok;
+	}
 	else if (!ft_strncmp((char *)st->tokens->content, "env", 4))
 	{
 		while (st->envv)

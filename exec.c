@@ -33,9 +33,25 @@ int	check_path(shell *st)
 	}
 	st->envv = st->firstenv;
 	//////////////////////////////////// fin recup path
-	tab = ft_split(path, ':');
-	if (!tab)
-		(void)tab;
+		tab = ft_split(path, ':');
+	i = 0;
+	tmp = NULL;
+	while (tab[i])
+	{
+//		printf("tab|%s|\n", tab[i]);
+		if (!ft_strchr(cmd, '/'))
+		{
+			tmp = ft_strjoin(tab[i], "/");
+			tmp = ft_strjoin(tmp, cmd);
+			if (stat(tmp, &b) != -1)
+			{
+				st->tokens->content = tmp;
+//				printf("tokens|%s|\n", (char *)st->tokens->content);
+				return (1);
+			}
+		}
+		i++;
+	}
 	if (stat(cmd, &b) == -1)
 		return (0);
 	return (1);

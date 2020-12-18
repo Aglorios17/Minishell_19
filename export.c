@@ -8,7 +8,7 @@ int ft_unset(shell *st)
 
 	tmp = NULL;
 	previous = NULL;
-	un = (char *)st->tokens->next->content;
+	un = (char *)st->tokens->content;
 	if (ft_strchr(un, '=') || ft_strchr(un, ' '))
 	{
 		write(1, "minishell: unset: `", 19);
@@ -44,7 +44,6 @@ int ft_unset(shell *st)
 		tmp = tmp->next;
 	}
 	st->envv = st->firstenv;
-	st->tokens = st->firsttok;
 	return (0);
 }
 
@@ -90,7 +89,7 @@ int	ft_dollars(shell *st, char *tmp, int i)
 	i++;
 	while (tmp[i] && !ft_strchr("\'\"", tmp[i]) && tmp[i] != '\0')
 	{
-		if (!ft_isalpha(tmp[i]))
+		if (!ft_isalpha(tmp[i]) && tmp[i] != '_')
 			break;
 		new = ft_charjoin(new, tmp[i]);
 		i++;
