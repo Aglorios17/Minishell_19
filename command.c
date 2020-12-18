@@ -16,10 +16,14 @@ int ft_cd(shell *st)
 	char *line;
 
 	i = 0;
+	if (!st->tokens->next)
+	{	
+		st->pwd = st->home;
+		if (chdir(st->pwd) < 0)
+			return (0);
+		return (1);
+	}
 	line = st->tokens->next->content;
-	while (line[i] == ' ')
-		i++;
-	i += 2;
 	while (line[i] == ' ')
 		i++;
 	if (!(ft_strncmp(&line[i], "..", 2)))
@@ -30,8 +34,6 @@ int ft_cd(shell *st)
 	}
 	else if (!(ft_strncmp(&line[i], "/", 1)))
 		st->pwd = "/";
-	else if (!line[i])
-		st->pwd = st->home;
 	else
 	{
 		tmp = ft_strjoin(st->pwd, "/");
