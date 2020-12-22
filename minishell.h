@@ -57,7 +57,7 @@ int	ft_dollars(shell *st, char *tmp, int i);
 ////////// cut ////////////////
 
 int ft_cutline(shell *st);
-char **ft_splitms(char const *str, char c);
+char **ft_splitms(char const *str, char c, shell *st);
 
 ////////// exec ////////////////
 
