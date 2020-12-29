@@ -151,9 +151,23 @@ int lstcmd(shell *st, char *line)
 		tmp = ft_charjoin(tmp, line[i]);
 		i++;
 	}
-	tmp = ft_strdup("/home/user42/Bureau/minishell_test/bin/env");
+//	tmp = ft_strdup("/home/user42/Bureau/minishell_test/bin/env");
 //	printf("|%s|\n",tmp);
-	ft_lstadd_back(&st->envv, ft_lstnew(ft_strjoin("_=", tmp)));
+	a = 0;
+	while (st->envv)
+	{
+		if (!ft_strcmp((char *)st->envv->content, ft_strjoin("_=", tmp)))
+			a = 1;
+		else if (!ft_strncmp((char *)st->envv->content, "_=", 2))
+		{
+			st->envv->content = ft_strjoin("_=", tmp);
+			a = 1;
+		}
+		st->envv = st->envv->next;
+	}
+	st->envv = st->firstenv;
+	if (a == 0)
+		ft_lstadd_back(&st->envv, ft_lstnew(ft_strjoin("_=", tmp)));
 	st->envv = st->firstenv;
 	return (1);
 }
@@ -217,6 +231,7 @@ int main(int argc, char **argv, char **envp)
 				write(1, "exit\n", 5);
 				return(0);
 			}
+			lstcmd(&st, st.line); ///////////////
 			ft_cutline(&st);
 //			write(1,"1\n",2);
 			while (st.cutline)

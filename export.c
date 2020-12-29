@@ -75,11 +75,13 @@ char *ft_pass_space(char *tmp, int i)
 int	ft_dollars(shell *st, char *tmp, int i)
 {
 	char *new;
+	int  a;
 	char **trad;
 
 	new = ft_strdup("");
 	st->pass = 0;
 	trad = NULL;
+	a = 0;
 	if (tmp[i + 1] == '\0' || tmp[i + 1] == '\\')
 	{
 		st->tmpq = ft_charjoin(st->tmpq, '$');
@@ -111,7 +113,14 @@ int	ft_dollars(shell *st, char *tmp, int i)
 			if (tmp[i] == '=')
 				i++;
 //			tmp = ft_pass_space(tmp, i);
-			if (st->flagdq)
+			if (!ft_strncmp(tmp, "SHLVL=", i))
+			{
+//				printf("ok\n");
+				a = ft_atoi(&tmp[i]);
+				st->tmpq = ft_strdup(&ft_shlvl(&tmp[i], a)[6]);	
+//				printf("envv|%s|\n", (char *)st->envv->content);
+			}
+			else if (st->flagdq)
 			{
 				while (tmp[i])
 				{
@@ -219,6 +228,37 @@ int	ft_envv(shell *st, char **envp)
     return (0);
 }
 
+char *ft_shlvl(char *line, int i)
+{
+	int a;
+
+	a = 0;
+//	printf("i|%i|\n", i);
+//	printf("line |%s|\n", line);
+	if (!ft_atoi(line))
+		a = 1;
+	else
+	{
+		a = ft_atoi(line);
+		if (i != 0)
+			a += 1;
+	}
+	if (a < 0)
+		a = 0;
+	if (a >= 1000)
+	{
+		write(1, "minishell: warning: shell level (", 33);	
+		write(1, ft_itoa(a), ft_strlen(ft_itoa(a)));
+		write(1, ") too high, resetting to 1\n", 27);	
+		a = 1;
+	}
+//	printf("level |%i|\n", a);
+	line = ft_itoa(a);
+	line = ft_strjoin("SHLVL=", line);
+//	printf("line |%s|\n", line);
+	return (line);
+}
+
 int ft_export(shell *st, char **envp)
 {
 	char *tmp;
@@ -262,7 +302,15 @@ int ft_export(shell *st, char **envp)
 				i++;
 			if (!ft_strncmp(tmp, tmp2, i))
 			{
-				st->envv->content = ft_strdup(tmp);
+				if (!ft_strncmp(tmp, "SHLVL=", i))
+				{
+					a = ft_atoi(&tmp2[i]);
+			//		printf("ok\n");
+					st->envv->content = ft_shlvl(&tmp[i], a);	
+//					printf("envv|%s|\n", (char *)st->envv->content);
+				}
+				else
+					st->envv->content = ft_strdup(tmp);
 				a = 1;
 			}
 			st->envv = st->envv->next;

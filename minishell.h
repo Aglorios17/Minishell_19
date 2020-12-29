@@ -54,6 +54,7 @@ int ft_export(shell *st, char **envp);
 int ft_unset(shell *st);
 int ft_envv(shell *st, char **envp);
 int	ft_dollars(shell *st, char *tmp, int i);
+char *ft_shlvl(char *line, int i);
 
 ////////// cut ////////////////
 
