@@ -1,6 +1,6 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
-# include <unistd.h>
+# include <errno.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
@@ -20,6 +20,7 @@ typedef struct	mini
 	int			quotes2;
 	char		*new;
 	char		*tmpq;
+	char		*cmdexec;
 	int			pass;
 	int			flagdq;
 	t_list		*tokens;

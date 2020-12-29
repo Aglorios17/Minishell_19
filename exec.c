@@ -33,20 +33,27 @@ int	check_path(shell *st)
 	}
 	st->envv = st->firstenv;
 	//////////////////////////////////// fin recup path
-		tab = ft_split(path, ':');
+	tab = ft_split(path, ':');
 	i = 0;
 	tmp = NULL;
+//	printf("1\n");
+	st->cmdexec = ft_strdup((char *)st->tokens->content);
 	while (tab[i])
 	{
 //		printf("tab|%s|\n", tab[i]);
 		if (!ft_strchr(cmd, '/'))
 		{
+//			printf("tokens|%s|\n", (char *)st->tokens->content);
+			if (!ft_strcmp(cmd, "echo") || !ft_strcmp(cmd, "cd") || !ft_strcmp(cmd, "pwd") ||
+				!ft_strcmp(cmd, "env") || !ft_strcmp(cmd, "export") ||
+				!ft_strcmp(cmd, "unset") || !ft_strcmp(cmd, "exit"))
+				return (0);
 			tmp = ft_strjoin(tab[i], "/");
 			tmp = ft_strjoin(tmp, cmd);
 			if (stat(tmp, &b) != -1)
 			{
-				st->tokens->content = tmp;
-//				printf("tokens|%s|\n", (char *)st->tokens->content);
+			//	st->tokens->content = tmp;
+				st->cmdexec = tmp;
 				return (1);
 			}
 		}
@@ -92,7 +99,10 @@ int ft_exec(shell *st)
 	ar = ft_tabreturn(st->tokens);
 	en = ft_tabreturn(st->envv);
 	if (a == 0)
-		i = execve((char *)st->tokens->content, ar, en);
+		i = execve((char *)st->cmdexec, ar, en);
+//		i = execve((char *)st->tokens->content, ar, en);
+//		printf("e|%i|\n", errno);
 	wait(&a);
+	st->status = a/256;
 	return (i);
 }

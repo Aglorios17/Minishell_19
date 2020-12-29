@@ -168,15 +168,46 @@ int	ft_cutline(shell *st)
 int	ft_envv(shell *st, char **envp)
 {
 	int a;
+	int p;
+	int e;
+	int s;
+	char *tmp;
 	
 	a = 0;
+	p = 0;
+	e = 0;
+	s = 0;
+	tmp = NULL;
+//	printf("envv1|%s|\n", (char *)st->envv->content);
+//	printf("ok\n");
 	while (envp[a])
 	{
 		ft_lstadd_back(&st->envv, ft_lstnew(ft_strdup(envp[a])));
 		a++;
 	}
-//	printf("envv1|%s|\n", (char *)st->envv->content);
 	st->firstenv = st->envv;
+	st->envv = st->firstenv;
+	while (st->envv)
+	{
+		tmp = (char *)st->envv->content;
+		if (!ft_strncmp(tmp, "PWD", 3))
+			p = 1;
+		if (!ft_strncmp(tmp, "_", 1))
+			e = 1;
+		if (!ft_strncmp(tmp, "SHLVL", 5))
+			s = 1;
+		st->envv = st->envv->next;
+	}
+	st->envv = st->firstenv;
+//	printf("_|%i|\n", e);
+//	printf("s|%i|\n", s);
+	if (p == 0)
+		ft_lstadd_back(&st->envv, ft_lstnew(ft_strjoin("PWD=", ft_pwd(st))));
+	if (s == 0)
+		ft_lstadd_back(&st->envv, ft_lstnew(ft_strdup("SHLVL=1")));
+	if (e == 0)
+		(void)st;
+	st->envv = st->firstenv;
 /*
 	while (st->envv != NULL)
 	{

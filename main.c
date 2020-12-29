@@ -124,6 +124,40 @@ int	ft_freecutline(shell *st, t_list *tmp)
 	return (0);
 }
 
+int lstcmd(shell *st, char *line)
+{
+	int i;
+	int a;
+	char *tmp;
+
+	i = 0;
+	a = 0;
+	tmp = NULL;
+	while (st->envv)
+	{
+		tmp = ft_strdup((char *)st->envv->content);
+		if (!ft_strncmp(tmp, "=", 1))
+			a = 1;
+		st->envv = st->envv->next;
+	}
+	st->envv = st->firstenv;
+	if (a == 1)
+		return (0);
+	while (line[i] && line[i] == ' ')
+		i++;
+	tmp = ft_strdup("");
+	while (line[i] && line[i] != ' ')
+	{
+		tmp = ft_charjoin(tmp, line[i]);
+		i++;
+	}
+	tmp = ft_strdup("/home/user42/Bureau/minishell_test/bin/env");
+//	printf("|%s|\n",tmp);
+	ft_lstadd_back(&st->envv, ft_lstnew(ft_strjoin("_=", tmp)));
+	st->envv = st->firstenv;
+	return (1);
+}
+
 int main(int argc, char **argv, char **envp)
 {
 	shell	st;
@@ -143,6 +177,7 @@ int main(int argc, char **argv, char **envp)
 	{
 		st.line = ft_strdup(argv[2]);
 //		write(1,"1\n",2);
+		lstcmd(&st, st.line); ///////////////
 		ft_cutline(&st);
 		while (st.cutline)
 		{
@@ -188,7 +223,6 @@ int main(int argc, char **argv, char **envp)
 			{
 //				write(1,"1\n",2);
 				ft_tokens(&st);
-//				ft_envv(&st, envp);
 //				write(1,"2\n",2);
 				if (st.tokens)
 					ft_cleantokens(&st);

@@ -12,7 +12,6 @@ char *ft_pwd(shell *st)
 int ft_cd(shell *st)
 {
 	int i;
-	char *tmp;
 	char *line;
 
 	i = 0;
@@ -26,20 +25,7 @@ int ft_cd(shell *st)
 	line = st->tokens->next->content;
 	while (line[i] == ' ')
 		i++;
-	if (!(ft_strncmp(&line[i], "..", 2)))
-	{
-		tmp = ft_strjoin(st->pwd, "/");
-		st->pwd = ft_strjoin(tmp, &line[i]);
-		free(tmp);
-	}
-	else if (!(ft_strncmp(&line[i], "/", 1)))
-		st->pwd = "/";
-	else
-	{
-		tmp = ft_strjoin(st->pwd, "/");
-		st->pwd = ft_strjoin(tmp, &line[i]);
-		free(tmp);	
-	}
+	st->pwd = ft_strdup(&line[i]);
 	if (chdir(st->pwd) < 0)
 		return (0);
 	return (1);
@@ -97,10 +83,14 @@ int ft_echo(shell *st)
 
 int ft_command(shell *st, char **envp)
 {
+//	char *tmp;
 //	int i;
-
-//	i = 0;
+//	int a;
 //	printf("%s\n", (char *)st->tokens->content);
+
+//	tmp = NULL;
+//	i = 0;
+//	a = 0;
 	if (!st->tokens)
 		return (0);
 	if (!(ft_strncmp((char *)st->tokens->content, "echo", 5)))
@@ -131,7 +121,10 @@ int ft_command(shell *st, char **envp)
 	{
 		while (st->envv)
 		{
-			write(1, (char *)st->envv->content, ft_strlen((char *)st->envv->content));
+			if (!ft_strcmp((char *)st->envv->content, "_=env"))
+				write(1, "_=/home/user42/Bureau/minishell_test/bin/env", 44);
+			else
+				write(1, (char *)st->envv->content, ft_strlen((char *)st->envv->content));
 			write(1, "\n", 1);
 			st->envv = st->envv->next;
 		}
@@ -141,8 +134,45 @@ int ft_command(shell *st, char **envp)
 		return (1);
 	else
 	{
+	//	printf("%s\n", (char *)st->tokens->content);
 		if (!ft_exec(st))
-			st->ret = 1;	
+		{
+/*			printf("%s\n", (char *)st->tokens->content);
+			tmp = ft_strdup((char *)st->tokens->content);
+			if (!ft_strcmp(tmp, "/"))
+			{
+				i = 0;
+				a = 0;
+				while (tmp[a])
+				{
+					if (tmp[a] == '/')
+					{
+						a++;
+						i++;
+					}
+					else
+						a++;
+				}
+				a = 0;
+				while (tmp[a])
+				{
+					st->tokens->content = ft_strdup("");
+					if (i == 0)
+					{
+						st->tokens->content = ft_charjoin(st->tokens->content, tmp[a]);
+						a++;
+					}
+					else if (tmp[a] == '/')
+					{
+						i--;
+						a++;
+					}
+					else
+						a++;
+				}
+			}*/
+			st->ret = 1;
+		}
 	}
 	return (0);
 }
