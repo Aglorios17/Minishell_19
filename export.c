@@ -130,7 +130,7 @@ int	ft_dollars(shell *st, char *tmp, int i)
 			}
 			else
 			{
-				trad = ft_split(&tmp[i], ' ');
+				trad = ft_split(&tmp[i], ' '); ////////////////////////////////// modif split
 				i = 0;
 				while (trad[i])
 				{
@@ -140,7 +140,7 @@ int	ft_dollars(shell *st, char *tmp, int i)
 					i++;
 				}
 			}
-		//	printf("st->tmpq|%s|\n", st->tmpq);
+//			printf("st->tmpq|%s|\n", st->tmpq);
 			st->envv = st->firstenv;
 			return (ft_strlen(st->tmpq));
 		}

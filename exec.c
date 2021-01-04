@@ -1,5 +1,11 @@
 #include "minishell.h"
 
+/*
+int open_path(shell *st, char *path)
+{
+	return (0);
+}
+*/
 int	check_path(shell *st)
 {
 	char *cmd;
