@@ -7,6 +7,7 @@
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <sys/wait.h>
+# include <dirent.h>
 # include "libft/libft.h"
 
 typedef struct	mini

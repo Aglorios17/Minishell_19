@@ -44,9 +44,11 @@ int	ft_checkspace(char *line)
 				}
 				i++;
 			}
+	//		printf("c1 : |%c|\n", line[i]);
 			while (line[i] && line[i] != '"')
 				i++;
-			if (line[i + 1] == ' ' || line[i + 1] == '\0')
+	//		printf("c2 : |%c|\n", line[i]);
+			if ((line[i + 1] == ' ' && line[i - 1] != '\\') || line[i + 1] == '\0') //////// modif tokens = " \" "
 				return i + 1;
 		}
 		else if (line[i] == ' ' || line[i] == '\t')
@@ -105,6 +107,9 @@ int ft_tokens(shell *st)
 /*	
 	while (st->tokens != NULL)
 	{
+	//	tmp = ft_strdup((char *)st->tokens->content);
+	//	if (tmp[ft_strlen(tmp) - 1] == '\\')
+	//		st->tokens->content = ft_strjoin(ft_substr(tmp, 0, ft_strlen(tmp) - 1), " ");
 		printf("tokens|%s|\n", (char *)st->tokens->content);
 		st->tokens = st->tokens->next;
 	}

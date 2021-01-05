@@ -75,13 +75,16 @@ char *ft_pass_space(char *tmp, int i)
 int	ft_dollars(shell *st, char *tmp, int i)
 {
 	char *new;
+	char *space;
 	int  a;
 	char **trad;
 
 	new = ft_strdup("");
 	st->pass = 0;
 	trad = NULL;
+	space = NULL;
 	a = 0;
+//	printf("tmp|%s|\n", tmp);
 	if (tmp[i + 1] == '\0' || tmp[i + 1] == '\\')
 	{
 		st->tmpq = ft_charjoin(st->tmpq, '$');
@@ -89,11 +92,19 @@ int	ft_dollars(shell *st, char *tmp, int i)
 		return (0);
 	}
 	i++;
+//	printf("tmp|%c|\n", tmp[1]);
 	while (tmp[i] && !ft_strchr("\'\"", tmp[i]) && tmp[i] != '\0')
 	{
-		if (!ft_isalpha(tmp[i]) && tmp[i] != '_')
+		if ((!ft_isalpha(tmp[i]) && !ft_isalpha(tmp[1])) && tmp[i] != '_')
 			break;
+		if (tmp[i] == '$' || tmp[i] == '\\') /////////////////////////////////////////////////////////// 
+		{
+			if (tmp[i] == '\\' && !tmp[i + 1])
+				space = ft_strdup(" ");
+			break;
+		}
 		new = ft_charjoin(new, tmp[i]);
+//		printf("join|%s|\n", new);
 		i++;
 	}
 //	printf("new|%s|\n", new);
@@ -141,6 +152,8 @@ int	ft_dollars(shell *st, char *tmp, int i)
 				}
 			}
 //			printf("st->tmpq|%s|\n", st->tmpq);
+			if (space)
+				st->tmpq = ft_charjoin(st->tmpq, ' ');
 			st->envv = st->firstenv;
 			return (ft_strlen(st->tmpq));
 		}
@@ -271,8 +284,41 @@ int ft_export(shell *st, char **envp)
 	a = 0;
 	i = 0;
 	(void)envp;
-	if (!st->tokens->next)
+//	if (!st->tokens->next)
+//		return (0);
+	if (!st->tokens->next) //////////////////////////////////////////////// faire avant trad (fonction) ou stocker l env dans un tableau avant trad
+	{
+		while (st->envv->next)
+		{	
+			tmp = ft_strdup("declare -x ");
+			write(1, tmp, ft_strlen(tmp));
+		//	tmp = ft_strjoin((char *)st->envv->content, "\n")); /////// mieux
+		//	write(1, tmp, ft_strlen(tmp));
+			tmp = ft_strdup((char *)st->envv->content); ////////// mouais
+			i = 0;
+			tmp2 = ft_strdup("");
+			a = 0;
+			while (tmp[i])
+			{
+//				printf("tmp|%c|\n", tmp[i]);
+				tmp2 = ft_charjoin(tmp2, tmp[i]);
+				if (tmp[i] == '=' && !a)
+				{
+					tmp2 = ft_charjoin(tmp2, '"');
+					a = 1;
+				}
+				i++;
+				if (tmp[i] == '\0')
+					tmp2 = ft_charjoin(tmp2, '"');
+			}
+			tmp2 = ft_strjoin(tmp2, "\n");
+			i = 0;
+			write(1, tmp2, ft_strlen(tmp2));
+			st->envv = st->envv->next;
+		}
+		st->envv = st->firstenv;
 		return (0);
+	}
 	st->tokens = st->tokens->next;
 	while (st->tokens)
 	{
@@ -281,7 +327,7 @@ int ft_export(shell *st, char **envp)
 //		printf("tmp|%s|\n", tmp);
 //		printf("tmp|%c|\n", tmp[i]);
 //		printf("ok1\n");
-		if (ft_strchr(tmp, '\\') || ft_strchr(tmp, '\'') || ft_strchr(tmp, '"') || ft_strchr(tmp, '$') || ft_strchr(tmp, '|') || ft_strchr(tmp, ';') || ft_strchr(tmp, '&') || ft_strchr(tmp, '!') ||  ft_strchr(tmp, '@'))
+		if (ft_isdigit(tmp[0]) || ft_strchr(tmp, '\\') || ft_strchr(tmp, '\'') || ft_strchr(tmp, '"') || ft_strchr(tmp, '$') || ft_strchr(tmp, '|') || ft_strchr(tmp, ';') || ft_strchr(tmp, '&') || ft_strchr(tmp, '!') ||  ft_strchr(tmp, '@'))
 		{
 			write(1, "minishell: export: `", 20);
 			write(1, tmp, ft_strlen(tmp));
@@ -291,6 +337,17 @@ int ft_export(shell *st, char **envp)
 		}
 		if (!ft_strchr(tmp, '='))
 			return (0);
+		a = 0;
+		while (tmp[a] != '=') ////////////////////////////////////// export lol =mdr (parser)
+			a++;
+		if (tmp[a] == '=' && tmp[a - 1] == ' ')
+		{
+			write(1, "minishell: export: `", 20);
+			write(1, tmp, ft_strlen(tmp));
+			write(1, "': not a valid identifier\n", 26);
+			st->status = 1;
+			return (0);
+		}
 		a = 0;
 		while (st->envv != NULL)
 		{

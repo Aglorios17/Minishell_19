@@ -1,11 +1,22 @@
 #include "minishell.h"
 
-/*
 int open_path(shell *st, char *path)
 {
-	return (0);
+	(void)st;
+	if (!opendir(path))
+	{
+//		printf("|%i|\n", errno);
+		if (errno == 13)
+		{
+			write(1, "minishell: ", 10);
+			write(1, path, ft_strlen(path));
+			write(1, "permission denied\n", 18);
+			return (0);
+		}
+	}
+	return (1);
 }
-*/
+
 int	check_path(shell *st)
 {
 	char *cmd;
@@ -39,6 +50,9 @@ int	check_path(shell *st)
 	}
 	st->envv = st->firstenv;
 	//////////////////////////////////// fin recup path
+	if (!open_path(st, path))
+		return (0);
+	//////////////////////////////////// open path
 	tab = ft_split(path, ':');
 	i = 0;
 	tmp = NULL;

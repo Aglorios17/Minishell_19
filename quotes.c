@@ -47,6 +47,7 @@ int ft_double_quote(shell *st, char *tmp, int a)
 			if (back%2 == 0 || tmp[a - 1] != '\\')
 			{
 				tmp2 = ft_substr(tmp, b + 1, c);
+//				printf("tmp2 : %s\n", tmp2);
 				st->quotes++;
 //				printf("quotes : %i\n", st->quotes);
 				break;
@@ -191,6 +192,7 @@ int    ft_cleantokens(shell *st)
     i = 0;
     st->firsttok = st->tokens;
 	tmp = (char*)st->tokens->content;
+//	printf("tmp : %s\n", tmp);
 	st->tokens->content = ft_clean_firsttoken(st, tmp);
     if (!ft_checkcommand(st))
     {
@@ -237,7 +239,11 @@ int    ft_cleantokens(shell *st)
 			//	printf("2\n");
 //				printf("tmp : |%s|\n", tmp);
 				if (tmp[i] == '\\')
-					i++;	
+				{
+//					if (!tmp[i + 1]) ///////////////////////////////////
+//						st->new = ft_strdup(" ");
+					i++;
+				}
 				if (tmp[i] == '$' && tmp[i - 1] != '\\')
 				{
 
