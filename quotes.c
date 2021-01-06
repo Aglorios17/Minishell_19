@@ -62,8 +62,10 @@ int ft_double_quote(shell *st, char *tmp, int a)
 //	printf("a : %i\n", a);
 	while (tmp2 && tmp2[b])
 	{
+		st->flagdq = 0;
 		if (tmp2[b] == '$')
 		{
+			st->flagdq = 1;
 			ft_dollars(st, tmp2, b);
 			b = st->pass;
 		}
@@ -146,7 +148,7 @@ char *ft_clean_firsttoken(shell *st, char *tmp)
 			if (tmp[a] == '$' && tmp[a - 1] != '\\')
 			{
 //				printf("i4 : |%d|\n", i);
-				st->flagdq = 1;
+//				st->flagdq = 1;
 				st->tmpq = ft_strdup("");
 				ft_dollars(st, tmp, a);
 				a = st->pass;
@@ -215,14 +217,14 @@ int    ft_cleantokens(shell *st)
 //		printf("tmp |%s|\n", tmp);
         while (tmp[i] && tmp[i] != '\0')
         {
-			st->flagdq = 0;
+//			st->flagdq = 0;
 			fri = st->new;
 //			printf("i1 : |%d|\n", i);
 			if (tmp[i] == '"')
 			{
 			//	printf("1\n");
 //				printf("i2 : |%d|\n", i);
-				st->flagdq = 1;
+//				st->flagdq = 1;
 				i = ft_double_quote(st, tmp, i);
 //				printf("i3 : |%d|\n", i);
 			//	printf("2\n");

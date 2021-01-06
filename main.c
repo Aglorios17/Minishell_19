@@ -200,8 +200,10 @@ int main(int argc, char **argv, char **envp)
 //			write(1,"1\n",2);
 			if (st.tokens)
 			{
+//				write(1,"1.2\n",4);
 				if (ft_cleantokens(&st) != 0)
 				{
+//					write(1,"1.3\n",4);
 					ft_exfree2(&st, tmp);
 					return (2);
 				}
