@@ -212,6 +212,7 @@ int    ft_cleantokens(shell *st)
         tmp = ft_strdup((char *)st->tokens->content);
         st->new = ft_strdup("");
         i = 0;
+//		printf("tmp |%s|\n", tmp);
         while (tmp[i] && tmp[i] != '\0')
         {
 			st->flagdq = 0;

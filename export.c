@@ -74,17 +74,21 @@ char *ft_pass_space(char *tmp, int i)
 
 int	ft_dollars(shell *st, char *tmp, int i)
 {
-	char *new;
-	char *space;
-	int  a;
-	char **trad;
+	char	*new;
+	char	*space;
+	int 	a;
+	int		b;
+	char	*tmp2;
+	char	**trad;
 
 	new = ft_strdup("");
 	st->pass = 0;
 	trad = NULL;
 	space = NULL;
 	a = 0;
-//	printf("tmp|%s|\n", tmp);
+	b = 0;
+	tmp2 = tmp;
+//	printf("tmp |%s|\n", tmp);
 	if (tmp[i + 1] == '\0' || tmp[i + 1] == '\\')
 	{
 		st->tmpq = ft_charjoin(st->tmpq, '$');
@@ -131,6 +135,39 @@ int	ft_dollars(shell *st, char *tmp, int i)
 				st->tmpq = ft_strdup(&ft_shlvl(&tmp[i], a)[6]);	
 //				printf("envv|%s|\n", (char *)st->envv->content);
 			}
+/*
+			else
+			{
+//				(void)tmp2;
+//				printf("&tmp[i] : |%s|\n", &tmp[i]);
+//				printf("tmp2 : |%s|\n", tmp2);
+//				tmp = ft_strdup(&tmp[i]);
+				tmp2 = ft_strdup(&tmp[i]);
+				a = 0;
+				while (tmp2[a] && tmp2[a] == ' ')
+					a++;
+				if (tmp2[a] != '\0')
+				{
+					tmp = ft_strdup("");
+					while (tmp2[a])
+					{
+						if (tmp2[a] == ' ' && tmp2[a - 1] == ' ')
+							a++;
+						else
+						{
+							tmp = ft_charjoin(tmp, tmp2[a]);
+							a++;
+						}
+					}
+					i = a;
+				}
+				while (tmp[i])
+				{
+					st->tmpq = ft_charjoin(st->tmpq, tmp[i]);
+					i++;
+				}
+			}
+*/
 			else if (st->flagdq)
 			{
 				while (tmp[i])
@@ -141,15 +178,33 @@ int	ft_dollars(shell *st, char *tmp, int i)
 			}
 			else
 			{
+//				printf("OK\n");
 				trad = ft_split(&tmp[i], ' '); ////////////////////////////////// modif split
+//				printf("&tmp[i] : |%s|\n", &tmp[i]);
+//				printf("tmp2 |%s|\n", tmp2);
+				b = 0;                       //////////// modif garreth debut
+				while (tmp2[b] != '$')  
+					b++;
+				if (tmp2[b - 1] != ' ' && tmp2[b - 1])
+				{
+					if (tmp[i] == ' ' && (tmp[i + 1] == ' ' || tmp[i + 1] == '\0'))
+					{
+						while (tmp[i] == ' ')
+							i++;
+						if (!st->tokens->next)
+							st->tmpq = ft_charjoin(st->tmpq, ' ');
+					}
+				}
 				i = 0;
 				while (trad[i])
 				{
 					st->tmpq = ft_strjoin(st->tmpq, trad[i]);
+//					printf("content : |%s|\n", (char*)st->tokens->next->content);
 					if (trad[i + 1])
 						st->tmpq = ft_charjoin(st->tmpq, ' ');
 					i++;
 				}
+
 			}
 //			printf("st->tmpq|%s|\n", st->tmpq);
 			if (space)
