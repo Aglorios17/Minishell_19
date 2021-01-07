@@ -105,8 +105,13 @@ int	ft_dollars(shell *st, char *tmp, int i)
 //	printf("tmp|%c|\n", tmp[1]);
 	while (tmp[i] && !ft_strchr("\'\"", tmp[i]) && tmp[i] != '\0')
 	{
-		if ((!ft_isalpha(tmp[i]) && !ft_isalpha(tmp[1])) && tmp[i] != '_')
+//		printf("tmp[1] : |%c|\n", tmp[1]);
+//		printf("tmp[i] : |%c|\n", tmp[i]);
+		if (!ft_isalnum(tmp[i]) && tmp[i] != '_')
+		{
+//			printf("OK\n");
 			break;
+		}
 		if (tmp[i] == '$' || tmp[i] == '\\') /////////////////////////////////////////////////////////// 
 		{
 			if (tmp[i] == '\\' && !tmp[i + 1])
@@ -211,7 +216,7 @@ int	ft_dollars(shell *st, char *tmp, int i)
 			else
 			{
 //				printf("OK\n");
-				trad = ft_split(&tmp[i], ' '); ////////////////////////////////// modif split
+				trad = ft_splitms(&tmp[i], ' ', st); ////////////////////////////////// modif split
 //				printf("&tmp[i] : |%s|\n", &tmp[i]);
 //				printf("tmp2 |%s|\n", tmp2);
 				b = 0;                       //////////// modif garreth debut
