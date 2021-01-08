@@ -102,7 +102,7 @@ int	ft_checkspace(char *line)
 			if (line[i] && line[i] == '"' && line[i - 1] == '\\') //////// modif tokens = " \" "
 				i++;
 			a = i + 1;
-			if (line[a] == '"')
+			if (line[a] == '"' && line[a - 1] != '"')
 				return (a + 1);
 //			printf("c2 : |%c| \n", line[a - 1]);
 //			printf("c3 : |%c| \n", line[a]);

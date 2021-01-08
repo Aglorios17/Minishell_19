@@ -7,6 +7,7 @@ void ft_init_struct(shell *st)
 	st->quotes2 = 0;
 	st->line = NULL;
 	st->pwd = NULL;
+	st->oldpwd = NULL;
 	st->home = NULL;
 	st->firsttok = NULL;
 	st->tmpq = NULL;
@@ -190,6 +191,7 @@ int main(int argc, char **argv, char **envp)
 	if  (argc > 1 && !ft_strncmp(argv[1], "-c", 2))
 	{
 		st.line = ft_strdup(argv[2]);
+/////////////////////////////////////////////////////////////////////
 //		write(1,"1\n",2);
 		lstcmd(&st, st.line); ///////////////
 		ft_cutline(&st);
@@ -205,7 +207,9 @@ int main(int argc, char **argv, char **envp)
 				{
 //					write(1,"1.3\n",4);
 					ft_exfree2(&st, tmp);
-					return (2);
+					st.status = 2;
+					break;
+				//	return (2);
 				}
 			}
 //			write(1,"2\n",2);
@@ -217,8 +221,11 @@ int main(int argc, char **argv, char **envp)
 			if (st.ret == 1)
 			{
 //				write(1,"4\n",2);
-				return (127);
+//				return (127);
+				st.status = 127;
+				break;
 			}
+//			st.oldpwd = st.pwd;
 			st.cutline = st.cutline->next;
 		}
 		ft_freecutline(&st, tmp);
@@ -238,9 +245,9 @@ int main(int argc, char **argv, char **envp)
 //			write(1,"1\n",2);
 			while (st.cutline)
 			{
-//				write(1,"1\n",2);
+	//			write(1,"1\n",2);
 				ft_tokens(&st);
-//				write(1,"2\n",2);
+	//			write(1,"2\n",2);
 				if (st.tokens)
 					ft_cleantokens(&st);
 //				write(1,"3\n",2);
@@ -253,6 +260,7 @@ int main(int argc, char **argv, char **envp)
 				ft_exfree(&st, tmp);
 	//			if (st.ret == 1)
 	//				return (127);
+//				st.oldpwd = st.pwd;
 				st.cutline = st.cutline->next;
 			}
 			ft_freecutline(&st, tmp);

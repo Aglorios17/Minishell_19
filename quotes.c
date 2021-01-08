@@ -150,6 +150,7 @@ char *ft_clean_firsttoken(shell *st, char *tmp)
 //				printf("i4 : |%d|\n", i);
 //				st->flagdq = 1;
 				st->tmpq = ft_strdup("");
+				st->firstd++;
 				ft_dollars(st, tmp, a);
 				a = st->pass;
 //				printf("i5 : |%d|\n", i);
@@ -192,15 +193,22 @@ int    ft_cleantokens(shell *st)
     tmp2 = 0;
 	fri = NULL;
     i = 0;
+	st->firstd = 1;
     st->firsttok = st->tokens;
 	tmp = (char*)st->tokens->content;
 //	printf("tmp : %s\n", tmp);
+//	write(1, "1\n", 2);
 	st->tokens->content = ft_clean_firsttoken(st, tmp);
+//	write(1, "1\n", 2);
     if (!ft_checkcommand(st))
     {
-        write(1, "minishell: ", 11);
-        write(1, (char *)st->tokens->content, ft_strlen((char *)st->tokens->content));
-        write(1, ": command not found\n", 20);
+//		write(1, "2\n", 2);
+		if (st->status != 126)
+		{
+        	write(1, "minishell: ", 11);
+        	write(1, (char *)st->tokens->content, ft_strlen((char *)st->tokens->content));
+        	write(1, ": command not found\n", 20);
+		}
         st->ret = 1;
         return (0);
     }
@@ -252,6 +260,7 @@ int    ft_cleantokens(shell *st)
 
 //					printf("i4 : |%d|\n", i);
 					st->tmpq = ft_strdup("");
+					st->firstd++;
 					ft_dollars(st, tmp, i);
 					i = st->pass;
 //					printf("i5 : |%d|\n", i);

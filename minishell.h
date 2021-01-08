@@ -14,6 +14,7 @@ typedef struct	mini
 {
 	char		*line;
 	char		*pwd;
+	char		*oldpwd;
 	char		*home;
 	int			ret;
 	int			status;
@@ -24,6 +25,7 @@ typedef struct	mini
 	char		*cmdexec;
 	int			pass;
 	int			flagdq;
+	int			firstd;
 	t_list		*tokens;
 	t_list		*envv;
 	t_list		*firsttok;

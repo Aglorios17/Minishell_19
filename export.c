@@ -78,23 +78,28 @@ int	ft_dollars(shell *st, char *tmp, int i)
 	char	*space;
 	int 	a;
 	int		b;
+	int		c;
 	char	*tmp2;
-	char	**trad; //////////////////////// changer trad char * (nouv)/ char **
+	char	*trad; //////////////////////// changer trad char * (nouv)/ char **
 	char	*first;
+	char	*val;
 
 	new = ft_strdup("");
 	st->pass = 0;
 	trad = NULL;
 	space = NULL;
 	first = NULL;
+	val = NULL;
 	(void)tmp2;
 	(void)trad;
 	(void)first;
 	a = 0;
 	b = 0;
+	c = 0;
 	(void)b;
+	(void)val;
 	tmp2 = tmp;
-//	printf("tmp |%s|\n", tmp);
+	val = ft_strdup(&tmp[i - 1]);
 	if (tmp[i + 1] == '\0' || tmp[i + 1] == '\\')
 	{
 		st->tmpq = ft_charjoin(st->tmpq, '$');
@@ -145,7 +150,7 @@ int	ft_dollars(shell *st, char *tmp, int i)
 				a = ft_atoi(&tmp[i]);
 				st->tmpq = ft_strdup(&ft_shlvl(&tmp[i], a)[6]);	
 //				printf("envv|%s|\n", (char *)st->envv->content);
-			}/* //////////////////////////////////////////////////////////////////////////////////// debut nouv
+			}///* //////////////////////////////////////////////////////////////////////////////////// debut nouv
 			else
 			{
 //				printf("ok\n");
@@ -153,16 +158,21 @@ int	ft_dollars(shell *st, char *tmp, int i)
 				(void)first;
 //				printf("&tmp[i] : |%s|\n", &tmp[i]);
 //				printf("tmp2 : |%s|\n", tmp2);
+//				printf("flag : |%i|\n", st->flagdq);
 				first = ft_substr(tmp2, st->pass + 1, ft_strlen(tmp2));
 				trad = ft_strdup(&tmp[i]);
 //				printf("first : |%s|\n", first);
 //				printf("tmp : |%s|\n", tmp);
 //				printf("trad1 : |%s|\n", trad);
+//				printf("val : |%s|\n", val);
 				a = 0;
+				b = 0;
 				while (trad[a] && trad[a] == ' ')
 					a++; 
+				if (trad[a] != '\0' && st->flagdq == 1)
+					c = 1;
 //				printf("trad[a] : |%c|\n", trad[a]);
-				if (trad[a] != '\0')
+				else if (trad[a] != '\0')
 				{
 					if (trad[a] != '\0')
 					{
@@ -183,28 +193,37 @@ int	ft_dollars(shell *st, char *tmp, int i)
 				}
 				else if (trad[a] == '\0')
 				{
+//					printf("trad[a] : |%c|\n", trad[a]);
 					if (st->flagdq == 1)
+					{
+//						printf("trad2 : |%s|\n", trad);
 						tmp = ft_strdup(trad);
+					}
+					else if (st->flagdq == 0 && tmp2[0] != '$' && first[0])
+						tmp = ft_strdup(" ");
 					else
 						tmp = ft_strdup("");
 					i = 0;
+					b = 1;
 				}
 //				printf("tmp2[0] : |%c|\n", tmp2[0]);
 //				printf("first[0] : |%c|\n", first[0]);
-				if (first[0] && first[0] != ' ' && (first[0] != '"' && tmp2[0] != '$') && (first[0] != '\'' && tmp2[0] != '$') && first[0] != '$' && st->flagdq == 0) /////////// idem '$' par le bon truc
-					tmp = ft_charjoin(tmp, ' ');
-				if (tmp2[0] && tmp2[0] == '[' && st->flagdq == 0) ///////////// changer [ par le bon truc
-					tmp = ft_strjoin(" ", tmp);
-//				else if (first[0] && tmp2[0])
-//					tmp = ft_charjoin(tmp, ' ');
 //				printf("tmpfin trad : |%s|\n", tmp);
 				while (tmp[i])
 				{
 					st->tmpq = ft_charjoin(st->tmpq, tmp[i]);
 					i++;
 				}
+//				printf("firstd : |%i|\n", st->firstd);
+			//	if (trad[0] == ' ' && st->firstd > 2)
+			//		st->tmpq = ft_strjoin(" ", st->tmpq);
+				if (trad[ft_strlen(trad) - 1] == ' ' && (first[0] && first[0] != '$') && b == 0 && c== 0)
+					st->tmpq = ft_charjoin(st->tmpq, ' ');
+				if (trad[0] == ' ' && val[0] && b == 0 && c == 0)
+					st->tmpq = ft_strjoin(" ", st->tmpq);
+	//			printf("tmpqfin : |%s|\n", st->tmpq);
 			}
-*/ ///////////////////////////////////////////////////////// fin nouv
+/* ///////////////////////////////////////////////////////// fin nouv
 			else if (st->flagdq)
 			{
 				while (tmp[i])
@@ -243,7 +262,7 @@ int	ft_dollars(shell *st, char *tmp, int i)
 				}
 
 			}
-//*/    ///////////////////////////////////////////////////////////////////////////// fin ancien
+*/    ///////////////////////////////////////////////////////////////////////////// fin ancien
 //			printf("st->tmpq|%s|\n", st->tmpq);
 			if (space)
 				st->tmpq = ft_charjoin(st->tmpq, ' ');
@@ -460,7 +479,13 @@ int ft_export(shell *st, char **envp)
 //					printf("envv|%s|\n", (char *)st->envv->content);
 				}
 				else
+				{
+					if (!ft_strncmp(tmp, "PWD=", i))
+						st->pwd = ft_strdup(&tmp[i]);		
+					if (!ft_strncmp(tmp, "OLDPWD=", i))
+						st->oldpwd = ft_strdup(&tmp[i]);		
 					st->envv->content = ft_strdup(tmp);
+				}
 				a = 1;
 			}
 			st->envv = st->envv->next;

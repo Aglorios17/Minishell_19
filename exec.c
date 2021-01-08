@@ -2,16 +2,33 @@
 
 int open_path(shell *st, char *path)
 {
+	struct stat b;
 	(void)st;
+//	printf("|%s|\n", path);
 	if (!opendir(path))
 	{
 //		printf("|%i|\n", errno);
-		if (errno == 13)
+		if (!stat(path, &b))
 		{
-			write(1, "minishell: ", 10);
-			write(1, path, ft_strlen(path));
-			write(1, "permission denied\n", 18);
-			return (0);
+//			printf("|%i|\n", errno);
+			if (errno == 13)
+			{
+				if (!ft_strcmp((char *)st->tokens->content, "cd\0"))
+				{
+					write(1, "minishell: ", 11);
+					write(1, "cd: ", 4);
+					write(1, path, ft_strlen(path));
+					write(1, ": Permission denied\n", 20);
+				}
+				else
+				{
+					write(1, "minishell: ", 11);
+					write(1, path, ft_strlen(path));
+					write(1, ": Permission denied\n", 20);
+				}
+//				st->status = 126;
+				return (0);
+			}
 		}
 	}
 	return (1);
@@ -50,8 +67,16 @@ int	check_path(shell *st)
 	}
 	st->envv = st->firstenv;
 	//////////////////////////////////// fin recup path
-	if (!open_path(st, path))
-		return (0);
+	if (!ft_strcmp(cmd, "cd\0") && st->tokens->next)
+	{
+		if (!open_path(st, (char *)st->tokens->next->content))
+			return (0);
+	}
+	if (!ft_strncmp(cmd, "./", 2))
+	{
+		if (!open_path(st, (char *)st->tokens->content))
+			return (0);
+	}
 	//////////////////////////////////// open path
 	tab = ft_split(path, ':');
 	i = 0;

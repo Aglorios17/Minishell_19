@@ -3,9 +3,36 @@
 char *ft_pwd(shell *st)
 {
 	char *buf;
-	
+	int i;
+	char *tmp;
+
+	i = 0;
+	tmp = NULL;
 	buf = NULL;
 	st->pwd = getcwd(buf, 65535);
+///*
+	while (st->envv)
+	{
+		tmp = (char *)st->envv->content;
+		if (!ft_strncmp(tmp, "PWD=", 4))
+		{
+			if (st->pwd)
+			{
+				i = 0;
+				while (tmp[i] != '=')
+					i++;
+				if (tmp[i] == '=')
+					i++;
+			//	if (!ft_strcmp(st->pwd, st->oldpwd))
+				st->envv->content = ft_strjoin("PWD=", st->pwd);
+//				printf("envv||%s||\n", (char *)st->envv->content);
+				break;
+			}
+		}
+		st->envv = st->envv->next;
+	}
+	st->envv = st->firstenv;
+//*/
 	return (st->pwd);
 }
 
@@ -13,7 +40,32 @@ int ft_cd(shell *st)
 {
 	int i;
 	char *line;
+///*	
+	char *tmp;
 
+	i = 0;
+	tmp = NULL;
+//	printf("tok||%s||\n", (char *)st->tokens->content);
+//	printf("pwd||%s||\n", st->pwd);
+//	printf("oldpwd||%s||\n", st->oldpwd);
+	while (st->envv)
+	{
+		tmp = (char *)st->envv->content;
+		if (!ft_strncmp(tmp, "OLDPWD=", 7))
+		{
+			i = 0;
+			while (tmp[i] != '=')
+				i++;
+			if (tmp[i] == '=')
+				i++;
+			st->envv->content = ft_strjoin("OLDPWD=", st->pwd);
+//			printf("envv||%s||\n", (char *)st->envv->content);
+			break;
+		}
+		st->envv = st->envv->next;
+	}
+	st->envv = st->firstenv;
+//*/
 	i = 0;
 	if (!st->tokens->next)
 	{	
@@ -102,8 +154,8 @@ int ft_command(shell *st, char **envp)
 	}
 	else if (!ft_strncmp((char *)st->tokens->content, "cd", 3))
 	{
-		if (!ft_cd(st))
-			return (0);
+		ft_cd(st);
+		st->pwd = ft_pwd(st);
 	}
 	else if (!ft_strncmp((char *)st->tokens->content, "export", 7))
 		ft_export(st, envp);
@@ -174,6 +226,7 @@ int ft_command(shell *st, char **envp)
 			st->ret = 1;
 		}
 	}
+//	st->oldpwd = ft_pwd(st);
 	return (0);
 }
 
@@ -187,7 +240,9 @@ int	ft_checkcommand(shell *st)
 	if (!ft_strcmp(tmp, "echo") || !ft_strcmp(tmp, "cd") || !ft_strcmp(tmp, "pwd") ||
 		!ft_strcmp(tmp, "env") || !ft_strcmp(tmp, "export") ||
 		!ft_strcmp(tmp, "unset") || !ft_strcmp(tmp, "exit") || !ft_strcmp(tmp, "exec"))
+	{
 		return (1);
+	}
 	else
 		return (0);
 }
