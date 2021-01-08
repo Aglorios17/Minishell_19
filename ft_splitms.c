@@ -1,29 +1,11 @@
 #include "minishell.h"
 
-static char	*ft_strchr2(const char *s, int c, int b)
-{
-	int	a;
-
-	a = 0;
-	while (s[a] != '\0' && a > b)
-	{
-		if (s[a] == (unsigned char)c)
-			return ((char*)&s[a]);
-		a++;
-	}
-	if (c == 0)
-		return ((char*)&s[a]);
-	return (NULL);
-}
-
 static int  ft_malloc_tab(char const *str, char c)
 {
     int     a;
-    int     b;
     int     counter;
 
     a = 0;
-    b = 0;
     counter = 0;
 //    printf("str : |%s|\n", str);
     while (str[a])
@@ -36,11 +18,8 @@ static int  ft_malloc_tab(char const *str, char c)
         {
             if (str[a] && (str[a] == '"' || str[a] == '\''))
             {
-                b = a;
                 a++;
                 while (str[a] && str[a] != '"' && str[a] != '\'')
-                    a++;
-                if (ft_strchr2(&str[b], c, a))
                     a++;
             }
             a++;
@@ -74,20 +53,15 @@ static char		*ft_free(char **tab)
 static char		*ft_write2(const char *str, char c, char **tab)
 {
 	int     a;
-    int     b;
 	char	*dest;
 
 	a = 0;
-    b = 0;
     while (str[a] && str[a] != c)
     {
         if (str[a] && (str[a] == '"' || str[a] == '\''))
         {
-            b = a;
             a++;
             while (str[a] && str[a] != '"' && str[a] != '\'')
-                a++;
-            if (ft_strchr2(&str[b], c, a))
                 a++;
         }
         a++;
@@ -105,12 +79,10 @@ static char		*ft_write2(const char *str, char c, char **tab)
 static char     **ft_write(const char *str, char c, char **tab, shell *st)
 {
     int     a;
-    int     b;
     int     d;
     char    *fri;
 
     a = 0;
-    b = 0;
     d = 0;
     fri = NULL;
     while (str[a])
@@ -133,11 +105,8 @@ static char     **ft_write(const char *str, char c, char **tab, shell *st)
         {
             if (str[a] && (str[a] == '"' || str[a] == '\''))
             {
-                b = a;
                 a++;
                 while (str[a] && str[a] != '"' && str[a] != '\'')
-                    a++;
-                if (ft_strchr2(&str[b], c, a))
                     a++;
             }
             a++;
