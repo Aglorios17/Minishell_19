@@ -122,6 +122,7 @@ char *ft_clean_firsttoken(shell *st, char *tmp)
 	char *tmp2;
 
 	a = 0;
+	st->ddone = 0;
 	fri = NULL;
 	new = ft_strdup("");
 	st->tmpq = NULL;
@@ -153,9 +154,12 @@ char *ft_clean_firsttoken(shell *st, char *tmp)
 				st->firstd++;
 				ft_dollars(st, tmp, a);
 				a = st->pass;
+				if (check_path(st, st->tmpq) == 1)
+					return ((char *)st->tokens->content);
+				else
+					new = ft_strjoin(new, st->tmpq);
 //				printf("i5 : |%d|\n", i);
 //				printf("new 2 : |%s|\n", st->new);
-				new = ft_strjoin(new, st->tmpq);
 //				printf("new 3 : |%s|\n", st->new);
 			}
 			else
@@ -202,7 +206,6 @@ int    ft_cleantokens(shell *st)
 //	write(1, "1\n", 2);
     if (!ft_checkcommand(st))
     {
-//		write(1, "2\n", 2);
 		if (st->status != 126)
 		{
         	write(1, "minishell: ", 11);

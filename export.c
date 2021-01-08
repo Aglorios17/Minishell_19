@@ -71,6 +71,20 @@ char *ft_pass_space(char *tmp, int i)
 	return (tmp);
 }
 */
+int	ft_cmddollars(shell *st, char *tmp)
+{
+	if (check_path(st, tmp) == 1)
+		return (1);
+	if (!ft_strcmp(tmp, "echo") || !ft_strcmp(tmp, "cd") || !ft_strcmp(tmp, "pwd") ||
+		!ft_strcmp(tmp, "env") || !ft_strcmp(tmp, "export") ||
+		!ft_strcmp(tmp, "unset") || !ft_strcmp(tmp, "exit") || !ft_strcmp(tmp, "exec"))
+	{
+		return (1);
+	}
+	else
+		return (0);
+}
+
 
 int	ft_dollars(shell *st, char *tmp, int i)
 {
@@ -174,6 +188,15 @@ int	ft_dollars(shell *st, char *tmp, int i)
 //				printf("trad[a] : |%c|\n", trad[a]);
 				else if (trad[a] != '\0')
 				{
+//					if (!ft_strncmp(trad, "echo", 5) || !ft_strncmp(trad, "cd", 3) ||
+//						!ft_strncmp(trad, "pwd", 4) ||
+//						!ft_strncmp(trad, "env", 4) || !ft_strncmp(trad, "export", 7) ||
+//						!ft_strncmp(trad, "unset", 6) || !ft_strncmp(trad, "exit", 5))
+//					{
+//						printf("ok\n");
+//					//	st->envv = st->firstenv;
+					//	return (ft_strlen(st->tmpq));
+//					}
 					if (trad[a] != '\0')
 					{
 						tmp = ft_strdup("");

@@ -26,6 +26,7 @@ typedef struct	mini
 	int			pass;
 	int			flagdq;
 	int			firstd;
+	int			ddone;
 	t_list		*tokens;
 	t_list		*envv;
 	t_list		*firsttok;
@@ -67,6 +68,6 @@ char **ft_splitms(char const *str, char c, shell *st);
 ////////// exec ////////////////
 
 int ft_exec(shell *st);
-int check_path(shell *st);
+int check_path(shell *st, char *dollars);
 
 #endif

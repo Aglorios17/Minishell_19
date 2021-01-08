@@ -235,7 +235,7 @@ int	ft_checkcommand(shell *st)
 	char *tmp;
 
 	tmp = (char *)st->tokens->content;
-	if (check_path(st) == 1)
+	if (check_path(st, tmp) == 1)
 		return (1);
 	if (!ft_strcmp(tmp, "echo") || !ft_strcmp(tmp, "cd") || !ft_strcmp(tmp, "pwd") ||
 		!ft_strcmp(tmp, "env") || !ft_strcmp(tmp, "export") ||

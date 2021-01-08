@@ -34,7 +34,7 @@ int open_path(shell *st, char *path)
 	return (1);
 }
 
-int	check_path(shell *st)
+int	check_path(shell *st, char *dollars)
 {
 	char *cmd;
 	char *path;
@@ -81,8 +81,50 @@ int	check_path(shell *st)
 	tab = ft_split(path, ':');
 	i = 0;
 	tmp = NULL;
-//	printf("1\n");
-	st->cmdexec = ft_strdup((char *)st->tokens->content);
+	cmppath = NULL;
+//	printf("dollars |%s|\n", dollars);
+//	if (!st->tokens->next)
+//	{
+//	printf("dollars1 |%s|\n", dollars);
+	if (dollars[i] && ft_strchr(dollars, ' '))
+	{
+		st->cmdexec = ft_strdup("");
+		while (dollars[i] && dollars[i] == ' ')
+			i++;
+		if (!dollars[i])
+			return (0);
+		while (dollars[i] && dollars[i] != ' ')
+		{
+			st->cmdexec = ft_charjoin(st->cmdexec, dollars[i]);
+			i++;
+		}
+		cmd = st->cmdexec;
+		if (!ft_strcmp(cmd, "echo")) /////////////////////////////// check commmmande
+		{
+	//		printf("cmd |%s|\n", cmd);
+			return (0);
+		}
+		st->tokens->content = cmd; ///////////// remplacer token
+		while (dollars[i]) ////////////////////////// modif while
+		{
+			cmppath = ft_strdup("");
+			while (dollars[i] == ' ')
+				i++;
+			while (dollars[i] && dollars[i] != ' ')
+			{
+				cmppath = ft_charjoin(cmppath, dollars[i]);
+				i++;
+			}
+//			printf("st->tokens|%s|\n", (char *)st->tokens->content);
+			ft_lstadd_back(&st->tokens, ft_lstnew(cmppath)); ///////////// remplacer token
+			i++;
+		}
+	}
+	else
+		st->cmdexec = ft_strdup((char *)st->tokens->content);
+//	printf("cmppath|%s|\n", cmppath);
+//	printf("cmd |%s|\n", st->cmdexec);
+	i = 0;
 	while (tab[i])
 	{
 //		printf("tab|%s|\n", tab[i]);
@@ -98,7 +140,10 @@ int	check_path(shell *st)
 			if (stat(tmp, &b) != -1)
 			{
 			//	st->tokens->content = tmp;
-				st->cmdexec = tmp;
+				if (cmppath)
+					st->cmdexec = ft_strjoin(tmp, cmppath);
+				else
+					st->cmdexec = tmp;
 				return (1);
 			}
 		}
@@ -143,6 +188,16 @@ int ft_exec(shell *st)
 	a = fork();
 	ar = ft_tabreturn(st->tokens);
 	en = ft_tabreturn(st->envv);
+/*
+	i = 0;
+	printf("st->cmd|%s|\n", st->cmdexec);
+	while (ar[i])
+	{
+		printf("ar|%s|\n", ar[i]);
+		i++;
+	}
+	i = 0;
+*/
 	if (a == 0)
 		i = execve((char *)st->cmdexec, ar, en);
 //		i = execve((char *)st->tokens->content, ar, en);
