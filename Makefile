@@ -18,6 +18,7 @@ SRCS 			= main.c \
 					command.c \
 					export.c \
 					exec.c \
+					exit.c \
 					ft_splitms.c \
 
 OBJS			= ${SRCS:.c=.o}

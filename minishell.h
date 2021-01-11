@@ -49,6 +49,7 @@ int ft_double_quote(shell *st, char *tmp, int a);
 int ft_command(shell *st, char **envp);
 int	ft_checkcommand(shell *st);
 int ft_echo(shell *st);
+int ft_exit(shell *st);
 int ft_cd(shell *st);
 char *ft_pwd(shell *st);
 

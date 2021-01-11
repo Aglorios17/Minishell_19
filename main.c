@@ -194,8 +194,11 @@ int main(int argc, char **argv, char **envp)
 //		writdde(1,"1\n",2);
 		lstcmd(&st, st.line);
 		ft_cutline(&st);
+//		st.status = 0; /////////////////////// hereeeee 
 		while (st.cutline)
 		{
+			if (st.status != 2)
+				st.status = 0; /////////////////////// hereeeee 
 			ft_tokens(&st);
 			if (st.tokens)
 				ft_cleantokens(&st);
@@ -203,6 +206,7 @@ int main(int argc, char **argv, char **envp)
 			if (ft_command(&st, envp) == 1)
 			{
 				free(st.home);
+	//			printf("status|%i|", st.status);
 				return (ft_exfree2(&st, tmp));
 			}
 //			write(1,"3\n",2);
@@ -226,6 +230,8 @@ int main(int argc, char **argv, char **envp)
 //			write(1,"1\n",2);
 			while (st.cutline)
 			{
+				if (st.status != 2)
+					st.status = 0; /////////////////////// hereeeee 
 	//			write(1,"1\n",2);
 				ft_tokens(&st);
 	//			write(1,"2\n",2);

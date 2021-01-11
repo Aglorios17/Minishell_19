@@ -189,7 +189,7 @@ int ft_command(shell *st, char **envp)
 	if (!st->tokens)
 		return (0);
 	if (!(ft_strncmp((char *)st->tokens->content, "exit", 5)))
-		return (1);
+		return (ft_exit(st));
 	else if (!(ft_strncmp((char *)st->tokens->content, "echo", 5)))
 		ft_echo(st);
 	else if (!ft_strncmp((char *)st->tokens->content, "pwd", 4))
