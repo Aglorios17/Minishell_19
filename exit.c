@@ -15,10 +15,19 @@ int ft_exit(shell *st)
 	i = 0;
 	tmp = ft_strdup((char *)st->tokens->next->content);
 //	printf("tmp |%s|\n", tmp);
+	while (tmp[i] == ' ')
+		i++;
+	while (tmp[i] == '0' && tmp[i + 1] != '\0')
+		i++;
 	while (tmp[i])
 	{
 		while (tmp[i] == ' ')
 			i++;
+		if (tmp[i] == '0' && (tmp[i - 1] == '-' || tmp[i - 1] == '+') && tmp[i + 1] != '\0')
+		{
+			while (tmp[i] == '0')
+				i++;
+		}
 		if (tmp[i] == '\\' && ft_strchr("tfr", tmp[i + 1]))
 			i += 2;
 		else if (tmp[i])
@@ -72,12 +81,14 @@ int ft_exit(shell *st)
 	}
 	i = ft_atoi(tmp);
 //	printf("i |%i|\n", i);
-	if (i == -1)
+	if (i == -1 || ft_strlen(tmp) >= 20 || ((tmp[0] == '-' || tmp[0] == '+') && ft_strlen(tmp) >= 20))
 	{
 		write(1, "minishell: ", 11);
 		write(1, "exit: ", 6);
 		write(1, tmp, ft_strlen(tmp));
 		write(1, ": numeric argument required\n", 28);
+		st->status = 255;
+		return (1);
 	}
 	st->status = i;
 	return (1);
