@@ -191,41 +191,22 @@ int main(int argc, char **argv, char **envp)
 	if  (argc > 1 && !ft_strncmp(argv[1], "-c", 2))
 	{
 		st.line = ft_strdup(argv[2]);
-/////////////////////////////////////////////////////////////////////
-//		write(1,"1\n",2);
-		lstcmd(&st, st.line); ///////////////
+//		writdde(1,"1\n",2);
+		lstcmd(&st, st.line);
 		ft_cutline(&st);
 		while (st.cutline)
 		{
-			if (ft_tokens(&st))
-				return (0);
-//			write(1,"1\n",2);
+			ft_tokens(&st);
 			if (st.tokens)
-			{
-//				write(1,"1.2\n",4);
-				if (ft_cleantokens(&st) != 0)
-				{
-//					write(1,"1.3\n",4);
-					ft_exfree2(&st, tmp);
-					st.status = 2;
-					break;
-				//	return (2);
-				}
-			}
+				ft_cleantokens(&st);
 //			write(1,"2\n",2);
-//			printf("%s", st.line);
-			if (ft_command(&st, envp))
+			if (ft_command(&st, envp) == 1)
+			{
+				free(st.home);
 				return (ft_exfree2(&st, tmp));
+			}
 //			write(1,"3\n",2);
 			ft_exfree(&st, tmp);
-			if (st.ret == 1)
-			{
-//				write(1,"4\n",2);
-//				return (127);
-				st.status = 127;
-				break;
-			}
-//			st.oldpwd = st.pwd;
 			st.cutline = st.cutline->next;
 		}
 		ft_freecutline(&st, tmp);
@@ -240,7 +221,7 @@ int main(int argc, char **argv, char **envp)
 				write(1, "exit\n", 5);
 				return(0);
 			}
-			lstcmd(&st, st.line); ///////////////
+			lstcmd(&st, st.line);
 			ft_cutline(&st);
 //			write(1,"1\n",2);
 			while (st.cutline)
@@ -251,16 +232,13 @@ int main(int argc, char **argv, char **envp)
 				if (st.tokens)
 					ft_cleantokens(&st);
 //				write(1,"3\n",2);
-				if (ft_command(&st, envp))
+				if (ft_command(&st, envp) == 1)
 				{
 					free(st.home);
 					return (ft_exfree2(&st, tmp));
 				}
 //				write(1,"4\n",2);
 				ft_exfree(&st, tmp);
-	//			if (st.ret == 1)
-	//				return (127);
-//				st.oldpwd = st.pwd;
 				st.cutline = st.cutline->next;
 			}
 			ft_freecutline(&st, tmp);

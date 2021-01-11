@@ -181,14 +181,16 @@ int ft_command(shell *st, char **envp)
 //	char *tmp;
 //	int i;
 //	int a;
-//	printf("%s\n", (char *)st->tokens->content);
+//	printf("|%s|\n", (char *)st->tokens->content);
 
 //	tmp = NULL;
 //	i = 0;
 //	a = 0;
 	if (!st->tokens)
 		return (0);
-	if (!(ft_strncmp((char *)st->tokens->content, "echo", 5)))
+	if (!(ft_strncmp((char *)st->tokens->content, "exit", 5)))
+		return (1);
+	else if (!(ft_strncmp((char *)st->tokens->content, "echo", 5)))
 		ft_echo(st);
 	else if (!ft_strncmp((char *)st->tokens->content, "pwd", 4))
 	{
@@ -225,51 +227,8 @@ int ft_command(shell *st, char **envp)
 		}
 		st->envv = st->firstenv;
 	}
-	else if (!(ft_strncmp((char *)st->tokens->content, "exit", 5)))
-		return (1);
-	else
-	{
-	//	printf("%s\n", (char *)st->tokens->content);
-		if (!ft_exec(st))
-		{
-//			printf("%s\n", (char *)st->tokens->content);
-/*			printf("%s\n", (char *)st->tokens->content);
-			tmp = ft_strdup((char *)st->tokens->content);
-			if (!ft_strcmp(tmp, "/"))
-			{
-				i = 0;
-				a = 0;
-				while (tmp[a])
-				{
-					if (tmp[a] == '/')
-					{
-						a++;
-						i++;
-					}
-					else
-						a++;
-				}
-				a = 0;
-				while (tmp[a])
-				{
-					st->tokens->content = ft_strdup("");
-					if (i == 0)
-					{
-						st->tokens->content = ft_charjoin(st->tokens->content, tmp[a]);
-						a++;
-					}
-					else if (tmp[a] == '/')
-					{
-						i--;
-						a++;
-					}
-					else
-						a++;
-				}
-			}*/
-			st->ret = 1;
-		}
-	}
+	else	
+		ft_exec(st);
 //	st->oldpwd = ft_pwd(st);
 	return (0);
 }

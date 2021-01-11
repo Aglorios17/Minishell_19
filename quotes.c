@@ -211,8 +211,9 @@ int    ft_cleantokens(shell *st)
         	write(1, "minishell: ", 11);
         	write(1, (char *)st->tokens->content, ft_strlen((char *)st->tokens->content));
         	write(1, ": command not found\n", 20);
+			st->status = 127;
 		}
-        st->ret = 1;
+//     	st->ret = 1;
         return (0);
     }
 	tmp = 0;
@@ -293,6 +294,7 @@ int    ft_cleantokens(shell *st)
 		fri = ft_strdup("minishell: unexpected EOF while looking for matching `\"\'\n");
        	write(1, fri, ft_strlen(fri));
 		free(fri);
+		st->status = 2;
 		return (-1);
 	}
 	if (st->quotes2%2 == 1)
@@ -300,6 +302,7 @@ int    ft_cleantokens(shell *st)
 		fri = ft_strdup("minishell: unexpected EOF while looking for matching `\'\'\n");
        	write(1, fri, ft_strlen(fri));
 		free(fri);
+		st->status = 2;
 		return (-1);
 	}
 	while (st->envv)

@@ -190,11 +190,14 @@ int ft_exec(shell *st)
 {
 	char **ar;
 	char **en;
+	struct stat b;
 	int i;
 	int a;
 
 	ar = NULL;
 	en = NULL;
+	if (stat(st->cmdexec, &b) == -1)
+		return (0);
 	a = fork();
 	ar = ft_tabreturn(st->tokens);
 	en = ft_tabreturn(st->envv);
