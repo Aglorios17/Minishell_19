@@ -35,13 +35,10 @@ char *ft_pwd(shell *st)
 //*/
 	return (st->pwd);
 }
-
-int ft_cd(shell *st)
+int oldpwd(shell *st)
 {
-	int i;
-	char *line;
-///*	
 	char *tmp;
+	int i;
 
 	i = 0;
 	tmp = NULL;
@@ -58,28 +55,74 @@ int ft_cd(shell *st)
 				i++;
 			if (tmp[i] == '=')
 				i++;
-			st->envv->content = ft_strjoin("OLDPWD=", st->pwd);
+			st->envv->content = ft_strjoin("OLDPWD=", st->oldpwd);
 //			printf("envv||%s||\n", (char *)st->envv->content);
 			break;
 		}
 		st->envv = st->envv->next;
 	}
+//	if (ft_strncmp((char *)st->envv->content, "OLDPWD=", 7) && !st->envv)
+//	st->envv = st->firstenv;
+//	if (!st->envv)
+//		ft_lstadd_back(&st->envv, ft_lstnew(ft_strjoin("OLDPWD=", st->oldpwd)));
 	st->envv = st->firstenv;
-//*/
+	return (0);
+}
+
+int ft_cd(shell *st)
+{
+	int i;
+	char *line;
+	char *tmp;
+	char *env;
+
 	i = 0;
+	tmp = st->oldpwd;
+	st->oldpwd = st->pwd;
 	if (!st->tokens->next)
 	{	
-		st->pwd = st->home;
+		while (st->envv)
+		{
+			env = (char *)st->envv->content;
+			if (!ft_strncmp(env, "HOME=", 5))
+			{
+				i = 0;
+				while (env[i] != '=')
+					i++;
+				if (env[i] == '=')
+					i++;
+				line = ft_strdup(&env[i]);
+//				printf("envv||%s||\n", (char *)st->envv->content);
+				break;
+			}
+			st->envv = st->envv->next;
+		}
+		st->envv = st->firstenv;
+		st->pwd = line;
+//		printf("line||%s||\n", line);
 		if (chdir(st->pwd) < 0)
+		{
+			st->oldpwd = tmp;
+			write(1, "minishell: ", 11);
+			write(1, "cd: ", 4);
+			write(1, "HOME not set\n", 13);
 			return (0);
+		}
+		oldpwd(st);
 		return (1);
 	}
 	line = st->tokens->next->content;
-	while (line[i] == ' ')
-		i++;
-	st->pwd = ft_strdup(&line[i]);
+//	while (line[i] == ' ')
+//		i++;
+	if (st->tokens->next && line[0] != '\0')
+		st->pwd = ft_strdup(&line[i]);
 	if (chdir(st->pwd) < 0)
+	{
+		open_pathcd(st, (char *)st->tokens->next->content);
+		st->oldpwd = tmp;
 		return (0);
+	}
+	oldpwd(st);
 	return (1);
 }
 
@@ -189,6 +232,7 @@ int ft_command(shell *st, char **envp)
 	//	printf("%s\n", (char *)st->tokens->content);
 		if (!ft_exec(st))
 		{
+//			printf("%s\n", (char *)st->tokens->content);
 /*			printf("%s\n", (char *)st->tokens->content);
 			tmp = ft_strdup((char *)st->tokens->content);
 			if (!ft_strcmp(tmp, "/"))

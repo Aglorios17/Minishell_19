@@ -69,5 +69,6 @@ char **ft_splitms(char const *str, char c, shell *st);
 
 int ft_exec(shell *st);
 int check_path(shell *st, char *dollars);
+int open_pathcd(shell *st, char *path);
 
 #endif

@@ -9,6 +9,8 @@ int ft_unset(shell *st)
 	tmp = NULL;
 	previous = NULL;
 	un = (char *)st->tokens->content;
+	if (!ft_strncmp(un, "PWD\0", ft_strlen(un)))
+		st->pwd = ft_strdup("");
 	if (ft_strchr(un, '=') || ft_strchr(un, ' '))
 	{
 		write(1, "minishell: unset: `", 19);
@@ -113,6 +115,7 @@ int	ft_dollars(shell *st, char *tmp, int i)
 	(void)b;
 	(void)val;
 	tmp2 = tmp;
+//	printf("tmp2 : |%s|\n", tmp2);
 	val = ft_strdup(&tmp[i - 1]);
 	if (tmp[i + 1] == '\0' || tmp[i + 1] == '\\')
 	{
@@ -246,46 +249,6 @@ int	ft_dollars(shell *st, char *tmp, int i)
 					st->tmpq = ft_strjoin(" ", st->tmpq);
 	//			printf("tmpqfin : |%s|\n", st->tmpq);
 			}
-/* ///////////////////////////////////////////////////////// fin nouv
-			else if (st->flagdq)
-			{
-				while (tmp[i])
-				{
-					st->tmpq = ft_charjoin(st->tmpq, tmp[i]);
-					i++;
-				}
-			}
-			else
-			{
-//				printf("OK\n");
-				trad = ft_splitms(&tmp[i], ' ', st); ////////////////////////////////// modif split
-//				printf("&tmp[i] : |%s|\n", &tmp[i]);
-//				printf("tmp2 |%s|\n", tmp2);
-				b = 0;                       //////////// modif garreth debut
-				while (tmp2[b] != '$')  
-					b++;
-				if (tmp2[b - 1] != ' ' && tmp2[b - 1])
-				{
-					if (tmp[i] == ' ' && (tmp[i + 1] == ' ' || tmp[i + 1] == '\0'))
-					{
-						while (tmp[i] == ' ')
-							i++;
-						if (!st->tokens->next)
-							st->tmpq = ft_charjoin(st->tmpq, ' ');
-					}
-				}
-				i = 0;
-				while (trad[i])
-				{
-					st->tmpq = ft_strjoin(st->tmpq, trad[i]);
-//					printf("content : |%s|\n", (char*)st->tokens->next->content);
-					if (trad[i + 1])
-						st->tmpq = ft_charjoin(st->tmpq, ' ');
-					i++;
-				}
-
-			}
-*/    ///////////////////////////////////////////////////////////////////////////// fin ancien
 //			printf("st->tmpq|%s|\n", st->tmpq);
 			if (space)
 				st->tmpq = ft_charjoin(st->tmpq, ' ');
@@ -293,6 +256,12 @@ int	ft_dollars(shell *st, char *tmp, int i)
 			return (ft_strlen(st->tmpq));
 		}
 		st->envv = st->envv->next;
+	}
+	st->envv = st->firstenv;
+	if (!ft_strncmp("$OLDPWD", tmp2, 7))
+	{
+//		printf("okok\n");
+		ft_lstadd_back(&st->envv, ft_lstnew(ft_strjoin("OLDPWD=", "")));
 	}
 	st->envv = st->firstenv;
 	return (ft_strlen(new));
@@ -325,16 +294,20 @@ int	ft_cutline(shell *st)
 int	ft_envv(shell *st, char **envp)
 {
 	int a;
+	int i;
 	int p;
 	int e;
 	int s;
 	char *tmp;
+	int num;
 	
 	a = 0;
 	p = 0;
 	e = 0;
 	s = 0;
 	tmp = NULL;
+	num = 0;
+	i = 0;
 //	printf("envv1|%s|\n", (char *)st->envv->content);
 //	printf("ok\n");
 	while (envp[a])
@@ -352,7 +325,16 @@ int	ft_envv(shell *st, char **envp)
 		if (!ft_strncmp(tmp, "_", 1))
 			e = 1;
 		if (!ft_strncmp(tmp, "SHLVL", 5))
+		{
+			i = 0;
+			while (tmp[i] && tmp[i] != '=')
+				i++;
+			if (tmp[i] && tmp[i] == '=')
+				i++;
+			num = ft_atoi(&tmp[i]) + 1;
+			st->envv->content = ft_strjoin("SHLVL=", ft_itoa(num));
 			s = 1;
+		}
 		st->envv = st->envv->next;
 	}
 	st->envv = st->firstenv;
@@ -388,8 +370,9 @@ char *ft_shlvl(char *line, int i)
 	else
 	{
 		a = ft_atoi(line);
-		if (i != 0)
-			a += 1;
+		(void)i;
+//		if (i != 0)
+//			a += 1;
 	}
 	if (a < 0)
 		a = 0;

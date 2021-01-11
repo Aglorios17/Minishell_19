@@ -122,7 +122,6 @@ char *ft_clean_firsttoken(shell *st, char *tmp)
 	char *tmp2;
 
 	a = 0;
-	st->ddone = 0;
 	fri = NULL;
 	new = ft_strdup("");
 	st->tmpq = NULL;
@@ -206,6 +205,7 @@ int    ft_cleantokens(shell *st)
 //	write(1, "1\n", 2);
     if (!ft_checkcommand(st))
     {
+//		printf("st->cmdexec : %s\n", st->cmdexec);
 		if (st->status != 126)
 		{
         	write(1, "minishell: ", 11);

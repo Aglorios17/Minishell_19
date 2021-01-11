@@ -1,35 +1,43 @@
 #include "minishell.h"
 
-int open_path(shell *st, char *path)
+int open_pathcd(shell *st, char *path)
 {
-	struct stat b;
+//	struct stat b;
 	(void)st;
 //	printf("|%s|\n", path);
-	if (!opendir(path))
+//	printf("|%i|\n", errno);
+//	if (!opendir(path))
+//	{
+	//	printf("|%i|\n", errno);
+	if (errno == 13)
 	{
-//		printf("|%i|\n", errno);
-		if (!stat(path, &b))
+		if (!ft_strcmp((char *)st->tokens->content, "cd\0"))
 		{
-//			printf("|%i|\n", errno);
-			if (errno == 13)
-			{
-				if (!ft_strcmp((char *)st->tokens->content, "cd\0"))
-				{
-					write(1, "minishell: ", 11);
-					write(1, "cd: ", 4);
-					write(1, path, ft_strlen(path));
-					write(1, ": Permission denied\n", 20);
-				}
-				else
-				{
-					write(1, "minishell: ", 11);
-					write(1, path, ft_strlen(path));
-					write(1, ": Permission denied\n", 20);
-				}
-//				st->status = 126;
-				return (0);
-			}
+			write(1, "minishell: ", 11);
+			write(1, "cd: ", 4);
+			write(1, path, ft_strlen(path));
+			write(1, ": Permission denied\n", 20);
 		}
+		else
+		{
+			write(1, "minishell: ", 11);
+			write(1, path, ft_strlen(path));
+			write(1, ": Permission denied\n", 20);
+		}
+//			st->status = 126;
+		return (0);
+	}
+	if (errno == 2)
+	{
+		if (!ft_strcmp((char *)st->tokens->content, "cd\0"))
+		{
+			write(1, "minishell: ", 11);
+			write(1, "cd: ", 4);
+			write(1, path, ft_strlen(path));
+			write(1, ": No such file or directory\n", 28);
+		}
+//			st->status = 126;
+		return (0);
 	}
 	return (1);
 }
@@ -66,25 +74,27 @@ int	check_path(shell *st, char *dollars)
 		st->envv = st->envv->next;
 	}
 	st->envv = st->firstenv;
+//	printf("path|%s|\n", path);
 	//////////////////////////////////// fin recup path
-	if (!ft_strcmp(cmd, "cd\0") && st->tokens->next)
-	{
-		if (!open_path(st, (char *)st->tokens->next->content))
-			return (0);
-	}
-	if (!ft_strncmp(cmd, "./", 2))
+//	printf("tokens|%s|\n", (char *)st->tokens->content);
+//	printf("cmd |%s|\n", cmd);
+
+//	if (!ft_strcmp(cmd, "cd\0") && st->tokens->next)
+//	{
+//		if (!open_path(st, (char *)st->tokens->next->content))
+//			return (0);
+//	}
+/*	if (!ft_strncmp(cmd, "./", 2))
 	{
 		if (!open_path(st, (char *)st->tokens->content))
 			return (0);
 	}
-	//////////////////////////////////// open path
+*/	//////////////////////////////////// open path
 	tab = ft_split(path, ':');
 	i = 0;
 	tmp = NULL;
 	cmppath = NULL;
 //	printf("dollars |%s|\n", dollars);
-//	if (!st->tokens->next)
-//	{
 //	printf("dollars1 |%s|\n", dollars);
 	if (dollars[i] && ft_strchr(dollars, ' '))
 	{
@@ -99,7 +109,7 @@ int	check_path(shell *st, char *dollars)
 			i++;
 		}
 		cmd = st->cmdexec;
-		if (!ft_strcmp(cmd, "echo")) /////////////////////////////// check commmmande
+		if (!ft_strcmp(cmd, "echo")) /////////////////////////////// check commmmande builtin
 		{
 	//		printf("cmd |%s|\n", cmd);
 			return (0);
@@ -198,11 +208,20 @@ int ft_exec(shell *st)
 	}
 	i = 0;
 */
+//	printf("st->cmd1|%s|\n", st->cmdexec);
+//	if (!ft_strncmp(st->cmdexec, "path/", 5))
+//	{
+//		printf("st->cmd2|%s|\n", st->cmdexec);
+//		st->cmdexec = ft_strjoin("./", st->cmdexec);
+//		if (!open_path(st, st->cmdexec))
+//			return (0);
+//	}
 	if (a == 0)
 		i = execve((char *)st->cmdexec, ar, en);
 //		i = execve((char *)st->tokens->content, ar, en);
 //		printf("e|%i|\n", errno);
 	wait(&a);
 	st->status = a/256;
+//	printf("st->status|%i|\n", st->status);
 	return (i);
 }
