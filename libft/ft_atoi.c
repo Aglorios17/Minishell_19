@@ -20,11 +20,11 @@ static int	ft_long(int signe)
 		return (-1);
 }
 
-int			ft_atoi(const char *str)
+long long	ft_atoi(const char *str)
 {
 	int					i;
 	int					signe;
-	unsigned long int	result;
+	unsigned long long	result;
 
 	result = 0;
 	signe = 1;
@@ -44,7 +44,7 @@ int			ft_atoi(const char *str)
 		result = result * 10 + (str[i] - 48);
 		i++;
 	}
-	if (result > 2147483648)
+	if (result > 9223372036854775807)
 		return (ft_long(signe));
 	return (result * signe);
 }

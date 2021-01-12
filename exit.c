@@ -4,11 +4,13 @@ int ft_exit(shell *st)
 {
 	int	 i;
 	int  a;
+	long long result;
 	char *tmp;
 
 	tmp = NULL;
 	i = 0;
 	a = 0;
+	result = 0;
 	if (!st->tokens->next)
 		return (1);
 //	printf("tok |%s|\n", (char *)st->tokens->next->content);
@@ -59,9 +61,9 @@ int ft_exit(shell *st)
 		st->status = -1;
 		return (1);
 	}
-	i = ft_atoi(tmp);
+	result = ft_atoi(tmp);
 //	printf("i |%i|\n", i);
-	if (i == -1)
+	if (result == -1)
 	{
 		write(1, "minishell: ", 11);
 		write(1, "exit: ", 6);
@@ -70,6 +72,6 @@ int ft_exit(shell *st)
 		st->status = 255;
 		return (1);
 	}
-	st->status = i;
+	st->status = result;
 	return (1);
 }

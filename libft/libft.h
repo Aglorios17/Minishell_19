@@ -48,7 +48,7 @@ int					ft_strncmp(const char *s1, const char *s2, size_t n);
 size_t				ft_strlcpy(char *dest, const char *src, size_t size);
 size_t				ft_strlcat(char *dest, const char *src, size_t size);
 char				*ft_strnstr(const char *str, const char *to_find, size_t n);
-int					ft_atoi(const char *str);
+long long			ft_atoi(const char *str);
 void				*ft_calloc(size_t nmemb, size_t size);
 char				*ft_strdup(const char *src);
 char				*ft_substr(char const *s, unsigned int start, size_t len);
