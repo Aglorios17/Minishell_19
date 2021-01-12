@@ -35,6 +35,7 @@ char *ft_pwd(shell *st)
 //*/
 	return (st->pwd);
 }
+
 int oldpwd(shell *st)
 {
 	char *tmp;
@@ -203,7 +204,9 @@ int ft_command(shell *st, char **envp)
 		st->pwd = ft_pwd(st);
 	}
 	else if (!ft_strncmp((char *)st->tokens->content, "export", 7))
+	{
 		ft_export(st, envp);
+	}
 	else if (!ft_strncmp((char *)st->tokens->content, "unset", 6))
 	{
 		st->tokens = st->tokens->next;

@@ -197,8 +197,8 @@ int main(int argc, char **argv, char **envp)
 //		st.status = 0; /////////////////////// hereeeee 
 		while (st.cutline)
 		{
-			if (st.status != 2)
-				st.status = 0; /////////////////////// hereeeee 
+//			if (st.status != 2)
+//				st.status = 0; /////////////////////// hereeeee 
 			ft_tokens(&st);
 			if (st.tokens)
 				ft_cleantokens(&st);
@@ -210,6 +210,8 @@ int main(int argc, char **argv, char **envp)
 				return (ft_exfree2(&st, tmp));
 			}
 //			write(1,"3\n",2);
+			if (st.cutline->next)
+				st.status = 0;
 			ft_exfree(&st, tmp);
 			st.cutline = st.cutline->next;
 		}
