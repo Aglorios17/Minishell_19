@@ -3,51 +3,31 @@
 int ft_exit(shell *st)
 {
 	int	 i;
+	int  a;
 	char *tmp;
-	char *val;
 
 	tmp = NULL;
-	val = NULL;
 	i = 0;
+	a = 0;
 	if (!st->tokens->next)
 		return (1);
-	val = ft_strdup("");
-	i = 0;
-	tmp = ft_strdup((char *)st->tokens->next->content);
-//	printf("tmp |%s|\n", tmp);
-	while (tmp[i] == ' ')
-		i++;
-	while (tmp[i] == '0' && tmp[i + 1] != '\0')
-		i++;
-	while (tmp[i])
-	{
-		while (tmp[i] == ' ')
-			i++;
-		if (tmp[i] == '0' && (tmp[i - 1] == '-' || tmp[i - 1] == '+') && tmp[i + 1] != '\0')
-		{
-			while (tmp[i] == '0')
-				i++;
-		}
-		if (tmp[i] == '\\' && ft_strchr("tfr", tmp[i + 1]))
-			i += 2;
-		else if (tmp[i])
-		{
-			val = ft_charjoin(val, tmp[i]);
-			i++;
-		}	
-	}
-	st->tokens->next->content = val;
-	val = tmp;
 //	printf("tok |%s|\n", (char *)st->tokens->next->content);
 	if (st->tokens->next)
 	{
 		i = 0;
 		tmp = ft_strdup((char *)st->tokens->next->content);
 //		printf("tokbcl |%s|\n", (char *)st->tokens->next->content);
+		a = 0;
 		while (tmp[i])
 		{
-//			printf("|%c|\n", tmp[i]);
-			if (!ft_isdigit(tmp[i]))
+		//	printf("1|%c|\n", tmp[i]);
+			while ((tmp[i] && ((tmp[i] >= 7 && tmp[i] <= 13) || tmp[i] == ' ')) && a == 0)
+				i++;
+			while ((tmp[i] && ((tmp[i] >= 7 && tmp[i] < 13) || tmp[i] == ' ')) && a == 1)
+				i++;
+			if (tmp[i] && ft_isdigit(tmp[i]))
+				a = 1;
+			if (tmp[i] && !ft_isdigit(tmp[i]))
 			{
 				if ((tmp[i] == '-' || tmp[i] == '+') && ft_isdigit(tmp[i + 1]))
 					(void)i;
@@ -55,7 +35,7 @@ int ft_exit(shell *st)
 				{
 					write(1, "minishell: ", 11);
 					write(1, "exit: ", 6);
-					write(1, val, ft_strlen(val));
+					write(1, tmp, ft_strlen(tmp));
 					write(1, ": numeric argument required\n", 28);
 					st->status = 255;
 					return (1);
@@ -81,7 +61,7 @@ int ft_exit(shell *st)
 	}
 	i = ft_atoi(tmp);
 //	printf("i |%i|\n", i);
-	if (i == -1 || ft_strlen(tmp) >= 20 || ((tmp[0] == '-' || tmp[0] == '+') && ft_strlen(tmp) >= 20))
+	if (i == -1)
 	{
 		write(1, "minishell: ", 11);
 		write(1, "exit: ", 6);

@@ -14,6 +14,7 @@ typedef struct	mini
 {
 	char		*line;
 	char		*pwd;
+	char		*pwdcp;
 	char		*oldpwd;
 	char		*home;
 	int			ret;

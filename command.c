@@ -3,14 +3,14 @@
 char *ft_pwd(shell *st)
 {
 	char *buf;
-	int i;
-	char *tmp;
+//	int i;
+//	char *tmp;
 
-	i = 0;
-	tmp = NULL;
+//	i = 0;
+//	tmp = NULL;
 	buf = NULL;
 	st->pwd = getcwd(buf, 65535);
-///*
+/*
 	while (st->envv)
 	{
 		tmp = (char *)st->envv->content;
@@ -32,7 +32,7 @@ char *ft_pwd(shell *st)
 		st->envv = st->envv->next;
 	}
 	st->envv = st->firstenv;
-//*/
+*/
 	return (st->pwd);
 }
 
@@ -80,6 +80,14 @@ int ft_cd(shell *st)
 	i = 0;
 	tmp = st->oldpwd;
 	st->oldpwd = st->pwd;
+	if (st->tokens->next && st->tokens->next->next)
+	{
+		st->oldpwd = tmp;
+		write(1, "minishell: ", 11);
+		write(1, "cd: ", 4);
+		write(1, "too many arguments\n", 19);
+		return (0);
+	}
 	if (!st->tokens->next)
 	{	
 		while (st->envv)
@@ -179,13 +187,13 @@ int ft_echo(shell *st)
 
 int ft_command(shell *st, char **envp)
 {
-//	char *tmp;
-//	int i;
+	char *tmp;
+	int i;
 //	int a;
 //	printf("|%s|\n", (char *)st->tokens->content);
 
-//	tmp = NULL;
-//	i = 0;
+	tmp = NULL;
+	i = 0;
 //	a = 0;
 	if (!st->tokens)
 		return (0);
@@ -200,8 +208,31 @@ int ft_command(shell *st, char **envp)
 	}
 	else if (!ft_strncmp((char *)st->tokens->content, "cd", 3))
 	{
-		ft_cd(st);
-		st->pwd = ft_pwd(st);
+		if (ft_cd(st) == 1)
+		{
+			st->pwd = ft_pwd(st);
+			while (st->envv)
+			{
+				tmp = (char *)st->envv->content;
+				if (!ft_strncmp(tmp, "PWD=", 4))
+				{
+					if (st->pwd)
+					{
+						i = 0;
+						while (tmp[i] != '=')
+							i++;
+						if (tmp[i] == '=')
+							i++;
+					//	if (!ft_strcmp(st->pwd, st->oldpwd))
+						st->envv->content = ft_strjoin("PWD=", st->pwd);
+//					printf("envv||%s||\n", (char *)st->envv->content);
+						break;
+					}
+				}
+				st->envv = st->envv->next;
+			}
+			st->envv = st->firstenv;
+		}
 	}
 	else if (!ft_strncmp((char *)st->tokens->content, "export", 7))
 	{

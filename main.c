@@ -7,6 +7,7 @@ void ft_init_struct(shell *st)
 	st->quotes2 = 0;
 	st->line = NULL;
 	st->pwd = NULL;
+	st->pwdcp = NULL;
 	st->oldpwd = NULL;
 	st->home = NULL;
 	st->firsttok = NULL;
@@ -14,6 +15,7 @@ void ft_init_struct(shell *st)
 	st->tokens = NULL;
 	st->envv = NULL;
 	st->firstenv = NULL;
+	st->flagdq = 0;
 	st->home = ft_pwd(st);
 	st->status = 0;
 	st->cutline = 0;

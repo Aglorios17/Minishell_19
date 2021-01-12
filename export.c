@@ -36,7 +36,7 @@ int ft_unset(shell *st)
 		st->envv = previous->next;
 		free(previous);
 		st->firstenv = st->envv;
-		st->tokens = st->firsttok;
+	//	st->tokens = st->firsttok;
 		return (0);
 	}
 	previous = st->envv;
@@ -48,7 +48,7 @@ int ft_unset(shell *st)
 			previous->next = tmp->next;
 			free(tmp);
 			st->envv = st->firstenv;
-			st->tokens = st->firsttok;
+	//		st->tokens = st->firsttok;
 			return (0);
 		}
 		previous = tmp;
