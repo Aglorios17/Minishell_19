@@ -2,14 +2,14 @@
 
 char *ft_pwd(shell *st)
 {
-	char *buf;
+//	char *buf;
 //	int i;
 //	char *tmp;
 
 //	i = 0;
 //	tmp = NULL;
-	buf = NULL;
-	st->pwd = getcwd(buf, 65535);
+//	buf = NULL;
+	st->pwd = getcwd(NULL, 0);
 /*
 	while (st->envv)
 	{
