@@ -12,6 +12,8 @@ int ft_unset(shell *st)
 //	printf("tokens|%s|\n", un);
 	if (!ft_strncmp(un, "PWD\0", ft_strlen(un)))
 		st->pwd = ft_strdup("");
+	if (!ft_strncmp(un, "PATH\0", ft_strlen(un)))
+		st->pat = NULL;
 	if (un[0] == '\0')
 	{
 		write(1, "minishell: unset: `", 19);

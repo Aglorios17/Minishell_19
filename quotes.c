@@ -208,18 +208,18 @@ int    ft_cleantokens(shell *st)
 //		printf("st->cmdexec : %s\n", st->cmdexec);
 		if (st->status != 126)
 		{
-		//	if (errno == 2)
-		//	{
-        //		write(1, "minishell: ", 11);
-        //		write(1, (char *)st->tokens->content, ft_strlen((char *)st->tokens->content));
-        //		write(1, ": No such file or directory\n", 28);
-		//	}
-		//	else
-		//	{
+			if (st->pat[0] == '\0' || !st->pat)
+			{
+        		write(1, "minishell: ", 11);
+        		write(1, (char *)st->tokens->content, ft_strlen((char *)st->tokens->content));
+        		write(1, ": No such file or directory\n", 28);
+			}
+			else
+			{
         	write(1, "minishell: ", 11);
         	write(1, (char *)st->tokens->content, ft_strlen((char *)st->tokens->content));
         	write(1, ": command not found\n", 20);
-		//	}
+			}
 			st->status = 127;
 		}
 //     	st->ret = 1;

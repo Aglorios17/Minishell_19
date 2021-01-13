@@ -17,6 +17,7 @@ typedef struct	mini
 	char		*pwdcp;
 	char		*oldpwd;
 	char		*home;
+	char		*pat;
 	int			ret;
 	int			status;
 	int			quotes;

@@ -19,6 +19,7 @@ void ft_init_struct(shell *st)
 	st->home = ft_pwd(st);
 	st->status = 0;
 	st->cutline = 0;
+	st->pat = NULL;
 }
 
 int	ft_exfree2(shell *st, t_list *tmp)

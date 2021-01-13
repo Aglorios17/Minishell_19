@@ -56,8 +56,10 @@ int	check_path(shell *st, char *dollars)
 	tab = NULL;
 	path = NULL;
 	cmd = (char *)st->tokens->content;
+//	st->pat = NULL;
 	cmppath = ft_strdup("PATH=");
 	i = 0;
+//	printf("1\n");
 	while (st->envv)
 	{
 		tmp = ft_strdup((char *)st->envv->content);
@@ -69,12 +71,13 @@ int	check_path(shell *st, char *dollars)
 			if (tmp[i] == '=')
 				i++;
 			path = ft_strdup(&tmp[i]);
+			st->pat = ft_strdup(&tmp[i]);
 			break;
 		}
 		st->envv = st->envv->next;
 	}
 	st->envv = st->firstenv;
-//	printf("path|%s|\n", path);
+//	printf("2\n");
 	//////////////////////////////////// fin recup path
 //	printf("tokens|%s|\n", (char *)st->tokens->content);
 //	printf("cmd |%s|\n", cmd);
@@ -133,18 +136,26 @@ int	check_path(shell *st, char *dollars)
 	else
 		st->cmdexec = ft_strdup((char *)st->tokens->content);
 //	printf("cmppath|%s|\n", cmppath);
-//	printf("cmd |%s|\n", st->cmdexec);
+//	printf("cmd |%s|\n", cmd);
+//	write(1, "1\n", 2);
+//	write(1, "2\n", 2);
 	i = 0;
+//	printf("tab|%s|\n", tab[i]);
 	while (tab[i])
 	{
+//		printf("3\n");
 //		printf("tab|%s|\n", tab[i]);
+//		write(1, "1\n", 2);
 		if (!ft_strchr(cmd, '/'))
 		{
+//			write(1, "2\n", 2);
 //			printf("tokens|%s|\n", (char *)st->tokens->content);
+//			printf("4\n");
 			if (!ft_strcmp(cmd, "echo") || !ft_strcmp(cmd, "cd") || !ft_strcmp(cmd, "pwd") ||
 				!ft_strcmp(cmd, "env") || !ft_strcmp(cmd, "export") ||
 				!ft_strcmp(cmd, "unset") || !ft_strcmp(cmd, "exit"))
 				return (0);
+//			printf("5\n");
 			tmp = ft_strjoin(tab[i], "/");
 			tmp = ft_strjoin(tmp, cmd);
 			if (stat(tmp, &b) != -1)
@@ -160,7 +171,9 @@ int	check_path(shell *st, char *dollars)
 		i++;
 	}
 	if (stat(cmd, &b) == -1)
+	{
 		return (0);
+	}
 	return (1);
 }
 
