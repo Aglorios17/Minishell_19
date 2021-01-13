@@ -376,15 +376,15 @@ char *ft_shlvl(char *line, int i)
 	a = 0;
 //	printf("i|%i|\n", i);
 //	printf("line |%s|\n", line);
-	if (!ft_atoi(line))
-		a = 1;
-	else
-	{
-		a = ft_atoi(line);
-		(void)i;
+//	if (!ft_atoi(line))
+//		a = 1;
+//	else
+//	{
+	a = ft_atoi(line);
+	(void)i;
 //		if (i != 0)
 //			a += 1;
-	}
+//	}
 	if (a < 0)
 		a = 0;
 	if (a >= 1000)
