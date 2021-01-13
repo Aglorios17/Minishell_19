@@ -196,8 +196,25 @@ int ft_exec(shell *st)
 
 	ar = NULL;
 	en = NULL;
+	i = 0;
+//	printf("tokens|%s|\n", (char *)st->tokens->content);	
+//	printf("st->cmd|%s|\n", st->cmdexec);
 	if (stat(st->cmdexec, &b) == -1)
+	{
 		return (0);
+	}
+	if (open(st->cmdexec, i))
+	{
+//		printf("ok|%i|\n", errno);	
+		if (errno == 13)
+		{
+			write(1, "minishell: ", 11);
+			write(1, st->cmdexec, ft_strlen(st->cmdexec));
+			write(1, ": Permission denied\n", 20);
+			st->status = 126;
+			return (0);
+		}
+	}
 	a = fork();
 	ar = ft_tabreturn(st->tokens);
 	en = ft_tabreturn(st->envv);

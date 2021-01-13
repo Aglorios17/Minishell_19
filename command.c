@@ -236,6 +236,7 @@ int ft_command(shell *st, char **envp)
 	}
 	else if (!ft_strncmp((char *)st->tokens->content, "export", 7))
 	{
+	//	printf("|okexport|\n");
 		ft_export(st, envp);
 	}
 	else if (!ft_strncmp((char *)st->tokens->content, "unset", 6))
@@ -262,7 +263,10 @@ int ft_command(shell *st, char **envp)
 		st->envv = st->firstenv;
 	}
 	else	
+	{
+	//	printf("|ok|\n");
 		ft_exec(st);
+	}
 //	st->oldpwd = ft_pwd(st);
 	return (0);
 }
