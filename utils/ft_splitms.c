@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../include/minishell.h"
 
 static int  ft_malloc_tab(char const *str, char c)
 {

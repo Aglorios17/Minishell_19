@@ -12,17 +12,23 @@
 
 NAME 			= minishell
 LIBFT_PATH 		= ./libft
-SRCS 			= main.c \
-					tokens.c \
-					quotes.c \
-					command.c \
-					export.c \
-					exec.c \
-					exit.c \
-					ft_splitms.c \
+SRCS 			= main/main.c \
+					parser/tokens.c \
+					parser/quotes.c \
+					parser/command.c \
+					cmd/export.c \
+					cmd/exec.c \
+					cmd/exit.c \
+					cmd/env.c \
+					cmd/unset.c \
+					utils/dollars.c \
+					cmd/cd.c \
+					cmd/echo.c \
+					cmd/pwd.c \
+					utils/ft_splitms.c \
 
 OBJS			= ${SRCS:.c=.o}
-INCLUDE 		= minishell.h
+INCLUDE 		= include/minishell.h
 #FOLDER			= srcs
 LIBFT 			= libft
 CC				= gcc -Wall -Wextra -Werror -g # -fsanitize=address

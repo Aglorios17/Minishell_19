@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../include/minishell.h"
 
 int ft_exit(shell *st)
 {

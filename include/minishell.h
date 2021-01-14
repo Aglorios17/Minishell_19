@@ -8,7 +8,7 @@
 # include <sys/stat.h>
 # include <sys/wait.h>
 # include <dirent.h>
-# include "libft/libft.h"
+# include "../libft/libft.h"
 
 typedef struct	mini
 {
@@ -54,6 +54,7 @@ int ft_echo(shell *st);
 int ft_exit(shell *st);
 int ft_cd(shell *st);
 char *ft_pwd(shell *st);
+int oldpwd(shell *st);
 
 ////////// export //////////////
 

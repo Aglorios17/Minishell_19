@@ -1,46 +1,4 @@
-#include "minishell.h"
-
-int open_pathcd(shell *st, char *path)
-{
-//	struct stat b;
-	(void)st;
-//	printf("|%s|\n", path);
-//	printf("|%i|\n", errno);
-//	if (!opendir(path))
-//	{
-	//	printf("|%i|\n", errno);
-	if (errno == 13)
-	{
-		if (!ft_strcmp((char *)st->tokens->content, "cd\0"))
-		{
-			write(1, "minishell: ", 11);
-			write(1, "cd: ", 4);
-			write(1, path, ft_strlen(path));
-			write(1, ": Permission denied\n", 20);
-		}
-		else
-		{
-			write(1, "minishell: ", 11);
-			write(1, path, ft_strlen(path));
-			write(1, ": Permission denied\n", 20);
-		}
-//			st->status = 126;
-		return (0);
-	}
-	if (errno == 2)
-	{
-		if (!ft_strcmp((char *)st->tokens->content, "cd\0"))
-		{
-			write(1, "minishell: ", 11);
-			write(1, "cd: ", 4);
-			write(1, path, ft_strlen(path));
-			write(1, ": No such file or directory\n", 28);
-		}
-//			st->status = 126;
-		return (0);
-	}
-	return (1);
-}
+#include "../include/minishell.h"
 
 int	check_path(shell *st, char *dollars)
 {

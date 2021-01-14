@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../include/minishell.h"
 
 int	ft_back(char *tmp, int a)
 {
