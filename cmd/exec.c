@@ -72,7 +72,7 @@ int	check_path(shell *st, char *dollars)
 		cmd = st->cmdexec;
 		if (!ft_strcmp(cmd, "echo")) /////////////////////////////// check commmmande builtin
 		{
-	//		printf("cmd |%s|\n", cmd);
+//			printf("cmd |%s|\n", cmd);
 			return (0);
 		}
 		st->tokens->content = cmd; ///////////// remplacer token
@@ -128,8 +128,9 @@ int	check_path(shell *st, char *dollars)
 		}
 		i++;
 	}
-	if (stat(cmd, &b) == -1)
+	if (stat(st->cmdexec, &b) == -1)
 	{
+//		printf("ok\n");
 		return (0);
 	}
 	return (1);
@@ -164,19 +165,24 @@ int ft_exec(shell *st)
 	struct stat b;
 	int i;
 	int a;
+	int fd;
 
 	ar = NULL;
 	en = NULL;
 	i = 0;
+	fd = 0;
 //	printf("tokens|%s|\n", (char *)st->tokens->content);	
 //	printf("st->cmd|%s|\n", st->cmdexec);
+///////////////////////////////////////////////////////// error ///////////////
+///*
 	if (stat(st->cmdexec, &b) == -1)
 	{
 		return (0);
 	}
-	if (open(st->cmdexec, i))
+	if ((fd = open(st->cmdexec, i)))
 	{
-//		printf("ok|%i|\n", errno);	
+//		printf("errno|%i|\n", errno);	
+//		printf("fd1|%i|\n", fd);	
 		if (errno == 13)
 		{
 			write(1, "minishell: ", 11);
@@ -186,31 +192,15 @@ int ft_exec(shell *st)
 			return (0);
 		}
 	}
+//	printf("fd2|%i|\n", fd);	
+	close(fd);
+//*/
+//////////////////////////////////////////////////////// fin error ///////////////////
 	a = fork();
 	ar = ft_tabreturn(st->tokens);
 	en = ft_tabreturn(st->envv);
-/*
-	i = 0;
-	printf("st->cmd|%s|\n", st->cmdexec);
-	while (ar[i])
-	{
-		printf("ar|%s|\n", ar[i]);
-		i++;
-	}
-	i = 0;
-*/
-//	printf("st->cmd1|%s|\n", st->cmdexec);
-//	if (!ft_strncmp(st->cmdexec, "path/", 5))
-//	{
-//		printf("st->cmd2|%s|\n", st->cmdexec);
-//		st->cmdexec = ft_strjoin("./", st->cmdexec);
-//		if (!open_path(st, st->cmdexec))
-//			return (0);
-//	}
 	if (a == 0)
 		i = execve((char *)st->cmdexec, ar, en);
-//		i = execve((char *)st->tokens->content, ar, en);
-//		printf("e|%i|\n", errno);
 	wait(&a);
 	st->status = a/256;
 //	printf("st->status|%i|\n", st->status);

@@ -39,7 +39,7 @@ LIBFLAGS 		= -I ./libft -L ./libft -L . ./libft/*.c
 
 all:			libft_all ${NAME}
 $(NAME):		${OBJS} 
-				@$(CC) $(LIBFLAGS) libft.a -I./ $(OBJS) -o $@ 
+				@$(CC) $(LIBFLAGS) libft/libft.a -I./ $(OBJS) -o $@ 
 clean:			libft_clean
 				@${RM} ${OBJS}
 fclean:			libft_fclean clean
@@ -50,13 +50,12 @@ re:				fclean all
 # The -C flag makes you go to the appropriate path and do the asked command
 libft_all:
 	make -C $(LIBFT_PATH) all
-	cp ./libft/libft.a libft.a
 
 libft_clean:
 	make -C $(LIBFT_PATH) clean
 
 libft_fclean:
 	make -C $(LIBFT_PATH) fclean
-	$(RM) libft.a
+	$(RM) libft/libft.a
 
 .PHONY: all fclean clean re
