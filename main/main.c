@@ -197,7 +197,6 @@ int main(int argc, char **argv, char **envp)
 //		writdde(1,"1\n",2);
 		lstcmd(&st, st.line);
 		ft_cutline(&st);
-//		st.status = 0; /////////////////////// hereeeee 
 		while (st.cutline)
 		{
 //			if (st.status != 2)
@@ -213,9 +212,10 @@ int main(int argc, char **argv, char **envp)
 				return (ft_exfree2(&st, tmp));
 			}
 //			write(1,"3\n",2);
-			if (st.cutline->next)
-				st.status = 0;
+//			if (st.cutline->next)
+//				st.status = 0;
 			ft_exfree(&st, tmp);
+//			statusenv(&st ,st.status);
 			st.cutline = st.cutline->next;
 		}
 		ft_freecutline(&st, tmp);
@@ -235,8 +235,8 @@ int main(int argc, char **argv, char **envp)
 //			write(1,"1\n",2);
 			while (st.cutline)
 			{
-				if (st.status != 2)
-					st.status = 0; /////////////////////// hereeeee 
+//				if (st.status != 2)
+//					st.status = 0; /////////////////////// hereeeee 
 	//			write(1,"1\n",2);
 				ft_tokens(&st);
 	//			write(1,"2\n",2);
@@ -250,6 +250,7 @@ int main(int argc, char **argv, char **envp)
 				}
 //				write(1,"4\n",2);
 				ft_exfree(&st, tmp);
+//				statusenv(&st ,st.status);
 				st.cutline = st.cutline->next;
 			}
 			ft_freecutline(&st, tmp);

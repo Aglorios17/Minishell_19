@@ -75,4 +75,7 @@ int ft_exec(shell *st);
 int check_path(shell *st, char *dollars);
 int open_pathcd(shell *st, char *path);
 
+/////////// utils /////////////
+int statusenv(shell *st, int status);
+
 #endif

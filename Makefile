@@ -15,17 +15,18 @@ LIBFT_PATH 		= ./libft
 SRCS 			= main/main.c \
 					parser/tokens.c \
 					parser/quotes.c \
-					parser/command.c \
-					cmd/export.c \
-					cmd/exec.c \
-					cmd/exit.c \
-					cmd/env.c \
-					cmd/unset.c \
+					cmd/command.c \
+					cmd/srcs/export.c \
+					cmd/srcs/exec.c \
+					cmd/srcs/exit.c \
+					cmd/srcs/env.c \
+					cmd/srcs/unset.c \
+					cmd/srcs/cd.c \
+					cmd/srcs/echo.c \
+					cmd/srcs/pwd.c \
 					utils/dollars.c \
-					cmd/cd.c \
-					cmd/echo.c \
-					cmd/pwd.c \
 					utils/ft_splitms.c \
+					utils/status.c \
 
 OBJS			= ${SRCS:.c=.o}
 INCLUDE 		= include/minishell.h

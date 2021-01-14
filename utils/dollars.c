@@ -56,7 +56,7 @@ int	ft_dollars(shell *st, char *tmp, int i)
 	{
 //		printf("tmp[1] : |%c|\n", tmp[1]);
 //		printf("tmp[i] : |%c|\n", tmp[i]);
-		if (!ft_isalnum(tmp[i]) && tmp[i] != '_')
+		if (!ft_isalnum(tmp[i]) && tmp[i] != '_' && tmp[i] != '?')
 		{
 //			printf("OK\n");
 			break;
@@ -80,9 +80,10 @@ int	ft_dollars(shell *st, char *tmp, int i)
 	{
 		tmp = (char *)st->envv->content;
 //		printf("tmp|%s|\n", tmp);
-		if (!ft_strncmp(new, tmp, ft_strlen(new)))
+		if ((!ft_strncmp(new, tmp, ft_strlen(new))) || !ft_strncmp(new, "?=", 2))
 		{
 			i = 0;
+//			printf("ok\n");
 			while (tmp[i] && tmp[i] != '=')
 				i++;
 			if (tmp[i] == '=')
@@ -93,6 +94,11 @@ int	ft_dollars(shell *st, char *tmp, int i)
 //				printf("ok\n");
 				a = ft_atoi(&tmp[i]);
 				st->tmpq = ft_strdup(&ft_shlvl(&tmp[i], a)[6]);	
+//				printf("envv|%s|\n", (char *)st->envv->content);
+			}///* //////////////////////////////////////////////////////////////////////////////////// debut nouv
+			else if (!ft_strncmp(new, "?=", i))
+			{
+				st->tmpq = ft_itoa(st->status);	
 //				printf("envv|%s|\n", (char *)st->envv->content);
 			}///* //////////////////////////////////////////////////////////////////////////////////// debut nouv
 			else
