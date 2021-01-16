@@ -15,6 +15,7 @@ LIBFT_PATH 		= ./libft
 SRCS 			= main/main.c \
 					parser/tokens.c \
 					parser/quotes.c \
+					parser/redirections.c \
 					cmd/command.c \
 					cmd/srcs/export.c \
 					cmd/srcs/exec.c \

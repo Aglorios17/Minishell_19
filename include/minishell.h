@@ -29,6 +29,7 @@ typedef struct	mini
 	int			flagdq;
 	int			firstd;
 	int			ddone;
+	char		**redir;
 	t_list		*tokens;
 	t_list		*envv;
 	t_list		*firsttok;
@@ -75,7 +76,15 @@ int ft_exec(shell *st);
 int check_path(shell *st, char *dollars);
 int open_pathcd(shell *st, char *path);
 
+/////////// redirection ///////
+
+int		ft_redirections(shell *st);
+int		ft_redirections2(shell *st);
+int		ft_parse_redir(shell *st);
+int 	ft_check_redir(shell *st);
+
 /////////// utils /////////////
+
 int statusenv(shell *st, int status);
 
 #endif

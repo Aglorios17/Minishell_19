@@ -194,6 +194,7 @@ int ft_tokens(shell *st)
 	st->envv = st->firstenv;
 */
 	st->firsttok = st->tokens;
+	ft_redirections(st);
 /*
 	while (st->tokens != NULL)
 	{
