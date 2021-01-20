@@ -9,11 +9,10 @@ int ft_unset(shell *st)
 	tmp = NULL;
 	previous = NULL;
 	un = (char *)st->tokens->content;
-//	printf("tokens|%s|\n", un);
 	if (!ft_strncmp(un, "PWD\0", ft_strlen(un)))
 		st->pwd = ft_strdup("");
 	if (!ft_strncmp(un, "PATH\0", ft_strlen(un)))
-		st->pat = NULL;
+		st->pat = ft_strdup("");
 	if (un[0] == '\0')
 	{
 		write(1, "minishell: unset: `", 19);
@@ -38,7 +37,6 @@ int ft_unset(shell *st)
 		st->envv = previous->next;
 		free(previous);
 		st->firstenv = st->envv;
-	//	st->tokens = st->firsttok;
 		return (0);
 	}
 	previous = st->envv;
@@ -50,7 +48,6 @@ int ft_unset(shell *st)
 			previous->next = tmp->next;
 			free(tmp);
 			st->envv = st->firstenv;
-	//		st->tokens = st->firsttok;
 			return (0);
 		}
 		previous = tmp;

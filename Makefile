@@ -13,9 +13,11 @@
 NAME 			= minishell
 LIBFT_PATH 		= ./libft
 SRCS 			= main/main.c \
+					main/free.c \
 					parser/tokens.c \
 					parser/quotes.c \
-					parser/redirections.c \
+					parser/path.c \
+					parser/ft_cutline.c \
 					cmd/command.c \
 					cmd/srcs/export.c \
 					cmd/srcs/exec.c \
@@ -28,6 +30,9 @@ SRCS 			= main/main.c \
 					utils/dollars.c \
 					utils/ft_splitms.c \
 					utils/status.c \
+					utils/lst_addin.c \
+					utils/lst_cmd.c \
+					utils/list_to_tab.c \
 
 OBJS			= ${SRCS:.c=.o}
 INCLUDE 		= include/minishell.h

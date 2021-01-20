@@ -14,188 +14,373 @@ int	ft_cmddollars(shell *st, char *tmp)
 		return (0);
 }
 
+int	ft_retokens(shell *st, char *env, char *first, char *after)
+{
+	int 	a;
+	int		b;
+	int		c;
+	char	**trad;
+	char	*backs;
+	t_list	*bef;
+
+	a = 0;
+	b = 0;
+	c = 0;
+	bef = NULL;
+	trad = NULL;
+	backs = ft_strdup("");
+	(void)after;
+//	printf("env|%s|\n", env);
+//	printf("first|%s|\n", first);
+//	printf("after|%s|\n", after);
+	while (after[b] && ft_strchr(after, '\\'))
+	{
+		if (after[b] == '\\' && (after[b + 1] == ' ' || after[b + 1] == '\0'))
+		{
+			backs = ft_charjoin(backs, ' ');
+			b += 2;
+		}
+		else
+		{	
+			if (after[b] == '\\' && after[b + 1] == '\\')
+				b++;
+			backs = ft_charjoin(backs, after[b]);
+			b++;
+		}
+	}
+	if (b != 0 && after[2] != '\0')
+		c = 1;
+	b = 0;
+	st->ddone = 0;
+	while (env[a] && env[a] != '=')
+		a++;
+	if (st->flagdq == 0 && env[a])
+	{
+		trad = ft_split(&env[a + 1], ' ');
+//		while (trad[b])
+//		{
+//			printf("trad|%s|\n", trad[b]);
+//			b++;
+//		}
+//		b = 0;
+	}
+	else if (st->flagdq == 1)
+	{
+		st->tokens->content = ft_strdup(&env[a + 1]);
+//		if (first[0] != '\0' && after[0] != '\0')
+//		{
+//			if (first[0] != '\0')
+//				st->tokens->content = ft_strjoin(first, (char *)st->tokens->content);
+//			if (after[0] != '\0')
+//				st->tokens->content = ft_strjoin((char *)st->tokens->content, after);
+//		}
+		st->tmpq = ft_strdup((char *)st->tokens->content);
+		return (1);
+	}
+	if (trad[0] == NULL)
+	{
+		if (first[0] != '\0')
+		{
+			if (env[a + 1] == ' ' && after[0] != '\0')
+				st->tokens->content = ft_strjoin(first, " ");
+			else
+				st->tokens->content = ft_strdup(first);
+			st->tmpq = ft_strdup((char *)st->tokens->content);
+		}
+		return (1);
+	}
+//	printf("trad[0]|%s|\n", trad[0]);
+	if (!st->tokens->next)
+	{
+		if (first[0] == '\0' && after[0] == '\0' &&
+			env[a + 1] != ' ' && env[ft_strlen(env) - 1] != ' ')
+		{
+			st->tokens->content = ft_strdup(trad[0]);
+			a = 1;
+		}
+		else if (env[a + 1] != ' ' && env[ft_strlen(env) - 1] != ' ')
+		{
+			if (first[0] != '\0')
+			{
+				st->tokens->content = ft_strjoin(first, trad[0]);
+				a = 1;
+			}
+			if (after[0] != '\0')
+			{
+				if (trad[1] == NULL)
+				{
+					if (first[0] != '\0')
+						st->tokens->content = ft_strjoin(first, trad[0]);
+					else
+						st->tokens->content = ft_strdup(trad[0]);
+//					st->tokens->content = ft_strdup((char *)st->tokens->content);
+//					st->tokens->content = ft_strjoin((char *)st->tokens->content, after);
+				}
+				else
+				{
+				//	printf("trad[0]|%s|\n", trad[0]);
+					if (first[0] == '\0')
+						st->tokens->content = ft_strdup(trad[0]);
+					else if (first[0] != '\0')
+						st->tokens->content = ft_strjoin(first, trad[0]);
+					if (after[0] != '\0')
+					{
+						a = 1;
+						b = 0;
+						while (trad[b])
+							b++;
+						(void)c;
+						if (after[0] == '\\')////////////////////////// mouais
+						{
+							if (c == 1)
+								trad[b - 1] = ft_strjoin(trad[b - 1], backs);
+							else
+								trad[b - 1] = ft_strjoin(trad[b - 1], " ");
+						}
+						else
+							trad[b - 1] = ft_strjoin(trad[b - 1], after);
+						st->pass += ft_strlen(after);
+					}
+				}
+			}
+		}
+		else if (first[0] == '\0' && after[0] == '\0' &&
+			env[a + 1] == ' ' && env[ft_strlen(env) - 1] == ' ')
+		{
+			st->tokens->content = ft_strdup(trad[0]);
+			a = 1;
+		}
+		else if (env[a + 1] == ' ')
+		{
+		//	printf("first|%s|\n", first);
+			if (first[0] != '\0')
+			{
+				st->tokens->content = ft_strdup(first);
+				a = 0;
+				if (after[0] != '\0' && env[ft_strlen(env) - 1] != ' ')
+				{
+					b = 0;
+					while (trad[b])
+						b++;
+					trad[b - 1] = ft_strjoin(trad[b - 1], after);
+			//		st->pass += ft_strlen(after);
+				}
+			}
+			else
+			{
+				st->tokens->content = ft_strdup(trad[0]);
+				a = 1;
+			}
+			st->ret = 1;
+		}
+		else if (env[a + 1] != ' ' && env[ft_strlen(env) - 1] == ' ')
+		{
+			if (first[0] != '\0')
+			{
+				st->tokens->content = ft_strjoin(first, trad[0]);
+				a = 1;
+			}
+			if (after[0] != '\0' && trad[1] == NULL)
+			{
+				if (first[0] == '\0')
+					st->tokens->content = ft_strdup(trad[0]);
+				a = 1;
+				b = 0;
+				while (trad[b])
+					b++;
+				trad[b - 1] = ft_strjoin(trad[b - 1], after);
+				st->pass += ft_strlen(after);
+			}
+		}
+		st->tmpq = ft_strdup((char *)st->tokens->content);
+//		printf("st->tmpqin|%s|\n", st->tmpq);
+		b = 0;
+		while (trad[b])
+			b++;
+		while (a < b && trad[a])
+		{
+		//	printf("ok\n");
+			ft_lstadd_back(&st->tokens, ft_lstnew(trad[a]));
+			st->ddone += 1;
+			a++;
+		}
+		if (env[ft_strlen(env) - 1] == ' ' && after[0] != '\0')
+		{
+			ft_lstadd_back(&st->tokens, ft_lstnew(after));
+		}
+		///////////////// debug
+/*
+		printf("st->tmpq|%s|\n", st->tmpq);
+		printf("toko|%s|\n", (char *)st->tokens->content);
+		st->tokens = st->firsttok;
+		while (st->tokens)
+		{
+			printf("st->tokens|%s|\n", (char *)st->tokens->content);
+			st->tokens = st->tokens->next;
+		}
+		exit(1);
+*/
+		////////////////
+	}
+	else if (st->tokens->next)
+	{
+		if (st->tokens == st->firsttok)
+		{
+			if (env[a + 1] != ' ')
+			{
+				if (first[0] != '\0')
+					st->tokens->content = ft_strjoin(first, trad[0]);
+				else
+					st->tokens->content = ft_strdup(trad[0]);
+			}
+			if (env[a + 1] == ' ')
+			{		
+				st->tokens->content = first;
+				a = 0;
+			}
+			else
+				a = 1;
+			st->tmpq = ft_strdup((char *)st->tokens->content);
+			st->tokens = lst_addin(&trad[a], st->tokens, 1);	
+			st->firsttok = st->tokens;
+		}
+		else
+		{
+//			printf("st->tokens|%s|\n", (char *)st->tokens->content);
+//			printf("trad[0]|%s|\n", trad[0]);
+			bef = st->tokens;
+			st->tokens = st->firsttok;
+			b = 0;
+			while (st->tokens != bef)
+			{
+				b++;
+				st->tokens = st->tokens->next;
+			}
+			st->tokens = st->firsttok;					
+			st->tokens = lst_addin(&trad[0], st->tokens, b);	
+			st->firsttok = st->tokens;
+			while (b)
+			{
+				st->tokens = st->tokens->next;
+				b--;
+			}
+			st->tmpq = ft_strdup((char *)st->tokens->content);
+		}
+		///////////////// debug
+/*
+		printf("st->tmpq|%s|\n", st->tmpq);
+		st->tokens = st->firsttok;
+		while (st->tokens)
+		{
+			printf("st->tokens|%s|\n", (char *)st->tokens->content);
+			st->tokens = st->tokens->next;
+		}
+		exit(1);
+*/
+		////////////////
+	}
+	return (1);
+}
 
 int	ft_dollars(shell *st, char *tmp, int i)
 {
 	char	*new;
 	char	*space;
-	int 	a;
-	int		b;
-	int		c;
 	char	*tmp2;
-	char	*trad; //////////////////////// changer trad char * (nouv)/ char **
+	char	*env;
 	char	*first;
-	char	*val;
+	char	*after;
+	int		a;
 
 	new = ft_strdup("");
+	first = ft_strdup("");
+	after = NULL;
 	st->pass = 0;
-	trad = NULL;
 	space = NULL;
-	first = NULL;
-	val = NULL;
-	(void)tmp2;
-	(void)trad;
-	(void)first;
+	env = NULL;
 	a = 0;
-	b = 0;
-	c = 0;
-	(void)b;
-	(void)val;
+	(void)tmp2;
+	(void)space;
 	tmp2 = tmp;
-//	printf("tmp2 : |%s|\n", tmp2);
-	val = ft_strdup(&tmp[i - 1]);
+//	printf("tmp[i]|%c|\n", tmp[i]);
+	a = 0;
+	while (a < i)
+	{
+		first = ft_charjoin(first, tmp[a]);
+		a++;
+	}
+//	printf("first|%s|\n", first);
 	if (tmp[i + 1] == '\0' || tmp[i + 1] == '\\')
 	{
-		st->tmpq = ft_charjoin(st->tmpq, '$');
+//		a = 0;
+//		while (a < i)
+//		{
+//			first = ft_charjoin(first, tmp[a]);
+//			a++;
+//		}
+		if (first[0] != '\0')
+		{
+			st->tmpq = ft_strjoin(first, "$");
+//			printf("st->tmpq|%s|\n", st->tmpq);
+		}
+		else
+			st->tmpq = ft_charjoin(st->tmpq, '$');
 		st->pass = i;
 		return (0);
 	}
 	i++;
-//	printf("tmp|%c|\n", tmp[1]);
 	while (tmp[i] && !ft_strchr("\'\"", tmp[i]) && tmp[i] != '\0')
 	{
-//		printf("tmp[1] : |%c|\n", tmp[1]);
-//		printf("tmp[i] : |%c|\n", tmp[i]);
 		if (!ft_isalnum(tmp[i]) && tmp[i] != '_' && tmp[i] != '?')
-		{
-//			printf("OK\n");
 			break;
-		}
-		if (tmp[i] == '$' || tmp[i] == '\\') /////////////////////////////////////////////////////////// 
+		if (tmp[i] == '$' || tmp[i] == '\\')
 		{
 			if (tmp[i] == '\\' && !tmp[i + 1])
 				space = ft_strdup(" ");
 			break;
 		}
 		new = ft_charjoin(new, tmp[i]);
-//		printf("join|%s|\n", new);
 		i++;
 	}
-//	printf("new|%s|\n", new);
+
+	after = ft_strdup(&tmp[i]);
+//	if (after[0] != '\0')
+//		st->pass = i + ft_strlen(after) - 1;
+//	else
 	st->pass = i - 1;
 	new = ft_charjoin(new, '=');
 //	printf("new|%s|\n", new);
-	tmp = NULL;
 	while (st->envv)
 	{
-		tmp = (char *)st->envv->content;
-//		printf("tmp|%s|\n", tmp);
-		if ((!ft_strncmp(new, tmp, ft_strlen(new))) || !ft_strncmp(new, "?=", 2))
-		{
-			i = 0;
-//			printf("ok\n");
-			while (tmp[i] && tmp[i] != '=')
-				i++;
-			if (tmp[i] == '=')
-				i++;
-//			tmp = ft_pass_space(tmp, i);
-			if (!ft_strncmp(tmp, "SHLVL=", i))
-			{
-//				printf("ok\n");
-				a = ft_atoi(&tmp[i]);
-				st->tmpq = ft_strdup(&ft_shlvl(&tmp[i], a)[6]);	
-//				printf("envv|%s|\n", (char *)st->envv->content);
-			}///* //////////////////////////////////////////////////////////////////////////////////// debut nouv
-			else if (!ft_strncmp(new, "?=", i))
-			{
-				st->tmpq = ft_itoa(st->status);	
-//				printf("envv|%s|\n", (char *)st->envv->content);
-			}///* //////////////////////////////////////////////////////////////////////////////////// debut nouv
-			else
-			{
-//				printf("ok\n");
-				(void)tmp2;
-				(void)first;
-//				printf("&tmp[i] : |%s|\n", &tmp[i]);
-//				printf("tmp2 : |%s|\n", tmp2);
-//				printf("flag : |%i|\n", st->flagdq);
-				first = ft_substr(tmp2, st->pass + 1, ft_strlen(tmp2));
-				trad = ft_strdup(&tmp[i]);
-//				printf("first : |%s|\n", first);
-//				printf("tmp : |%s|\n", tmp);
-//				printf("trad1 : |%s|\n", trad);
-//				printf("val : |%s|\n", val);
-				a = 0;
-				b = 0;
-				while (trad[a] && trad[a] == ' ')
-					a++; 
-				if (trad[a] != '\0' && st->flagdq == 1)
-					c = 1;
-//				printf("trad[a] : |%c|\n", trad[a]);
-				else if (trad[a] != '\0')
-				{
-//					if (!ft_strncmp(trad, "echo", 5) || !ft_strncmp(trad, "cd", 3) ||
-//						!ft_strncmp(trad, "pwd", 4) ||
-//						!ft_strncmp(trad, "env", 4) || !ft_strncmp(trad, "export", 7) ||
-//						!ft_strncmp(trad, "unset", 6) || !ft_strncmp(trad, "exit", 5))
-//					{
-//						printf("ok\n");
-//					//	st->envv = st->firstenv;
-					//	return (ft_strlen(st->tmpq));
-//					}
-					if (trad[a] != '\0')
-					{
-						tmp = ft_strdup("");
-						while (trad[a])
-						{
-//							printf("trad[a]bcl : |%c|\n", trad[a]);
-							if (trad[a] == ' ' && (trad[a + 1] == ' ' || trad[a + 1] == '\0'))
-								a++;
-							else
-							{
-								tmp = ft_charjoin(tmp, trad[a]);
-								a++;
-							}
-						}
-						i = 0;
-					}
-				}
-				else if (trad[a] == '\0')
-				{
-//					printf("trad[a] : |%c|\n", trad[a]);
-					if (st->flagdq == 1)
-					{
-//						printf("trad2 : |%s|\n", trad);
-						tmp = ft_strdup(trad);
-					}
-					else if (st->flagdq == 0 && tmp2[0] != '$' && first[0])
-						tmp = ft_strdup(" ");
-					else
-						tmp = ft_strdup("");
-					i = 0;
-					b = 1;
-				}
-//				printf("tmp2[0] : |%c|\n", tmp2[0]);
-//				printf("first[0] : |%c|\n", first[0]);
-//				printf("tmpfin trad : |%s|\n", tmp);
-				while (tmp[i])
-				{
-					st->tmpq = ft_charjoin(st->tmpq, tmp[i]);
-					i++;
-				}
-//				printf("firstd : |%i|\n", st->firstd);
-			//	if (trad[0] == ' ' && st->firstd > 2)
-			//		st->tmpq = ft_strjoin(" ", st->tmpq);
-				if (trad[ft_strlen(trad) - 1] == ' ' && (first[0] && first[0] != '$') && b == 0 && c== 0)
-					st->tmpq = ft_charjoin(st->tmpq, ' ');
-				if (trad[0] == ' ' && val[0] && b == 0 && c == 0)
-					st->tmpq = ft_strjoin(" ", st->tmpq);
-	//			printf("tmpqfin : |%s|\n", st->tmpq);
-			}
-//			printf("st->tmpq|%s|\n", st->tmpq);
-			if (space)
-				st->tmpq = ft_charjoin(st->tmpq, ' ');
-			st->envv = st->firstenv;
-			return (ft_strlen(st->tmpq));
-		}
+		env = ft_strdup((char *)st->envv->content);
+//		printf("env|%s|\n", env);
+		if (!ft_strncmp(new, env, ft_strlen(new)))
+			break;
 		st->envv = st->envv->next;
+		free(env);
+		env = NULL;
 	}
 	st->envv = st->firstenv;
-	if (!ft_strncmp("$OLDPWD", tmp2, 7))
+//	printf("env|%s|\n", env);
+	if (!ft_strncmp(new, "SHLVL=", ft_strlen(new)))
 	{
-//		printf("okok\n");
-		ft_lstadd_back(&st->envv, ft_lstnew(ft_strjoin("OLDPWD=", "")));
+		a = ft_atoi(&tmp[i]);
+		st->tmpq = ft_strdup(&ft_shlvl(&env[i], a)[6]);	
 	}
-	st->envv = st->firstenv;
-	return (ft_strlen(new));
+	else if (!ft_strncmp(new, "?=", ft_strlen(new)))
+		st->tmpq = ft_itoa(st->status);	
+	else if (env == NULL && !ft_strncmp("$OLDPWD", tmp2, 7))
+		ft_lstadd_back(&st->envv, ft_lstnew(ft_strjoin("OLDPWD=", "")));
+	else
+	{
+//		printf("|ok|\n");
+		if (env == NULL)
+			env = ft_strdup("=");
+//		printf("|ok|\n");
+//		printf("env|%s|\n", env);
+		ft_retokens(st, env, first, after);
+//		printf("|ok|\n");
+//		printf("st->tmpq|%s|\n", st->tmpq);
+	}
+	return (1);
 }

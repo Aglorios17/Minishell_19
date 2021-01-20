@@ -97,7 +97,6 @@ int	ft_checkcommand(shell *st)
 //	printf("|ok|\n");
 	if (check_path(st, tmp) == 1)
 	{
-//		printf("|ok1|\n");
 		return (1);
 	}
 //	printf("|ok2|\n");

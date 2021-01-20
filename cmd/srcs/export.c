@@ -4,13 +4,17 @@ int ft_export(shell *st, char **envp)
 {
 	char *tmp;
 	char *tmp2;
+	char *bef;
 	int	a;
 	int	i;
+	int	b;
 	int err;
 
 	tmp = NULL;
 	tmp2 = NULL;
+	bef = NULL;
 	a = 0;
+	b = 0;
 	err = 0;
 	i = 0;
 	(void)envp;
@@ -76,7 +80,14 @@ int ft_export(shell *st, char **envp)
 		}
 		if (err == 0)
 		{
-			if (ft_isdigit(tmp[0]) || ft_strchr(tmp, '\\') || ft_strchr(tmp, '\'') || ft_strchr(tmp, '"') || ft_strchr(tmp, '$') || ft_strchr(tmp, '|') || ft_strchr(tmp, ';') || ft_strchr(tmp, '&') || ft_strchr(tmp, '!') ||  ft_strchr(tmp, '@'))
+			b = 0;
+			bef = ft_strdup("");
+			while (tmp[b] && tmp[b] != '=')
+			{
+				bef = ft_charjoin(bef, tmp[b]);
+				b++;
+			}
+			if (ft_isdigit(bef[0]) || ft_strchr(bef, '\\') || ft_strchr(bef, '\'') || ft_strchr(bef, '"') || ft_strchr(bef, '$') || ft_strchr(bef, '|') || ft_strchr(bef, ';') || ft_strchr(bef, '&') || ft_strchr(bef, '!') ||  ft_strchr(bef, '@'))
 			{
 				write(1, "minishell: export: `", 20);
 				write(1, tmp, ft_strlen(tmp));

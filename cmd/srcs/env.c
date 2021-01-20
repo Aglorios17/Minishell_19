@@ -1,29 +1,5 @@
 #include "../../include/minishell.h"
 
-int	ft_cutline(shell *st)
-{
-	int a;
-	char **line;
-	a = 0;
-	line = ft_splitms(st->line, ';', st);
-	while (line[a])
-	{
-		ft_lstadd_back(&st->cutline, ft_lstnew(ft_strdup(line[a])));
-		a++;
-	}
-//	printf("envv1|%s|\n", (char *)st->envv->content);
-	st->firstcut = st->cutline;
-/*
-	while (st->cutline != NULL)
-	{
-		printf("cut|%s|\n", (char *)st->cutline->content);
-		st->cutline = st->cutline->next;
-	}
-	st->cutline = st->firstcut;
-*/
-    return (0);
-}
-
 int	ft_envv(shell *st, char **envp)
 {
 	int a;
@@ -96,17 +72,8 @@ char *ft_shlvl(char *line, int i)
 	int a;
 
 	a = 0;
-//	printf("i|%i|\n", i);
-//	printf("line |%s|\n", line);
-//	if (!ft_atoi(line))
-//		a = 1;
-//	else
-//	{
 	a = ft_atoi(line);
 	(void)i;
-//		if (i != 0)
-//			a += 1;
-//	}
 	if (a < 0)
 		a = 0;
 	if (a >= 1000)
@@ -116,9 +83,7 @@ char *ft_shlvl(char *line, int i)
 		write(1, ") too high, resetting to 1\n", 27);	
 		a = 1;
 	}
-//	printf("level |%i|\n", a);
 	line = ft_itoa(a);
 	line = ft_strjoin("SHLVL=", line);
-//	printf("line |%s|\n", line);
 	return (line);
 }
