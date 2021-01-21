@@ -4,25 +4,25 @@ int ft_check_errorredir2(shell *st)
 {
     if (st->redirnext && !ft_strncmp(st->redirnext, ">", 2))
     {
-        ft_putstr("minishell: syntax error near unexpected token `>'\n");
+        ft_putendl_fd("minishell: syntax error near unexpected token `>'\n", 2);
         st->errorredir = 3;
         return (1);
     }
     if (st->redirnext && !ft_strncmp(st->redirnext, ">>", 2))
     {
-        ft_putstr("minishell: syntax error near unexpected token `>>'\n");
+        ft_putendl_fd("minishell: syntax error near unexpected token `>>'\n", 2);
         st->errorredir = 3;
         return (1);
     }
     if (st->redirnext && !ft_strncmp(st->redirnext, "<", 1))
     {
-        ft_putstr("minishell: syntax error near unexpected token `<'\n");
+        ft_putendl_fd("minishell: syntax error near unexpected token `<'\n", 2);
         st->errorredir = 3;
         return (1);
     }
     if (st->redirnext && !ft_strncmp(st->redirnext, "<<", 2))
     {
-        ft_putstr("minishell: syntax error near unexpected token `<<'\n");
+        ft_putendl_fd("minishell: syntax error near unexpected token `<<'\n", 2);
         st->errorredir = 3;
         return (1);
     }
@@ -33,44 +33,43 @@ int ft_check_errorredir(shell *st)
 {
     if (!ft_strncmp((char *)st->tokens->content, ">>>", 4))
     {
-        ft_putstr("minishell: syntax error near unexpected token `>'\n");
+        ft_putendl_fd("minishell: syntax error near unexpected token `>'\n", 2);
         st->errorredir = 2;
         return (1);
     }
     if (!ft_strncmp((char *)st->tokens->content, ">>>>", 4))
     {
-        ft_putstr("minishell: syntax error near unexpected token `>>'\n");
+        ft_putendl_fd("minishell: syntax error near unexpected token `>>'\n", 2);
         st->errorredir = 2;
         return (1);
     }
     if (!ft_strncmp((char *)st->tokens->content, "<<<<", 5))
     {
-        ft_putstr("minishell: syntax error near unexpected token `<'\n");
+        ft_putendl_fd("minishell: syntax error near unexpected token `<'\n", 2);
         st->errorredir = 2;
         return (1);
     }
     if (!ft_strncmp((char *)st->tokens->content, "<<<<<", 6))
     {
-        ft_putstr("minishell: syntax error near unexpected token `<<'\n");
+        ft_putendl_fd("minishell: syntax error near unexpected token `<<'\n", 2);
         st->errorredir = 2;
         return (1);
     }
     if (!ft_strncmp((char *)st->tokens->content, "<<<<<<", 6))
     {
-        ft_putstr("minishell: syntax error near unexpected token `<<<'\n");
+        ft_putendl_fd("minishell: syntax error near unexpected token `<<<'\n", 2);
         st->errorredir = 2;
         return (1);
     }
     return (0);
 }
 
-int ft_parse_redir(shell *st)
+int ft_parse_redir(shell *st, int fd)
 {
     int a;
-    int fd;
 
     a = 0;
-    fd = 0;
+    fd = 1;
 //    st->errorredir = 0;
     while (st->redir[a])
     {
@@ -78,12 +77,12 @@ int ft_parse_redir(shell *st)
         {
             if (st->cutline->next)
             {
-                ft_putstr("minishell: syntax error near unexpected token `;\'\n");
+                ft_putendl_fd("minishell: syntax error near unexpected token `;\'\n", 2);
                 st->errorredir = 4;
             }
             else
             {
-                ft_putstr("minishell: syntax error near unexpected token `newline'\n");
+                ft_putendl_fd("minishell: syntax error near unexpected token `newline'\n", 2);
                 st->errorredir = 1;
             }
             return (1);
@@ -95,7 +94,6 @@ int ft_parse_redir(shell *st)
         }
         if (!ft_strcmp(st->redir[a], ">>"))
         {
-//            printf("OK\n");
             if ((fd = open(st->redir[a + 1], O_WRONLY | O_APPEND | O_CREAT, 0644)) < 0)
                 return (0);
         }
@@ -104,8 +102,12 @@ int ft_parse_redir(shell *st)
                 return (0);
         a++;
     }
-    st->fdout = fd;
-//    dup2(fd, 1); 
+//	printf("ok\n");
+//	st->fdone = st->fdout;
+//	printf("fdone|%i|\n", st->fdone);
+//	close(1);
+ //   st->fdout = dup2(fd, 1);
+    st->fdout = dup2(fd, 1);
     return (0);
 }
 
@@ -162,7 +164,6 @@ t_list  *ft_redirections2(shell *st, char *supp, char *supp2, char *supp3)
 
 int ft_check_redir(shell *st)
 {
-
     st->redirnext = NULL;
 /*    while (st->tokens)
     {
@@ -187,6 +188,9 @@ int ft_check_redir(shell *st)
 
 int ft_redirections(shell *st)
 {
+	int fd;
+
+	fd = 0;
     st->errorredir = 0;
     if (!(st->redir = malloc(1 * sizeof(char *))))
         return (1);
@@ -202,7 +206,9 @@ int ft_redirections(shell *st)
     if (ft_check_redir(st) == 1)
         return (1);
     if (st->redir[0] != NULL)
-        if (ft_parse_redir(st) == 1)
-            return (1);
+    {
+		if (ft_parse_redir(st, fd) == 1)
+  	         return (1);	
+	}
     return (0);
 }

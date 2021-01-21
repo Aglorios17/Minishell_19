@@ -21,6 +21,7 @@ void ft_init_struct(shell *st)
 	st->cutline = 0;
 	st->pat = NULL;
 	st->fdout = 1;
+	st->fdone = 1;
 	st->errorredir = 0;
 }
 
@@ -35,24 +36,25 @@ int mainprocess(int argc, char **argv, char **envp, shell *st)
 	ft_cutline(st);
 	while (st->cutline)
 	{
-//		if (st.status != 2)
-//			st.status = 0; /////////////////////// hereeeee 
 //		write(1,"1\n",2);
+		st->fdone = dup(st->fdout);
 		if (ft_tokens(st) == 1)
 			st->status = 1;
-		if (st->tokens)
-			ft_cleantokens(st);
-//		write(1,"2\n",2);
-		if (ft_command(st, envp) == 1)
+		else
 		{
-			free(st->home);
-//			printf("status|%i|", st.status);
-			ft_exfree2(st, tmp);
-			return (1);
+			if (st->tokens)
+				ft_cleantokens(st);
+//			write(1,"2\n",2);
+			if (ft_command(st, envp) == 1)
+			{
+				free(st->home);
+				ft_exfree2(st, tmp);
+				return (1);
+			}
+//			write(1,"3\n",2);
 		}
-//		write(1,"3\n",2);
-//		if (st.cutline->next)
-//			st.status = 0;
+		close(st->fdout);
+		st->fdout = dup2(st->fdone, 1);	
 		ft_exfree(st, tmp);
 //		statusenv(&st ,st.status);
 		st->cutline = st->cutline->next;
@@ -82,7 +84,7 @@ int main(int argc, char **argv, char **envp)
 	{
 		while(1)
 		{
-			write(1,">>",2);
+			write(2,">>",2);
 			if (get_next_line3d(0, &st.line) != 1)
 			{
 				write(1, "exit\n", 5);

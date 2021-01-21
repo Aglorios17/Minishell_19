@@ -30,6 +30,7 @@ typedef struct	mini
 	int			firstd;
 	int			ddone;
 	int			fdout;
+	int			fdone;
 	int			errorredir;
 	char		**redir;
 	char		*redirnext;
@@ -84,7 +85,7 @@ int open_pathcd(shell *st, char *path);
 
 int		ft_redirections(shell *st);
 t_list	*ft_redirections2(shell *st, char *supp, char *supp2, char *supp3);
-int		ft_parse_redir(shell *st);
+int		ft_parse_redir(shell *st, int fd);
 int 	ft_check_redir(shell *st);
 int 	ft_check_errorredir(shell *st);
 int 	ft_check_errorredir2(shell *st);

@@ -40,21 +40,12 @@ int ft_echo(shell *st)
 	st->tokens = st->tokens->next;
 	while (st->tokens != NULL)
 	{
-		if (st->fdout != 1)
-		{
-//			printf("tokens content : %s\n", (char *)st->tokens->content);
-			ft_putendl_fd((char *)st->tokens->content, st->fdout);
-			if (i == 0)
-				write(st->fdout, "\n", 1);
-			st->fdout = 0;
-		}
-		else
-			ft_putstr((char *)st->tokens->content);
+		ft_putendl_fd((char *)st->tokens->content, st->fdout);
 		st->tokens = st->tokens->next;
 		if (st->tokens != NULL)
-			write(1, " ", 1);
+			write(st->fdout, " ", 1);
 	}
-	if (i == 0 && st->fdout == 1) //&& st->errorredir == 0)
-		write(1, "\n", 1);
+	if (i == 0)
+		write(st->fdout, "\n", 1);
 	return (0);
 }
