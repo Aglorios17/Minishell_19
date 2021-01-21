@@ -20,6 +20,8 @@ void ft_init_struct(shell *st)
 	st->status = 0;
 	st->cutline = 0;
 	st->pat = NULL;
+	st->fdout = 1;
+	st->errorredir = 0;
 }
 
 int mainprocess(int argc, char **argv, char **envp, shell *st)
@@ -36,7 +38,8 @@ int mainprocess(int argc, char **argv, char **envp, shell *st)
 //		if (st.status != 2)
 //			st.status = 0; /////////////////////// hereeeee 
 //		write(1,"1\n",2);
-		ft_tokens(st);
+		if (ft_tokens(st) == 1)
+			st->status = 1;
 		if (st->tokens)
 			ft_cleantokens(st);
 //		write(1,"2\n",2);

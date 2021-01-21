@@ -24,10 +24,16 @@ int ft_error(shell *st, struct stat b)
 //	}
 	if (stat(cmd, &b) == -1)
 	{
-		write(1, "minishell: ", 11);
-     	write(1, (char *)st->tokens->content, ft_strlen((char *)st->tokens->content));
- 		write(1, ": command not found\n", 20);
+//		if (st->errorredir != 2)
+//		{
+			write(1, "minishell: ", 11);
+     		write(1, (char *)st->tokens->content, ft_strlen((char *)st->tokens->content));
+ 			write(1, ": command not found\n", 20);
+//		}
 		st->status = 127;
+//		if (st->errorredir == 2)
+//			st->status = 1;
+//		st->errorredir = 0;
 		return (0);
 	}
 	return (1);
@@ -40,13 +46,11 @@ int ft_exec(shell *st)
 	struct stat b;
 	int i;
 	int a;
-//	int fd;
 
 	ar = NULL;
 	en = NULL;
 	i = 0;
 	(void)b;
-//	fd = 0;
 //	printf("tokens|%s|\n", (char *)st->tokens->content);	
 //	printf("st->cmd|%s|\n", st->cmdexec);
 	if (ft_error(st, b) == 0)
@@ -74,7 +78,11 @@ int ft_exec(shell *st)
 	ar = ft_tabreturn(st->tokens);
 	en = ft_tabreturn(st->envv);
 	if (a == 0)
+	{
+		dup2(st->fdout, 1);
+//		close(st->fdout);
 		i = execve((char *)st->cmdexec, ar, en);
+	}
 	wait(&a);
 	st->status = a/256;
 //	printf("st->status|%i|\n", st->status);

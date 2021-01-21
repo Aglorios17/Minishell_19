@@ -18,6 +18,9 @@ int ft_command(shell *st, char **envp)
 	{
 		ft_echo(st);
 		st->status = 0;
+//		if (st->errorredir == 1)
+//			st->status = 1;
+//		st->errorredir = 0;
 	}
 	else if (!ft_strncmp((char *)st->tokens->content, "pwd", 4))
 	{
@@ -72,10 +75,10 @@ int ft_command(shell *st, char **envp)
 		while (st->envv)
 		{
 			if (!ft_strcmp((char *)st->envv->content, "_=env"))
-				write(1, "_=/home/user42/Bureau/minishell_test/bin/env", 44);
+				write(st->fdout, "_=/home/user42/Bureau/minishell_test/bin/env", 44);
 			else
-				write(1, (char *)st->envv->content, ft_strlen((char *)st->envv->content));
-			write(1, "\n", 1);
+				write(st->fdout, (char *)st->envv->content, ft_strlen((char *)st->envv->content));
+			write(st->fdout, "\n", 1);
 			st->envv = st->envv->next;
 		}
 		st->envv = st->firstenv;

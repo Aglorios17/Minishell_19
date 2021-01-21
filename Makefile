@@ -18,6 +18,7 @@ SRCS 			= main/main.c \
 					parser/quotes.c \
 					parser/path.c \
 					parser/ft_cutline.c \
+					parser/redirections.c \
 					cmd/command.c \
 					cmd/srcs/export.c \
 					cmd/srcs/exec.c \

@@ -13,7 +13,7 @@ int	ft_checkspace(char *line)
 //		printf("1|%c|\n", line[i]);
 //		printf("in1  |%i|\n", i);
 //		printf("111111111111111111|%c|\n", line[i]);
-		if (line[i] != ' ' && line[i] != '\t' && line[i] != '\'' && line[i] != '"')
+		if (line[i] != ' ' && line[i] != '\t' && line[i] != '\'' && line[i] != '"' && line[i] != '>' && line[i] != '<')
 		{
 			i++;
 //			printf("in2  |%i|\n", i);
@@ -122,6 +122,8 @@ int	ft_checkspace(char *line)
 				return (a);
 //*/
 		}
+		else if (line[i] == '>' || line[i] == '<')
+			return (i);
 		else if (line[i] == ' ' || line[i] == '\t')
 		{
 			(void)a;
@@ -151,15 +153,19 @@ int ft_tokens(shell *st)
 {
 	int i;
 	int a;
+	int b;
+	int len;
 	char *fri;
 	char *tmp;
 
 	i = 0;
 	a = 0;
+	b = 0;
+	len = 0;
 	fri = NULL;
 	tmp = NULL;
 	tmp = (char *)st->cutline->content;
-//	printf("|%s|\n", (char *)st->cutline->content);
+//	printf("cultine->content |%s|\n", (char *)st->cutline->content);
 	if (tmp[0] == '\0')
 		return (1);
 	while (tmp[i])
@@ -167,17 +173,39 @@ int ft_tokens(shell *st)
 		while (tmp[i] == ' ' || tmp[i] == '\t')
 		{
 			if (tmp[i + 1] == '\0')
+			{
+				if (ft_redirections(st) == 1)
+					return (1);
 				return (0);
+			}
 			i++;
 		}
-		fri = ft_substr(tmp, i, a = ft_checkspace(&tmp[i]));
+		if (tmp[i] == '>' || tmp[i] == '<')
+		{
+			b = i;
+			len = 0;
+//			printf("tmp[b] |%c|\n", tmp[b]);
+			while(tmp[i] && (tmp[i] == '>' || tmp[i] == '<'))
+			{
+//				printf("tmp[i] |%c|\n", tmp[i]);
+				i++;
+				len++;
+			}
+			fri = ft_substr(tmp, b, len);
+//			printf("fri |%s|\n", fri);
+		}
+		else
+		{
+			fri = ft_substr(tmp, i, a = ft_checkspace(&tmp[i]));
+			i += a;
+		}
 //		printf("aacheck  |%i|\n", a);
 //		printf("tokkkkk  |%s|\n", fri);
 //		printf("iiiiiii  |%i|\n", i);
 		ft_lstadd_back(&st->tokens, ft_lstnew(fri));
 //		free(fri);
 //		fri = NULL;
-		i += ft_checkspace(&tmp[i]);
+//		i += a; //ft_checkspace(&tmp[i]);
 	}
 /*	while (st->envv)
 	{
@@ -194,6 +222,8 @@ int ft_tokens(shell *st)
 	st->envv = st->firstenv;
 */
 	st->firsttok = st->tokens;
+	if (ft_redirections(st) == 1)
+		return (1);
 /*
 	while (st->tokens != NULL)
 	{
