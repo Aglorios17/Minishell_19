@@ -54,16 +54,41 @@ int ft_exit(shell *st)
 		st->status = 1;
 		return (0);
 	}
-	tmp = (char *)st->tokens->next->content;
+	tmp = ft_strdup((char *)st->tokens->next->content);
 //	printf("tmp |%s|\n", tmp);
+	a = 0;
+	while (tmp[a] && tmp[a] == '-')
+		a++;
+	while (tmp[a] == '0')
+		a++;
+//	printf("tmp[a] |%c|\n", tmp[a]);
+//	printf("tmp[0] |%c|\n", tmp[0]);
+//	printf("tmp[a + 1] |%c|\n", tmp[a + 1]);
+	if (tmp[0] == '-' && tmp[a] == '1' && tmp[a + 1] == '\0')
+	{
+		st->status = -1;
+		return (1);
+	}
 	if (tmp[0] == '-' && tmp[1] == '1' && tmp[2] == '\0')
 	{
 		st->status = -1;
 		return (1);
 	}
+	if (tmp[0] == '0')
+	{
+		a = 0;
+		while (tmp[a] == '0')
+			a++;
+		if (tmp[a] == '\0')
+		{
+			st->status = 0;
+			return (1);
+		}
+	}
 	result = ft_atoi(tmp);
 //	printf("i |%i|\n", i);
-	if (result == -1)
+//	printf("result |%lli|\n", result);
+	if (result == -1 || (result == 0 && ft_strlen(tmp) > 5))
 	{
 		write(1, "minishell: ", 11);
 		write(1, "exit: ", 6);

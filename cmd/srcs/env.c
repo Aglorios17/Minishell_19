@@ -40,7 +40,7 @@ int	ft_envv(shell *st, char **envp)
 				i++;
 			if (tmp[i] && tmp[i] == '=')
 				i++;
-			num = ft_atoi(&tmp[i]) + 1;
+			num = ft_atoi2(&tmp[i]) + 1;
 			st->envv->content = ft_strjoin("SHLVL=", ft_itoa(num));
 			s = 1;
 		}

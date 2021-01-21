@@ -2,39 +2,81 @@
 
 int ft_error(shell *st, struct stat b)
 {
-	int		fd;
 	char	*cmd;
 	DIR		*dir;
+	char	*tmp;
+	int		i;
 
-	fd = 0;
-//	cmd = ft_strdup((char *)st->tokens->content);
-	cmd = st->cmdexec;
-//	fd = open(cmd, O_RDONLY, S_IRUSR | S_IWUSR);
-	(void)fd;
-	(void)b;
-	(void)dir;
-//	printf("fd|%i|\n", fd);
-//	printf("cmdexec|%s|\n", cmd);
-//	printf("st->tokens|%s|\n", (char *)st->tokens->content);
-//	dir = opendir(cmd);
-//	if (dir != NULL)
-//	{
-//		fd = open(st->cmdexec, O_RDONLY, S_IRUSR | S_IWUSR | S_IXUSR);
-//		stat(cmd, &b);
-//	}
-	if (stat(cmd, &b) == -1)
+	tmp = NULL;
+	i = 0;
+	while (st->envv)
 	{
-//		if (st->errorredir != 2)
-//		{
-			write(1, "minishell: ", 11);
-     		write(1, (char *)st->tokens->content, ft_strlen((char *)st->tokens->content));
- 			write(1, ": command not found\n", 20);
-//		}
+		tmp = ft_strdup((char *)st->envv->content);
+		if (!ft_strncmp("PATH=", tmp, 5))
+			break;
+		st->envv = st->envv->next;
+		tmp = NULL;
+	}
+	st->envv = st->envv;
+	if (tmp != NULL)
+	{
+		while (tmp[i] && tmp[i] != '=')
+			i++;
+	}
+	if (tmp == NULL || tmp[i + 1] == '\0')
+	{
+		write(2, "minishell: ", 11);
+     	write(2, (char *)st->tokens->content, ft_strlen((char *)st->tokens->content));
+ 		write(2, ": No such file or directory\n", 28);
 		st->status = 127;
-//		if (st->errorredir == 2)
-//			st->status = 1;
-//		st->errorredir = 0;
 		return (0);
+	}
+	//////////////////////////////////////////////////////////////////// debug
+//	printf("cmdexec|%s|\n", st->cmdexec);
+//	printf("st->tokens|%s|\n", (char *)st->tokens->content);
+//	printf("tmp|%s|\n", tmp);
+	//////////////////////////////////////////////////////////////////// pas toucher
+	if (!ft_strchr((char *)st->tokens->content, '/'))
+	{
+		cmd = ft_strdup(st->cmdexec);
+		if (!ft_strcmp(cmd, (char *)st->tokens->content))
+		{
+			write(2, "minishell: ", 11);
+    	 	write(2, (char *)st->tokens->content, ft_strlen((char *)st->tokens->content));
+ 			write(2, ": command not found\n", 20);
+			st->status = 127;
+			return (0);
+		}
+	}
+	cmd = ft_strdup((char *)st->tokens->content);
+	dir = opendir(cmd);
+	if (dir != NULL || errno == 13)
+	{
+		write(2, "minishell: ", 11);
+     	write(2, (char *)st->tokens->content, ft_strlen((char *)st->tokens->content));
+		write(2, ": is a directory\n", 17);
+		st->status = 126;
+		closedir(dir);
+		return (0);
+	}
+	else if (ft_strchr(cmd, '/') && stat(cmd, &b) == -1)
+	{
+		write(2, "minishell: ", 11);
+     	write(2, (char *)st->tokens->content, ft_strlen((char *)st->tokens->content));
+ 		write(2, ": No such file or directory\n", 28);
+		st->status = 127;
+		return (0);
+	}
+	if (stat(cmd, &b) == 0)
+	{
+		if (!(b.st_mode & S_IRUSR && b.st_mode & S_IXUSR))
+		{
+			write(2, "minishell: ", 11);
+     		write(2, (char *)st->tokens->content, ft_strlen((char *)st->tokens->content));
+			write(2, ": Permission denied\n", 20);
+			st->status = 126;
+			return (0);
+		}
 	}
 	return (1);
 }
@@ -50,41 +92,27 @@ int ft_exec(shell *st)
 	ar = NULL;
 	en = NULL;
 	i = 0;
-	(void)b;
-//	printf("tokens|%s|\n", (char *)st->tokens->content);	
+//	printf("tokens|%s|\n", (char *)st->tokens->content);
 //	printf("st->cmd|%s|\n", st->cmdexec);
 	if (ft_error(st, b) == 0)
 		return (0);
-///////////////////////////////////////////////////////// error ///////////////
-/*
-	if ((fd = open(st->cmdexec, i)))
-	{
-		printf("errno|%i|\n", errno);	
-		printf("fd1|%i|\n", fd);	
-		if (errno == 13)
-		{
-			write(1, "minishell: ", 11);
-			write(1, st->cmdexec, ft_strlen(st->cmdexec));
-			write(1, ": Permission denied\n", 20);
-			st->status = 126;
-			return (0);
-		}
-	}
-	printf("fd2|%i|\n", fd);	
-	close(fd);
-*/
-//////////////////////////////////////////////////////// fin error ///////////////////
 	a = fork();
 	ar = ft_tabreturn(st->tokens);
 	en = ft_tabreturn(st->envv);
 	if (a == 0)
-	{
-		dup2(st->fdout, 1);
-//		close(st->fdout);
 		i = execve((char *)st->cmdexec, ar, en);
+	if (errno == 13)
+	{
+		write(2, "minishell: ", 11);
+		write(2, st->cmdexec, ft_strlen(st->cmdexec));
+		write(2, ": Permission denied\n", 20);
+		st->status = 126;
+		return (0);
 	}
+//	printf("errno|%i|\n", errno);
 	wait(&a);
 	st->status = a/256;
+//	printf("st->status|%i|\n", st->status);
 //	printf("st->status|%i|\n", st->status);
 	return (i);
 }
