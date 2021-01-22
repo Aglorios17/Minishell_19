@@ -22,6 +22,8 @@ void ft_init_struct(shell *st)
 	st->pat = NULL;
 	st->fdout = 1;
 	st->fdone = 1;
+	st->errorredir = 0;
+	st->rd = 0;
 }
 
 int mainprocess(int argc, char **argv, char **envp, shell *st)
@@ -38,11 +40,7 @@ int mainprocess(int argc, char **argv, char **envp, shell *st)
 //		write(1,"1\n",2);
 		st->fdone = dup(st->fdout);
 		if (ft_tokens(st) == 1)
-		{
 			st->status = 1;
-			st->cutline = st->cutline->next;
-			break ;
-		}
 		else
 		{
 			if (st->tokens)

@@ -31,6 +31,8 @@ typedef struct	mini
 	int			ddone;
 	int			fdout;
 	int			fdone;
+	int			errorredir;
+	int			rd;
 	char		**redir;
 	char		*redirnext;
 	t_list		*tokens;
@@ -47,7 +49,7 @@ typedef struct	mini
 int ft_tokens(shell *st);
 int	ft_checkspace(char *line);
 int ft_cleantokens(shell *st);
-char *ft_clean_firsttoken(shell *st, char *tmp);
+char *ft_traduction(shell *st, char *tmp);
 int ft_simple_quote(shell *st, char *tmp, int a);
 int ft_double_quote(shell *st, char *tmp, int a);
 
