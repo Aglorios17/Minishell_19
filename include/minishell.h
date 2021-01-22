@@ -31,7 +31,6 @@ typedef struct	mini
 	int			ddone;
 	int			fdout;
 	int			fdone;
-	int			errorredir;
 	char		**redir;
 	char		*redirnext;
 	t_list		*tokens;

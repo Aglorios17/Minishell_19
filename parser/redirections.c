@@ -5,25 +5,21 @@ int ft_check_errorredir2(shell *st)
     if (st->redirnext && !ft_strncmp(st->redirnext, ">", 2))
     {
         ft_putendl_fd("minishell: syntax error near unexpected token `>'\n", 2);
-        st->errorredir = 3;
         return (1);
     }
     if (st->redirnext && !ft_strncmp(st->redirnext, ">>", 2))
     {
         ft_putendl_fd("minishell: syntax error near unexpected token `>>'\n", 2);
-        st->errorredir = 3;
         return (1);
     }
     if (st->redirnext && !ft_strncmp(st->redirnext, "<", 1))
     {
         ft_putendl_fd("minishell: syntax error near unexpected token `<'\n", 2);
-        st->errorredir = 3;
         return (1);
     }
     if (st->redirnext && !ft_strncmp(st->redirnext, "<<", 2))
     {
         ft_putendl_fd("minishell: syntax error near unexpected token `<<'\n", 2);
-        st->errorredir = 3;
         return (1);
     }
     return (0);
@@ -34,31 +30,26 @@ int ft_check_errorredir(shell *st)
     if (!ft_strncmp((char *)st->tokens->content, ">>>", 4))
     {
         ft_putendl_fd("minishell: syntax error near unexpected token `>'\n", 2);
-        st->errorredir = 2;
         return (1);
     }
     if (!ft_strncmp((char *)st->tokens->content, ">>>>", 4))
     {
         ft_putendl_fd("minishell: syntax error near unexpected token `>>'\n", 2);
-        st->errorredir = 2;
         return (1);
     }
     if (!ft_strncmp((char *)st->tokens->content, "<<<<", 5))
     {
         ft_putendl_fd("minishell: syntax error near unexpected token `<'\n", 2);
-        st->errorredir = 2;
         return (1);
     }
     if (!ft_strncmp((char *)st->tokens->content, "<<<<<", 6))
     {
         ft_putendl_fd("minishell: syntax error near unexpected token `<<'\n", 2);
-        st->errorredir = 2;
         return (1);
     }
     if (!ft_strncmp((char *)st->tokens->content, "<<<<<<", 6))
     {
         ft_putendl_fd("minishell: syntax error near unexpected token `<<<'\n", 2);
-        st->errorredir = 2;
         return (1);
     }
     return (0);
@@ -70,21 +61,14 @@ int ft_parse_redir(shell *st, int fd)
 
     a = 0;
     fd = 1;
-//    st->errorredir = 0;
     while (st->redir[a])
     {
         if (st->redir[1] == NULL)
         {
             if (st->cutline->next)
-            {
                 ft_putendl_fd("minishell: syntax error near unexpected token `;\'\n", 2);
-                st->errorredir = 4;
-            }
             else
-            {
                 ft_putendl_fd("minishell: syntax error near unexpected token `newline'\n", 2);
-                st->errorredir = 1;
-            }
             return (1);
         }
         if (!ft_strcmp(st->redir[a], ">"))
@@ -191,7 +175,6 @@ int ft_redirections(shell *st)
 	int fd;
 
 	fd = 0;
-    st->errorredir = 0;
     if (!(st->redir = malloc(1 * sizeof(char *))))
         return (1);
     st->redir[0] = NULL;
