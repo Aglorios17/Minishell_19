@@ -139,7 +139,9 @@ int ft_parse_redir(shell *st, int fd)
         {
             if ((fd = open(st->redir[a + 1], O_RDONLY)) < 0)
             {
-                ft_putendl_fd("minishell: doesnotexist: No such file or directory\n", 2);
+                write(2, "minishell: ", 11);
+                write(2, st->redir[a + 1], ft_strlen(st->redir[a + 1]));
+                write(2, ": No such file or directory\n", 28);
                 return (1);
             }
         }
