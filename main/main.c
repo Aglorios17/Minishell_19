@@ -19,6 +19,8 @@ void ft_init_struct(shell *st)
 	st->home = ft_pwd(st);
 	st->status = 0;
 	st->cutline = 0;
+	st->pipe = NULL;
+	st->firstpipe = NULL;
 	st->pat = NULL;
 	st->fdout = 1;
 	st->fdone = 1;
@@ -37,26 +39,29 @@ int mainprocess(int argc, char **argv, char **envp, shell *st)
 	ft_cutline(st);
 	while (st->cutline)
 	{
-//		write(1,"1\n",2);
-		st->fdone = dup(st->fdout);
-		if (ft_tokens(st) == 1)
-			st->status = 1;
-		else
+		ft_cutpipe(st);
+		while (st->pipe)
 		{
-			if (st->tokens)
-				ft_cleantokens(st);
-//			write(1,"2\n",2);
-			if (ft_command(st, envp) == 1)
+			st->fdone = dup(st->fdout);
+			if (ft_tokens(st) == 1)
+				st->status = 1;
+			else
 			{
-				free(st->home);
-				ft_exfree2(st, tmp);
-				return (1);
+				if (st->tokens)
+					ft_cleantokens(st);
+				if (ft_command(st, envp) == 1)
+				{
+					free(st->home);
+					ft_exfree2(st, tmp);
+					return (1);
+				}
 			}
-//			write(1,"3\n",2);
+			close(st->fdout);
+			st->fdout = dup2(st->fdone, 1);
+			st->pipe = st->pipe->next;	
+			ft_exfree(st, tmp);
 		}
-		close(st->fdout);
-		st->fdout = dup2(st->fdone, 1);	
-		ft_exfree(st, tmp);
+		ft_freecutpipe(st, tmp);
 //		statusenv(&st ,st.status);
 		st->cutline = st->cutline->next;
 	}

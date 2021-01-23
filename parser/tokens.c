@@ -164,7 +164,7 @@ int ft_tokens(shell *st)
 	len = 0;
 	fri = NULL;
 	tmp = NULL;
-	tmp = (char *)st->cutline->content;
+	tmp = (char *)st->pipe->content;
 //	printf("cultine->content |%s|\n", (char *)st->cutline->content);
 	if (tmp[0] == '\0')
 		return (1);

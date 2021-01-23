@@ -41,6 +41,8 @@ typedef struct	mini
 	t_list		*firstenv;
 	t_list		*cutline;
 	t_list		*firstcut;
+	t_list		*pipe;
+	t_list		*firstpipe;
 	t_list		*redirection;
 }				shell;
 
@@ -74,6 +76,7 @@ char *ft_shlvl(char *line, int i);
 ////////// cut ////////////////
 
 int ft_cutline(shell *st);
+int ft_cutpipe(shell *st);
 char **ft_splitms(char const *str, char c, shell *st);
 
 ////////// exec ////////////////
@@ -103,5 +106,6 @@ void ft_init_struct(shell *st);
 int	ft_exfree(shell *st, t_list *tmp);
 int	ft_exfree2(shell *st, t_list *tmp);
 int	ft_freecutline(shell *st, t_list *tmp);
+int	ft_freecutpipe(shell *st, t_list *tmp);
 
 #endif
