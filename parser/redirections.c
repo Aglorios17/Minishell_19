@@ -68,14 +68,17 @@ int ft_parse_redir(shell *st, int fd)
 {
     int a;
 	char *tmp;
+	char *tmp2;
 
     a = 0;
     fd = 1;
 	tmp = NULL;
+	tmp2 = NULL;
 //    st->errorredir = 0;
 	st->rd = 1;
 	tmp = ft_strdup(st->redir[a + 1]);
 	st->redir[a + 1] = ft_strdup(ft_traduction(st, tmp));
+	tmp2 = ft_strdup(st->redir[a]);
 	st->rd = 0;
     while (st->redir[a])
     {
@@ -108,7 +111,10 @@ int ft_parse_redir(shell *st, int fd)
                 return (0);
         a++;
     }
-    st->fdout = dup2(fd, 1);
+    if (!ft_strcmp(tmp2, "<"))
+    	st->fdout = dup2(fd, 0);
+	else
+    	st->fdout = dup2(fd, 1);
     return (0);
 }
 

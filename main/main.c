@@ -24,8 +24,41 @@ void ft_init_struct(shell *st)
 	st->pat = NULL;
 	st->fdout = 1;
 	st->fdone = 1;
+	st->pipefd = 0;
 	st->errorredir = 0;
 	st->rd = 0;
+}
+
+int	ft_pipe(shell *st)
+{
+	int		pop[2];
+	pid_t	cpid;
+
+	wait(NULL);
+	if (!st->pipe->next)
+		st->fdout = st->fdone;
+	if (st->pipe->next)
+	{
+		if (pipe(pop) > 0)
+			exit(1);
+//		printf("ok1\n");
+//		printf("pop[0]|%i|\n", pop[0]);
+//		printf("pop[1]|%i|\n", pop[1]);
+		if ((cpid = fork()) == -1)
+		{
+			perror("fork");
+			exit(1);
+		}
+		if (cpid == 0)
+			close(pop[0]);
+		else
+			close(pop[1]);
+//		printf("ok2\n");
+//		printf("pop[0]|%i|\n", pop[0]);
+//		printf("pop[1]|%i|\n", pop[1]);
+		st->fdout = pop[1];
+	}
+	return (1);
 }
 
 int mainprocess(int argc, char **argv, char **envp, shell *st)
@@ -40,9 +73,12 @@ int mainprocess(int argc, char **argv, char **envp, shell *st)
 	while (st->cutline)
 	{
 		ft_cutpipe(st);
+		st->fdone = dup(st->fdout);
 		while (st->pipe)
 		{
-			st->fdone = dup(st->fdout);
+//			ft_pipe(st);
+//			printf("st->fdone|%i|\n", st->fdone);
+//			printf("st->fdout|%i|\n", st->fdout);
 			if (ft_tokens(st) == 1)
 				st->status = 1;
 			else
@@ -56,8 +92,16 @@ int mainprocess(int argc, char **argv, char **envp, shell *st)
 					return (1);
 				}
 			}
-			close(st->fdout);
-			st->fdout = dup2(st->fdone, 1);
+			if (st->fdout == 0)
+			{
+				close(st->fdout);
+				st->fdout = dup2(st->fdone, 0);
+			}
+			else
+			{
+				close(st->fdout);
+				st->fdout = dup2(st->fdone, 1);
+			}
 			st->pipe = st->pipe->next;	
 			ft_exfree(st, tmp);
 		}

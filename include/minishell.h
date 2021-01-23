@@ -29,6 +29,7 @@ typedef struct	mini
 	int			flagdq;
 	int			firstd;
 	int			ddone;
+	int			pipefd;
 	int			fdout;
 	int			fdone;
 	int			errorredir;
