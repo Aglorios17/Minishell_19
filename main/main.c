@@ -80,7 +80,16 @@ int mainprocess(int argc, char **argv, char **envp, shell *st)
 //			printf("st->fdone|%i|\n", st->fdone);
 //			printf("st->fdout|%i|\n", st->fdout);
 			if (ft_tokens(st) == 1)
-				st->status = 1;
+			{
+				if (st->status == 2)
+				{
+					free(st->home);
+					ft_exfree2(st, tmp);
+					return (1);
+				}
+				else
+					st->status = 1;
+			}
 			else
 			{
 				if (st->tokens)

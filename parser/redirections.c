@@ -119,8 +119,16 @@ int ft_parse_redir(shell *st, int fd)
     {
         if (st->redir[1] == NULL)
         {
-            if (st->cutline->next)
+            if (st->pipe->next)
+			{
+                ft_putendl_fd("minishell: syntax error near unexpected token `|\'\n", 2);
+				st->status = 2;
+			}
+            else if (st->cutline->next)
+			{
                 ft_putendl_fd("minishell: syntax error near unexpected token `;\'\n", 2);
+				st->status = 2;
+			}
             else
                 ft_putendl_fd("minishell: syntax error near unexpected token `newline'\n", 2);
             return (1);
