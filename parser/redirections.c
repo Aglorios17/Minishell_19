@@ -147,9 +147,18 @@ int ft_parse_redir(shell *st, int fd)
         {
             if ((fd = open(st->redir[a + 1], O_RDONLY)) < 0)
             {
-                write(2, "minishell: ", 11);
-                write(2, st->redir[a + 1], ft_strlen(st->redir[a + 1]));
-                write(2, ": No such file or directory\n", 28);
+				if (errno == 2)
+				{
+                	write(2, "minishell: ", 11);
+                	write(2, st->redir[a + 1], ft_strlen(st->redir[a + 1]));
+                	write(2, ": No such file or directory\n", 28);
+				}
+				if (errno == 13)
+				{
+                	write(2, "minishell: ", 11);
+                	write(2, st->redir[a + 1], ft_strlen(st->redir[a + 1]));
+                	write(2, ": Permission denied\n", 20);
+				}
                 return (1);
             }
         }

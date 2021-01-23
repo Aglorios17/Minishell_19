@@ -2,13 +2,6 @@
 
 int open_pathcd(shell *st, char *path)
 {
-//	struct stat b;
-	(void)st;
-//	printf("|%s|\n", path);
-//	printf("|%i|\n", errno);
-//	if (!opendir(path))
-//	{
-	//	printf("|%i|\n", errno);
 	if (errno == 13)
 	{
 		if (!ft_strcmp((char *)st->tokens->content, "cd\0"))
@@ -24,7 +17,6 @@ int open_pathcd(shell *st, char *path)
 			write(1, path, ft_strlen(path));
 			write(1, ": Permission denied\n", 20);
 		}
-//			st->status = 126;
 		return (0);
 	}
 	if (errno == 2)
@@ -36,7 +28,6 @@ int open_pathcd(shell *st, char *path)
 			write(1, path, ft_strlen(path));
 			write(1, ": No such file or directory\n", 28);
 		}
-//			st->status = 126;
 		return (0);
 	}
 	return (1);
@@ -73,14 +64,12 @@ int ft_cd(shell *st)
 				if (env[i] == '=')
 					i++;
 				line = ft_strdup(&env[i]);
-//				printf("envv||%s||\n", (char *)st->envv->content);
 				break;
 			}
 			st->envv = st->envv->next;
 		}
 		st->envv = st->firstenv;
 		st->pwd = line;
-//		printf("line||%s||\n", line);
 		if (chdir(st->pwd) < 0)
 		{
 			st->oldpwd = tmp;
@@ -93,8 +82,6 @@ int ft_cd(shell *st)
 		return (1);
 	}
 	line = st->tokens->next->content;
-//	while (line[i] == ' ')
-//		i++;
 	if (st->tokens->next && line[0] != '\0')
 		st->pwd = ft_strdup(&line[i]);
 	if (chdir(st->pwd) < 0)

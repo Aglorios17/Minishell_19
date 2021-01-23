@@ -50,13 +50,18 @@ int	ft_pipe(shell *st)
 			exit(1);
 		}
 		if (cpid == 0)
+		{
 			close(pop[0]);
+			st->fdout = pop[1];
+		}
 		else
+		{
 			close(pop[1]);
+			st->fdout = pop[0];
+		}
 //		printf("ok2\n");
 //		printf("pop[0]|%i|\n", pop[0]);
 //		printf("pop[1]|%i|\n", pop[1]);
-		st->fdout = pop[1];
 	}
 	return (1);
 }
@@ -101,16 +106,11 @@ int mainprocess(int argc, char **argv, char **envp, shell *st)
 					return (1);
 				}
 			}
+			close(st->fdout);
 			if (st->fdout == 0)
-			{
-				close(st->fdout);
 				st->fdout = dup2(st->fdone, 0);
-			}
 			else
-			{
-				close(st->fdout);
 				st->fdout = dup2(st->fdone, 1);
-			}
 			st->pipe = st->pipe->next;	
 			ft_exfree(st, tmp);
 		}

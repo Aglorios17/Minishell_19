@@ -31,11 +31,6 @@ int ft_error(shell *st, struct stat b)
 		st->status = 127;
 		return (0);
 	}
-	//////////////////////////////////////////////////////////////////// debug
-//	printf("cmdexec|%s|\n", st->cmdexec);
-//	printf("st->tokens|%s|\n", (char *)st->tokens->content);
-//	printf("tmp|%s|\n", tmp);
-	//////////////////////////////////////////////////////////////////// pas toucher
 	if (!ft_strchr((char *)st->tokens->content, '/'))
 	{
 		cmd = ft_strdup(st->cmdexec);
@@ -92,8 +87,6 @@ int ft_exec(shell *st)
 	ar = NULL;
 	en = NULL;
 	i = 0;
-//	printf("tokens|%s|\n", (char *)st->tokens->content);
-//	printf("st->cmd|%s|\n", st->cmdexec);
 	if (ft_error(st, b) == 0)
 		return (0);
 	a = fork();
@@ -109,10 +102,7 @@ int ft_exec(shell *st)
 		st->status = 126;
 		return (0);
 	}
-//	printf("errno|%i|\n", errno);
 	wait(&a);
 	st->status = a/256;
-//	printf("st->status|%i|\n", st->status);
-//	printf("st->status|%i|\n", st->status);
 	return (i);
 }

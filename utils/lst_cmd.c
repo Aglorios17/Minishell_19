@@ -27,8 +27,6 @@ int lstcmd(shell *st, char *line)
 		tmp = ft_charjoin(tmp, line[i]);
 		i++;
 	}
-//	tmp = ft_strdup("/home/user42/Bureau/minishell_test/bin/env");
-//	printf("|%s|\n",tmp);
 	a = 0;
 	while (st->envv)
 	{
@@ -43,7 +41,7 @@ int lstcmd(shell *st, char *line)
 	}
 	st->envv = st->firstenv;
 	if (a == 0)
-		ft_lstadd_back(&st->envv, ft_lstnew(ft_strjoin("_=", tmp)));
+		ft_lstadd_back(&st->envv, ft_lstnew(ft_strjoin("_=", "/bin/bash")));
 	st->envv = st->firstenv;
 	return (1);
 }

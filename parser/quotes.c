@@ -144,7 +144,8 @@ char *ft_traduction(shell *st, char *tmp)
 				tmp = ft_strjoin(back, &tmp[i + 1]);
 				b = 1;
 			}
-			if (st->rd == 0 && (tmp[i] == '$' && b == 0 && tmp[i + 1] != '\\'))
+			if (st->rd == 0 && (tmp[i] == '$' && b == 0 && tmp[i + 1] != '\\' &&
+				(ft_isalnum(tmp[i + 1]) || tmp[i + 1] == '_' || tmp[i + 1] == '?')))
 			{
 				st->ret = 0;
 				st->tmpq = ft_strdup("");
@@ -173,8 +174,10 @@ int    ft_cleantokens(shell *st)
     char	*tmp;
     char	*tmp2;
 	char	*fri;
+	int		i;
 
 	st->quotes = 0;
+	i = 0;
     tmp = 0;
     tmp2 = 0;
 	fri = NULL;
@@ -236,7 +239,21 @@ int    ft_cleantokens(shell *st)
 		if (!ft_strncmp("_=", tmp, 2))
 		{
 //			printf("tmp2 ||%s||\n", tmp2);
-			st->envv->content = ft_strjoin("_=", tmp2);
+//			printf("tok ||%s||\n", (char *)st->firsttok->content);
+//			(void)i;
+			if (!ft_strcmp((char *)st->firsttok->content, "export"))
+			{
+				st->envv->content = ft_strdup("");
+				i = 0;
+				while (tmp2[i] && tmp2[i] != '=')
+				{
+					st->envv->content = ft_charjoin((char *)st->envv->content, tmp2[i]);
+					i++;
+				}
+				st->envv->content = ft_strjoin("_=", (char *)st->envv->content);
+			}
+			else
+				st->envv->content = ft_strjoin("_=", tmp2);
 			break;
 		}
 		st->envv = st->envv->next;

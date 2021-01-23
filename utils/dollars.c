@@ -29,9 +29,6 @@ int	ft_retokens(shell *st, char *env, char *first, char *after)
 	trad = NULL;
 	backs = ft_strdup("");
 	nex = NULL;
-//	printf("env|%s|\n", env);
-//	printf("first|%s|\n", first);
-//	printf("after|%s|\n", after);
 	while (after[b] && ft_strchr(after, '\\'))
 	{
 		if (after[b] == '\\' && (after[b + 1] == ' ' || after[b + 1] == '\0'))
