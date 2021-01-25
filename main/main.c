@@ -29,6 +29,44 @@ void ft_init_struct(shell *st)
 	st->rd = 0;
 }
 
+int commandline(int argc, char **argv, char **envp, shell *st)
+{
+	t_list *tmp;
+
+	tmp = NULL;
+	(void)argc;
+	(void)argv;
+	if (ft_tokens(st) == 1)
+	{	
+		if (st->status == 2)
+		{
+			free(st->home);
+			ft_exfree2(st, tmp);
+			return (1);
+		}
+		else
+			st->status = 1;
+	}
+	else
+	{
+		if (st->tokens)
+			ft_cleantokens(st);
+		if (ft_command(st, envp) == 1)
+		{
+			free(st->home);
+			ft_exfree2(st, tmp);
+			return (1);
+		}
+	}
+	close(st->fdout);
+	if (st->fdout == 0)
+		st->fdout = dup2(st->fdone, 0);
+	else
+		st->fdout = dup2(st->fdone, 1);
+	ft_exfree(st, tmp);
+	return (0);
+}
+
 int	ft_pipe(shell *st)
 {
 	int		pop[2];
@@ -36,7 +74,7 @@ int	ft_pipe(shell *st)
 
 	wait(NULL);
 	if (!st->pipe->next)
-		st->fdout = st->fdone;
+		return (0);
 	if (st->pipe->next)
 	{
 		if (pipe(pop) > 0)
@@ -52,12 +90,13 @@ int	ft_pipe(shell *st)
 		if (cpid == 0)
 		{
 			close(pop[0]);
-			st->fdout = pop[1];
+			st->fdout = dup2(pop[1], 1);
+			exit(0);
 		}
 		else
 		{
 			close(pop[1]);
-			st->fdout = pop[0];
+			st->fdout = dup2(pop[0], 0);
 		}
 //		printf("ok2\n");
 //		printf("pop[0]|%i|\n", pop[0]);
@@ -71,8 +110,6 @@ int mainprocess(int argc, char **argv, char **envp, shell *st)
 	t_list *tmp;
 
 	tmp = NULL;
-	(void)argc;
-	(void)argv;
 	lstcmd(st, st->line);
 	ft_cutline(st);
 	while (st->cutline)
@@ -81,38 +118,12 @@ int mainprocess(int argc, char **argv, char **envp, shell *st)
 		st->fdone = dup(st->fdout);
 		while (st->pipe)
 		{
-//			ft_pipe(st);
+			ft_pipe(st);
 //			printf("st->fdone|%i|\n", st->fdone);
 //			printf("st->fdout|%i|\n", st->fdout);
-			if (ft_tokens(st) == 1)
-			{
-				if (st->status == 2)
-				{
-					free(st->home);
-					ft_exfree2(st, tmp);
-					return (1);
-				}
-				else
-					st->status = 1;
-			}
-			else
-			{
-				if (st->tokens)
-					ft_cleantokens(st);
-				if (ft_command(st, envp) == 1)
-				{
-					free(st->home);
-					ft_exfree2(st, tmp);
-					return (1);
-				}
-			}
-			close(st->fdout);
-			if (st->fdout == 0)
-				st->fdout = dup2(st->fdone, 0);
-			else
-				st->fdout = dup2(st->fdone, 1);
+			if (commandline(argc, argv, envp, st) == 1)
+				return (1);
 			st->pipe = st->pipe->next;	
-			ft_exfree(st, tmp);
 		}
 		ft_freecutpipe(st, tmp);
 //		statusenv(&st ,st.status);
@@ -129,8 +140,6 @@ int main(int argc, char **argv, char **envp)
 //	write(1,"\n",1);
 //	write(1,"by Aglorios and Gverhelp\n",25);
 //	write(1,"\n",1);
-	(void)argc;
-	(void)argv;
 //	st.home = "/Users/aglorios";
 //	envp = 0;
 	ft_envv(&st, envp);
