@@ -89,6 +89,7 @@ int ft_exec(shell *st)
 	i = 0;
 	if (ft_error(st, b) == 0)
 		return (0);
+//	dup2(st->fdout, 1);
 	a = fork();
 	ar = ft_tabreturn(st->tokens);
 	en = ft_tabreturn(st->envv);

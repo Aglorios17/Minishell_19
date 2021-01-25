@@ -67,21 +67,21 @@ int commandline(int argc, char **argv, char **envp, shell *st)
 	return (0);
 }
 
-int	ft_pipe(shell *st)
+int ft_pipe(int argc, char **argv, char **envp, shell *st)
 {
 	int		pop[2];
 	pid_t	cpid;
 
-	wait(NULL);
 	if (!st->pipe->next)
+	{
+		if (commandline(argc, argv, envp, st) == 1)
+			return (1);
 		return (0);
+	}
 	if (st->pipe->next)
 	{
 		if (pipe(pop) > 0)
 			exit(1);
-//		printf("ok1\n");
-//		printf("pop[0]|%i|\n", pop[0]);
-//		printf("pop[1]|%i|\n", pop[1]);
 		if ((cpid = fork()) == -1)
 		{
 			perror("fork");
@@ -91,18 +91,18 @@ int	ft_pipe(shell *st)
 		{
 			close(pop[0]);
 			st->fdout = dup2(pop[1], 1);
+			if (commandline(argc, argv, envp, st) == 1)
+				return (1);
 			exit(0);
 		}
-		else
+		else if (cpid > 0)
 		{
 			close(pop[1]);
 			st->fdout = dup2(pop[0], 0);
+			wait(NULL);
 		}
-//		printf("ok2\n");
-//		printf("pop[0]|%i|\n", pop[0]);
-//		printf("pop[1]|%i|\n", pop[1]);
 	}
-	return (1);
+	return (0);
 }
 
 int mainprocess(int argc, char **argv, char **envp, shell *st)
@@ -118,15 +118,11 @@ int mainprocess(int argc, char **argv, char **envp, shell *st)
 		st->fdone = dup(st->fdout);
 		while (st->pipe)
 		{
-			ft_pipe(st);
-//			printf("st->fdone|%i|\n", st->fdone);
-//			printf("st->fdout|%i|\n", st->fdout);
-			if (commandline(argc, argv, envp, st) == 1)
+			if (ft_pipe(argc, argv, envp, st) == 1)
 				return (1);
 			st->pipe = st->pipe->next;	
 		}
 		ft_freecutpipe(st, tmp);
-//		statusenv(&st ,st.status);
 		st->cutline = st->cutline->next;
 	}
 	ft_freecutline(st, tmp);

@@ -77,7 +77,7 @@ int ft_command(shell *st, char **envp)
 			if (!ft_strcmp((char *)st->envv->content, "_=env"))
 				write(1, "_=/home/user42/Bureau/minishell_test/bin/env", 44);
 			else
-				write(1, (char *)st->envv->content, ft_strlen((char *)st->envv->content));
+				write(st->fdout, (char *)st->envv->content, ft_strlen((char *)st->envv->content));
 			write(1, "\n", 1);
 			st->envv = st->envv->next;
 		}
