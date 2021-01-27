@@ -34,13 +34,12 @@ char **recuppath(shell *st, char **tab)
 
 int	check_path(shell *st, char *dollars)
 {
-	char *cmd;
-	char *cmppath;
-	char *tmp;
-	int i;
-	int fd;
-	struct stat b;
-	char **tab;
+	char 	*cmd;
+	char 	*cmppath;
+	char	*tmp;
+	int		i;
+	struct	stat b;
+	char	**tab;
 
 	tmp = NULL;
 	tab = NULL;
@@ -73,22 +72,7 @@ int	check_path(shell *st, char *dollars)
 		}
 		i++;
 	}
-	(void)fd;
-//	fd = open(st->cmdexec, O_RDONLY, S_IRUSR | S_IWUSR);
-//	i = 0;
-//	if (i = stat(st->cmdexec, &b) != -1)
-//	{
-  //      write(1, "minishell: ", 11);
-   	//    write(1, (char *)st->tokens->content, ft_strlen((char *)st->tokens->content));
-//       	write(1, ": No such file or directory\n", 28);
-//		st->status = 126;
-//		return (0);
-//	}
-//	close(fd);
 	if (stat(st->cmdexec, &b) == -1)
-	{
-//		printf("ok2\n");
 		return (0);
-	}
 	return (1);
 }

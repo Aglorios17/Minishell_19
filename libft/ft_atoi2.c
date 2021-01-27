@@ -10,16 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-static int	ft_long(int signe)
-{
-	if (signe == -1)
-		return (0);
-	else
-		return (-1);
-}
-
 long long	ft_atoi2(const char *str)
 {
 	int					i;
@@ -44,9 +34,7 @@ long long	ft_atoi2(const char *str)
 		result = result * 10 + (str[i] - 48);
 		i++;
 	}
-	if (signe == 1 && result > 9223372036854775807)
-		return (0);
 	if (result > 9223372036854775807)
-		return (ft_long(signe));
+		return (0);
 	return (result * signe);
 }
