@@ -133,10 +133,12 @@ int ft_check_errorredir(shell *st)
 int ft_parse_redir(shell *st, int fd)
 {
     int a;
+    int i;
 	char *tmp;
 	char *tmp2;
 
-    a = 0;
+    i = 0;
+	a = 0;
     fd = 1;
 	tmp = NULL;
 	tmp2 = NULL;
@@ -144,6 +146,10 @@ int ft_parse_redir(shell *st, int fd)
     if (st->redir[a + 1])
     {
 	    tmp = ft_strdup(st->redir[a + 1]);
+		i = ft_strlen(tmp);
+		while (tmp[i - 1] == ' ')
+			i--;
+	    tmp = ft_substr(tmp, 0, i);
 	    st->redir[a + 1] = ft_strdup(ft_traduction(st, tmp));
     }
 	tmp2 = ft_strdup(st->redir[a]);
