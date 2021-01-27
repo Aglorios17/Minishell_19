@@ -18,14 +18,12 @@ int ft_error(shell *st, struct stat b)
 		tmp = NULL;
 	}
 	st->envv = st->envv;
-//	printf("path|%s|\n", tmp);
-//	printf("exec|%s|\n", st->cmdexec);
 	if (tmp != NULL)
 	{
 		while (tmp[i] && tmp[i] != '=')
 			i++;
 	}
-	if (tmp == NULL)
+	if (tmp == NULL || tmp[i + 1] == '\0')
 	{
 		write(2, "minishell: ", 11);
      	write(2, (char *)st->tokens->content, ft_strlen((char *)st->tokens->content));
@@ -33,27 +31,7 @@ int ft_error(shell *st, struct stat b)
 		st->status = 127;
 		return (0);
 	}
-	if (tmp[i + 1] == '\0' || tmp[i + 1] == ':' || tmp[ft_strlen(tmp) - 1] == ':')
-	{
-		if (tmp[i + 1] != '\0' && !ft_strncmp((char *)st->tokens->content, "whoami\0", 7))
-		{
-			write(2, "minishell: ", 11);
-    	 	write(2, (char *)st->tokens->content, ft_strlen((char *)st->tokens->content));
- 			write(2, ": command not found\n", 20);
-			st->status = 127;
-			return (0);
-		}
-		if (tmp[i + 1] == '\0' && stat((char *)st->tokens->content, &b) == -1)
-		{
-			write(2, "minishell: ", 11);
-     		write(2, (char *)st->tokens->content, ft_strlen((char *)st->tokens->content));
- 			write(2, ": No such file or directory\n", 28);
-			st->status = 127;
-			return (0);
-		}
-		return (1);
-	}
-	if (!ft_strchr((char *)st->tokens->content, '/') && tmp[i + 1] != ':')
+	if (!ft_strchr((char *)st->tokens->content, '/'))
 	{
 		cmd = ft_strdup(st->cmdexec);
 		if (!ft_strcmp(cmd, (char *)st->tokens->content))
@@ -111,6 +89,7 @@ int ft_exec(shell *st)
 	i = 0;
 	if (ft_error(st, b) == 0)
 		return (0);
+//	dup2(st->fdout, 1);
 	a = fork();
 	ar = ft_tabreturn(st->tokens);
 	en = ft_tabreturn(st->envv);

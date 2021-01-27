@@ -107,26 +107,32 @@ char *ft_traduction(shell *st, char *tmp)
 	int		i;
 	int		b;
 	char	*back;
-
+	char	*fri;
+	
 	i = 0;
 	b = 0;
 	back = NULL;
 	st->tmpq = NULL;
+	fri = NULL;
     st->new = ft_strdup("");
 	while (tmp[i] && tmp[i] != '\0')
 	{
 		if (tmp[i] == '"')
 		{
 			i = ft_double_quote(st, tmp, i);
+			fri = st->new;
 			st->new = ft_strjoin(st->new, st->tmpq);
-			tmp = ft_strjoin(st->new, &tmp[i + 1]);
+			free(fri);
+			tmp = ft_strjoin(st->new, &tmp[i + 1]);                                 ////// here
 			i = ft_strlen(st->new) - 1;
 		}
 		else if (tmp[i] == '\'')
 		{
 			i = ft_simple_quote(st, tmp, i);
+			fri = st->new;
 			st->new = ft_strjoin(st->new, st->tmpq);
-			tmp = ft_strjoin(st->new, &tmp[i + 1]);
+			free(fri);
+			tmp = ft_strjoin(st->new, &tmp[i + 1]);                                   ////// here
 			i = ft_strlen(st->new) - 1;
 		}
 		else if (tmp[i] != '\0')
@@ -138,34 +144,41 @@ char *ft_traduction(shell *st, char *tmp)
 				back = ft_strdup("");
 				while (b < i)
 				{
+					fri = back;
 					back = ft_charjoin(back, tmp[b]);
+					free(fri);
 					b++;
 				}
 				tmp = ft_strjoin(back, &tmp[i + 1]);
+				free(back);
 				b = 1;
 			}
 			if (st->rd == 0 && (tmp[i] == '$' && b == 0 && tmp[i + 1] != '\\' &&
 				(ft_isalnum(tmp[i + 1]) || tmp[i + 1] == '_' || tmp[i + 1] == '?')))
 			{
 				st->ret = 0;
-				st->tmpq = ft_strdup("");
+				st->tmpq = ft_strdup("");                                                       //// here
 				st->firstd++;
 				ft_dollars(st, tmp, i);
+				free(st->new); 
 				st->new = ft_strdup(st->tmpq);
 				if (st->ret == 0)
-					tmp = ft_strjoin(st->new, &tmp[st->pass + 1]);
+					tmp = ft_strjoin(st->new, &tmp[st->pass + 1]);                            ///// here
 				else
-					tmp = ft_strdup(st->new);
+					tmp = ft_strdup(st->new);                                                   //// here
 				i = ft_strlen(st->new) - 1;
 			}
 			else
 			{
+				fri = st->new;
 				st->new = ft_charjoin(st->new, tmp[i]);
-				tmp = ft_strjoin(st->new, &tmp[i + 1]);
+				free(fri);
+				tmp = ft_strjoin(st->new, &tmp[i + 1]);                                         //// here
 			}
 		}
 		i++;
 	}
+	free(st->new);
 	return (tmp);
 }
 
@@ -184,15 +197,15 @@ int    ft_cleantokens(shell *st)
 	st->firstd = 1;
     st->firsttok = st->tokens;
 	tmp = (char*)st->tokens->content;
-    st->tokens->content = ft_strdup(ft_traduction(st, tmp));
+    st->tokens->content = ft_strdup(ft_traduction(st, tmp));                                   //// here
 	if (!st->tokens->next)
 	{
 		while (st->envv)
 		{
-			tmp = ft_strdup((char *)st->envv->content);
+			tmp = (char *)st->envv->content;
 			if (!ft_strncmp("_=", tmp, 2))
 			{
-				st->envv->content = ft_strjoin("_=", (char *)st->tokens->content);
+				st->envv->content = ft_strjoin("_=", (char *)st->tokens->content);                  //// here
 				break;
 			}
 			st->envv = st->envv->next;
@@ -206,8 +219,8 @@ int    ft_cleantokens(shell *st)
     st->tokens = st->tokens->next;
     while (st->tokens)
     {
-        tmp = ft_strdup((char *)st->tokens->content);
-        st->tokens->content = ft_strdup(ft_traduction(st, tmp));
+        tmp = ft_strdup((char *)st->tokens->content);											//// here
+        st->tokens->content = ft_strdup(ft_traduction(st, tmp));                                //// here
 		tmp2 = (char *)st->tokens->content;
 		st->ddone += 1;
 		while (st->tokens && st->ddone != 0)
@@ -243,17 +256,17 @@ int    ft_cleantokens(shell *st)
 //			(void)i;
 			if (!ft_strcmp((char *)st->firsttok->content, "export"))
 			{
-				st->envv->content = ft_strdup("");
+				st->envv->content = ft_strdup("");                                                 /// here
 				i = 0;
 				while (tmp2[i] && tmp2[i] != '=')
 				{
-					st->envv->content = ft_charjoin((char *)st->envv->content, tmp2[i]);
+					st->envv->content = ft_charjoin((char *)st->envv->content, tmp2[i]);			//// here
 					i++;
 				}
-				st->envv->content = ft_strjoin("_=", (char *)st->envv->content);
+				st->envv->content = ft_strjoin("_=", (char *)st->envv->content);					//// here
 			}
 			else
-				st->envv->content = ft_strjoin("_=", tmp2);
+				st->envv->content = ft_strjoin("_=", tmp2);											/// here
 			break;
 		}
 		st->envv = st->envv->next;

@@ -89,13 +89,13 @@ static char     **ft_write(const char *str, char c, char **tab, shell *st)
     {
         while (str[a] && str[a] == ' ')
             a++;
-        if (str[a] && (str[a] == '|' || str[a] == ';'))
+        if (str[a] && str[a] == ';') // || str[a] == '|')
 		{
             tab[d] = NULL;
 			if (str[a] == ';')
         	   	fri = ft_strdup("minishell: syntax error near unexpected token `;\'\n");
-			else if (str[a] == '|')
-        	   	fri = ft_strdup("minishell: syntax error near unexpected token `|\'\n");
+//			else if (str[a] == '|')
+//        	   	fri = ft_strdup("minishell: syntax error near unexpected token `|\'\n");
        	    write(1, fri, ft_strlen(fri));
 		    free(fri);
             ft_free(tab);
@@ -104,7 +104,7 @@ static char     **ft_write(const char *str, char c, char **tab, shell *st)
 		}
         if (str[a] && str[a] != c)
             tab[d++] = ft_write2(&str[a], c, tab);
-        if (str[a] && (str[a] == '|' || str[a] == ';'))
+/*        if (str[a] && (str[a] == '|' || str[a] == ';'))
         {
             tab[d] = NULL;
 			if (c == ';')
@@ -116,7 +116,7 @@ static char     **ft_write(const char *str, char c, char **tab, shell *st)
             ft_free(tab);
             st->status = 2;
             return (tab);
-        }
+        } */
         while (str[a] && str[a] != c)
         {
             if (str[a] && (str[a] == '"' || str[a] == '\''))

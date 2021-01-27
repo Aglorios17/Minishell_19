@@ -38,13 +38,13 @@ int commandline(int argc, char **argv, char **envp, shell *st)
 	(void)argv;
 	if (ft_tokens(st) == 1)
 	{	
-		if (st->status == 2)
-		{
-			free(st->home);
-			ft_exfree2(st, tmp);
-			return (1);
-		}
-		else
+//		if (st->status == 2)
+//		{
+//			free(st->home);
+//			ft_exfree2(st, tmp);
+//			return (1);
+//		}
+//		else
 			st->status = 1;
 	}
 	else
@@ -53,7 +53,7 @@ int commandline(int argc, char **argv, char **envp, shell *st)
 			ft_cleantokens(st);
 		if (ft_command(st, envp) == 1)
 		{
-			free(st->home);
+	//		free(st->home);                                             //// demander à Alessio
 			ft_exfree2(st, tmp);
 			return (1);
 		}
@@ -112,6 +112,7 @@ int mainprocess(int argc, char **argv, char **envp, shell *st)
 	tmp = NULL;
 	lstcmd(st, st->line);
 	ft_cutline(st);
+//	printf("wtf\n");
 	while (st->cutline)
 	{
 		ft_cutpipe(st);

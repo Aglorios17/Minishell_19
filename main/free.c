@@ -2,6 +2,11 @@
 
 int	ft_exfree2(shell *st, t_list *tmp)
 {
+	if (st->pat)
+	{
+		free(st->pat);
+		st->pat = NULL;
+	}
 	if (st->tmpq)
 	{
 		free(st->tmpq);
@@ -46,6 +51,11 @@ int	ft_exfree2(shell *st, t_list *tmp)
 
 int	ft_exfree(shell *st, t_list *tmp)
 {
+	if (st->pat)
+	{
+		free(st->pat);
+		st->pat = NULL;
+	}
 	if (st->tmpq)
 	{
 		free(st->tmpq);
