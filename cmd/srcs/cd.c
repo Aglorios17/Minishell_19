@@ -91,6 +91,25 @@ int ft_cd(shell *st)
 	line = ft_strdup((char *)st->tokens->next->content);
 	if (st->tokens->next && line[0] != '\0')
 		st->pwd = ft_strdup(&line[i]);
+	if (!ft_strncmp(st->pwd, "~\0", 2))
+	{
+		while (st->envv)
+		{
+			env = (char *)st->envv->content;
+			if (!ft_strncmp(env, "HOME=", 5))
+			{
+				i = 0;
+				while (env[i] != '=')
+					i++;
+				if (env[i] == '=')
+					i++;
+				st->pwd = ft_strdup(&env[i]);
+				break;
+			}
+			st->envv = st->envv->next;
+		}
+		st->envv = st->firstenv;
+	}
 	if (chdir(st->pwd) < 0)
 	{
 		open_pathcd(st, (char *)st->tokens->next->content);
