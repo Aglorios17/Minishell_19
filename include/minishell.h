@@ -10,6 +10,8 @@
 # include <sys/wait.h>
 # include <dirent.h>
 # include "../libft/libft.h"
+int prompt;
+int pid;
 
 typedef struct	mini
 {

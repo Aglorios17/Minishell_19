@@ -89,6 +89,7 @@ int ft_pipe(int argc, char **argv, char **envp, shell *st)
 		}
 		if (cpid == 0)
 		{
+			pid = cpid;
 			close(pop[0]);
 			st->fdout = dup2(pop[1], 1);
 			if (commandline(argc, argv, envp, st) == 1)
@@ -129,11 +130,31 @@ int mainprocess(int argc, char **argv, char **envp, shell *st)
 	ft_freecutline(st, tmp);
 	return (0);
 }
+
+void signalhandler(int signum)
+{
+	(void)signum;
+//	printf("pid|%i|\n", pid);
+	if (pid == 0)
+	{
+		kill(0, 0);
+		pid = 1;
+	}
+	else
+	{
+		write(2,"\n>>",3);
+		prompt = 1;
+	}
+//	printf("pid2|%i|\n", pid);
+}
+
 int main(int argc, char **argv, char **envp)
 {
 	shell	st;
 
 	ft_init_struct(&st);
+	pid = 1;
+	prompt = 0;
 //	write(1,"\n",1);
 //	write(1,"by Aglorios and Gverhelp\n",25);
 //	write(1,"\n",1);
@@ -147,9 +168,12 @@ int main(int argc, char **argv, char **envp)
 	}
 	else
 	{
+		signal(SIGINT, signalhandler);
 		while(1)
 		{
-			write(2,">>",2);
+			if (prompt == 0)
+				write(2,">>",2);
+			prompt = 0;
 			if (get_next_line3d(0, &st.line) != 1)
 			{
 				write(1, "exit\n", 5);

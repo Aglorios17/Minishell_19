@@ -57,8 +57,10 @@ int ft_command(shell *st, char **envp)
 	}
 	else if (!ft_strncmp((char *)st->tokens->content, "export", 7))
 	{
-	//	printf("|okexport|\n");
-		ft_export(st, envp);
+		if (st->pipe->next || st->pipe != st->firstpipe)
+			return (0);
+		else
+			ft_export(st, envp);
 	}
 	else if (!ft_strncmp((char *)st->tokens->content, "unset", 6))
 	{
