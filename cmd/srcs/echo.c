@@ -29,7 +29,10 @@ int ft_echo(shell *st)
 				i = 1;
 			}
 			else
+			{
 				i = 0;
+				break;
+			}
 //			free(tm);
 		}
 		else
