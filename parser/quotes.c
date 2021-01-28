@@ -218,6 +218,7 @@ int    ft_cleantokens(shell *st)
     tmp2 = 0;
 	fri = NULL;
 	st->firstd = 1;
+	st->ddone = 0;
     st->firsttok = st->tokens;
 	tmp = (char*)st->tokens->content;
     st->tokens->content = ft_strdup(ft_traduction(st, tmp));                                   //// here

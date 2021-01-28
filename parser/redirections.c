@@ -1,20 +1,5 @@
 #include "../include/minishell.h"
 
-static void    ft_freetab(char **tab)
-{
-    int a;
-
-    a = 0;
-    while (tab[a])
-    {
-        free(tab[a]);
-        tab[a] = NULL;
-        a++;
-    }
-    free(tab);
-    tab = NULL;
-}
-
 static int ft_isinstring(char *str, char c)
 {
     int a;

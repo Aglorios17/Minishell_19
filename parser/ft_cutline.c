@@ -154,14 +154,24 @@ int	ft_cutpipe(shell *st)
 {
 	int a;
 	char **line;
+//	t_list *fri;
+//	t_list	*tmp;
+
 	a = 0;
+//	fri = NULL;
 	line = ft_splitms((char *)st->cutline->content, '|', st);
+//	fri = malloc(2 * sizeof(t_list*));
+//	fri->content = NULL;
+//	fri->next->content = NULL;
 	while (line[a])
 	{
-		ft_lstadd_back(&st->pipe, ft_lstnew(ft_strdup(line[a])));
+		ft_lstadd_back(&st->pipe, ft_lstnew(ft_strdup(line[a])));                     //// free
+//		fri->content = NULL;
 		a++;
 	}
+//	free(fri);
 	st->firstpipe = st->pipe;
+	ft_freetab(line);
     return (0);
 }
 
@@ -177,10 +187,11 @@ int	ft_cutline(shell *st)
 		return (1);
 	while (line[a])
 	{
-		ft_lstadd_back(&st->cutline, ft_lstnew(ft_strdup(line[a])));
+		ft_lstadd_back(&st->cutline, ft_lstnew(ft_strdup(line[a])));                  //// free
 		a++;
 	}
 	st->firstcut = st->cutline;
+	ft_freetab(line);
     return (0);
 }
 

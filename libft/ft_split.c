@@ -12,81 +12,77 @@
 
 #include "libft.h"
 
-static int			ft_words_count(char const *str, char c)
+static int		ft_malloc_s(char const *s, char c)
 {
-	int	i;
-	int wc;
+	int	a;
+	int	counter;
 
-	i = 0;
-	wc = 0;
-	while (str[i])
+	a = 0;
+	counter = 0;
+	while (s[a] != '\0')
 	{
-		while (str[i] && str[i] == c)
-			i++;
-		if (str[i] && str[i] != c)
+		while (s[a] != '\0' && s[a] == c)
+			a++;
+		if (s[a] != '\0' && s[a] != c)
 		{
-			wc++;
-			while (str[i] && str[i] != c)
-				i++;
+			counter++;
+			while (s[a] != '\0' && s[a] != c)
+				a++;
 		}
 	}
-	return (wc);
+	return (counter);
 }
 
-static char			*ft_add_word(char const *str, char c)
+static void		ft_free(char **tab)
 {
-	int		i;
-	char	*lstr;
+	int	a;
 
-	i = 0;
-	while (str[i] && str[i] != c)
-		i++;
-	lstr = malloc(sizeof(char *) * i);
-	if (lstr == NULL)
-		return (0);
-	i = 0;
-	while (str[i] && str[i] != c)
+	a = 0;
+	while (tab[a] != NULL)
 	{
-		lstr[i] = str[i];
-		i++;
+		free(tab[a]);
+		a++;
 	}
-	lstr[i] = '\0';
-	return (lstr);
+	free(tab);
 }
 
-static char			**ft_free(int j, char **split)
+static char		*ft_write(const char *s, char c, char **tab)
 {
-	while (j != 0)
-		free(split[j--]);
-	free(split);
-	return (NULL);
+	size_t	a;
+	char	*dest;
+
+	a = 0;
+	while (s[a] != '\0' && s[a] != c)
+		a++;
+	dest = ft_substr(s, 0, a);
+	if (dest == NULL)
+		ft_free(tab);
+	return (dest);
 }
 
-char				**ft_split(char const *str, char c)
+char			**ft_split(char const *s, char c)
 {
-	int		i;
-	int		j;
-	char	**split;
+	int		a;
+	int		b;
+	char	**tab;
 
-	i = 0;
-	j = 0;
-	if (str == 0)
+	a = 0;
+	b = 0;
+	if (s == NULL)
 		return (NULL);
-	if ((split = malloc(sizeof(char *) * (ft_words_count(str, c) + 1))) == NULL)
-		return (0);
-	while (str[i])
+	if (!(tab = malloc((ft_malloc_s(s, c) + 1) * sizeof(char*))))
+		return (NULL);
+	while (s[a] != '\0')
 	{
-		while (str[i] && str[i] == c)
-			i++;
-		if (str[i] && str[i] != c)
+		while (s[a] == c)
+			a++;
+		if (s[a] != '\0' && s[a] != c)
 		{
-			split[j++] = ft_add_word(&str[i], c);
-			if (ft_add_word(&str[i], c) == 0)
-				return (ft_free(--j, split));
-			while (str[i] && str[i] != c)
-				i++;
+			tab[b++] = ft_write(&s[a], c, tab);
+			while (s[a] != c && s[a] != '\0')
+				a++;
 		}
 	}
-	split[j] = 0;
-	return (split);
+	tab[b] = NULL;
+	return (tab);
 }
