@@ -29,6 +29,7 @@ SRCS 			= main/main.c \
 					cmd/srcs/echo.c \
 					cmd/srcs/pwd.c \
 					utils/dollars.c \
+					utils/dolredic.c \
 					utils/ft_splitms.c \
 					utils/status.c \
 					utils/lst_addin.c \

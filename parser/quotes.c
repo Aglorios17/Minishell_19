@@ -57,7 +57,15 @@ int ft_double_quote(shell *st, char *tmp, int a)
 	while (tmp2 && tmp2[b])
 	{
 		st->flagdq = 0;
-		if (st->rd == 0 && tmp2[b] == '$')
+		if (st->rd == 1 && tmp2[b] == '$')
+		{
+			st->flagdq = 1;
+			ft_dolredic(st, tmp2, b);
+			re = ft_strjoin(re, st->tmpq);
+			b = st->pass;
+			st->flagdq = 0;
+		}
+		else if (st->rd == 0 && tmp2[b] == '$')
 		{
 			st->flagdq = 1;
 			ft_dollars(st, tmp2, b);
@@ -153,7 +161,22 @@ char *ft_traduction(shell *st, char *tmp)
 				free(back);
 				b = 1;
 			}
-			if (st->rd == 0 && (tmp[i] == '$' && b == 0 && tmp[i + 1] != '\\' &&
+			if (st->rd == 1 && (tmp[i] == '$' && b == 0 && tmp[i + 1] != '\\' &&
+				(ft_isalnum(tmp[i + 1]) || tmp[i + 1] == '_' || tmp[i + 1] == '?')))
+			{
+				st->ret = 0;
+				st->tmpq = ft_strdup("");                                                       //// here
+				st->firstd++;
+				ft_dolredic(st, tmp, i);
+				free(st->new); 
+				st->new = ft_strdup(st->tmpq);
+				if (st->ret == 0)
+					tmp = ft_strjoin(st->new, &tmp[st->pass + 1]);                            ///// here
+				else
+					tmp = ft_strdup(st->new);                                                   //// here
+				i = ft_strlen(st->new) - 1;
+			}
+			else if (st->rd == 0 && (tmp[i] == '$' && b == 0 && tmp[i + 1] != '\\' &&
 				(ft_isalnum(tmp[i + 1]) || tmp[i + 1] == '_' || tmp[i + 1] == '?')))
 			{
 				st->ret = 0;
