@@ -21,7 +21,7 @@ int	ft_envv(shell *st, char **envp)
 //	printf("ok\n");
 	while (envp[a])
 	{
-		ft_lstadd_back(&st->envv, ft_lstnew(ft_strdup(envp[a])));
+		ft_lstadd_back(&st->envv, ft_lstnew(ft_strdup(envp[a])));                              ///// free strdup
 		a++;
 	}
 	st->firstenv = st->envv;
@@ -41,7 +41,7 @@ int	ft_envv(shell *st, char **envp)
 			if (tmp[i] && tmp[i] == '=')
 				i++;
 			num = ft_atoi2(&tmp[i]) + 1;
-			st->envv->content = ft_strjoin("SHLVL=", ft_itoa(num));
+			st->envv->content = ft_strjoin("SHLVL=", ft_itoa(num));                            /// free join;
 			s = 1;
 		}
 		st->envv = st->envv->next;
@@ -50,10 +50,10 @@ int	ft_envv(shell *st, char **envp)
 //	printf("_|%i|\n", e);
 //	printf("s|%i|\n", s);
 	if (p == 0)
-		ft_lstadd_back(&st->envv, ft_lstnew(ft_strjoin("PWD=", ft_pwd(st))));
+		ft_lstadd_back(&st->envv, ft_lstnew(ft_strjoin("PWD=", ft_pwd(st))));                     //// free join
 	if (s == 0)
-		ft_lstadd_back(&st->envv, ft_lstnew(ft_strdup("SHLVL=1")));
-	if (e == 0)
+		ft_lstadd_back(&st->envv, ft_lstnew(ft_strdup("SHLVL=1")));                               //// free join
+	if (e == 0)   
 		(void)st;
 	st->envv = st->firstenv;
 /*
@@ -84,6 +84,6 @@ char *ft_shlvl(char *line, int i)
 		a = 1;
 	}
 	line = ft_itoa(a);
-	line = ft_strjoin("SHLVL=", line);
+	line = ft_strjoin("SHLVL=", line);                                               //// free line
 	return (line);
 }

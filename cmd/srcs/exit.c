@@ -40,6 +40,7 @@ int ft_exit(shell *st)
 					write(1, tmp, ft_strlen(tmp));
 					write(1, ": numeric argument required\n", 28);
 					st->status = 255;
+					free(tmp);
 					return (1);
 				}
 			}
@@ -54,6 +55,8 @@ int ft_exit(shell *st)
 		st->status = 1;
 		return (0);
 	}
+	if (tmp)
+		free(tmp);
 	tmp = ft_strdup((char *)st->tokens->next->content);
 //	printf("tmp |%s|\n", tmp);
 	a = 0;
@@ -67,11 +70,13 @@ int ft_exit(shell *st)
 	if (tmp[0] == '-' && tmp[a] == '1' && tmp[a + 1] == '\0')
 	{
 		st->status = -1;
+		free(tmp);
 		return (1);
 	}
 	if (tmp[0] == '-' && tmp[1] == '1' && tmp[2] == '\0')
 	{
 		st->status = -1;
+		free(tmp);
 		return (1);
 	}
 	if (tmp[0] == '0')
@@ -82,6 +87,7 @@ int ft_exit(shell *st)
 		if (tmp[a] == '\0')
 		{
 			st->status = 0;
+			free(tmp);
 			return (1);
 		}
 	}
@@ -95,8 +101,10 @@ int ft_exit(shell *st)
 		write(1, tmp, ft_strlen(tmp));
 		write(1, ": numeric argument required\n", 28);
 		st->status = 255;
+		free(tmp);
 		return (1);
 	}
 	st->status = result;
+	free(tmp);
 	return (1);
 }

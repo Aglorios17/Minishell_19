@@ -12,6 +12,7 @@ static void    ft_freetab(char **tab)
         a++;
     }
     free(tab);
+    tab = NULL;
 }
 
 static int ft_isinstring(char *str, char c)
@@ -50,16 +51,6 @@ int ft_check_errorredir(shell *st)
         ft_putendl_fd("minishell: syntax error near unexpected token `>>'\n", 2);
         return (1);
     }
-/*    if ((ft_isinstring("<>", tokensnext[0]) == 0) && !ft_strncmp(tokens, "<<", 3))
-    {
-        ft_putendl_fd("minishell: syntax error near unexpected token `newline'\n", 2);
-        return (1);
-    }
-    if ((ft_isinstring("<>", tokensnext[0]) == 0) &&!ft_strncmp(tokens, "<<<", 4))
-    {
-        ft_putendl_fd("minishell: syntax error near unexpected token `newline'\n", 2);
-        return (1);
-    } */
     if (!ft_strncmp(tokens, "<<<<", 5))
     {
         ft_putendl_fd("minishell: syntax error near unexpected token `<'\n", 2);
@@ -83,7 +74,7 @@ int ft_check_errorredir(shell *st)
             ft_putendl_fd("minishell: syntax error near unexpected token `newline'\n", 2);
             return (1);
         }
-        if ((ft_isinstring("<>", tokensnext[0]) == 0) &&!ft_strncmp(tokens, "<<<", 4))
+        if ((ft_isinstring("<>", tokensnext[0]) == 0) && !ft_strncmp(tokens, "<<<", 4))
         {
             ft_putendl_fd("minishell: syntax error near unexpected token `newline'\n", 2);
             return (1);
@@ -119,6 +110,16 @@ int ft_check_errorredir(shell *st)
             return (1);
         }
     }
+    if (tokensnext == NULL && !ft_strncmp(tokens, "<<", 3))
+    {
+        ft_putendl_fd("minishell: syntax error near unexpected token `newline'\n", 2);
+        return (1);
+    }
+    if (tokensnext == NULL && !ft_strncmp(tokens, "<<<", 4))
+    {
+        ft_putendl_fd("minishell: syntax error near unexpected token `newline'\n", 2);
+        return (1);
+    }
 /*    if (!st->tokens->next)
     {
         if (!ft_strncmp(tokens, "<<", 2))
@@ -133,12 +134,10 @@ int ft_check_errorredir(shell *st)
 int ft_parse_redir(shell *st, int fd)
 {
     int a;
-    int i;
 	char *tmp;
 	char *tmp2;
 
-    i = 0;
-	a = 0;
+    a = 0;
     fd = 1;
 	tmp = NULL;
 	tmp2 = NULL;
@@ -146,10 +145,6 @@ int ft_parse_redir(shell *st, int fd)
     if (st->redir[a + 1])
     {
 	    tmp = ft_strdup(st->redir[a + 1]);
-		i = ft_strlen(tmp);
-		while (tmp[i - 1] == ' ')
-			i--;
-	    tmp = ft_substr(tmp, 0, i);
 	    st->redir[a + 1] = ft_strdup(ft_traduction(st, tmp));
     }
 	tmp2 = ft_strdup(st->redir[a]);

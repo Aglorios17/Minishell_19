@@ -8,10 +8,11 @@ int ft_error(shell *st, struct stat b)
 	int		i;
 
 	tmp = NULL;
+	cmd = NULL;
 	i = 0;
 	while (st->envv)
 	{
-		tmp = ft_strdup((char *)st->envv->content);
+		tmp = (char *)st->envv->content;
 		if (!ft_strncmp("PATH=", tmp, 5))
 			break;
 		st->envv = st->envv->next;
@@ -55,7 +56,7 @@ int ft_error(shell *st, struct stat b)
 	}
 	if (!ft_strchr((char *)st->tokens->content, '/') && tmp[i + 1] != ':')
 	{
-		cmd = ft_strdup(st->cmdexec);
+		cmd = st->cmdexec;
 		if (!ft_strcmp(cmd, (char *)st->tokens->content))
 		{
 			write(2, "minishell: ", 11);
@@ -65,7 +66,7 @@ int ft_error(shell *st, struct stat b)
 			return (0);
 		}
 	}
-	cmd = ft_strdup((char *)st->tokens->content);
+	cmd = (char *)st->tokens->content;
 	dir = opendir(cmd);
 	if (dir != NULL || errno == 13)
 	{

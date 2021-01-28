@@ -5,6 +5,7 @@ int ft_export(shell *st, char **envp)
 	char *tmp;
 	char *tmp2;
 	char *bef;
+	char *fri;
 	int	a;
 	int	i;
 	int	b;
@@ -13,6 +14,7 @@ int ft_export(shell *st, char **envp)
 	tmp = NULL;
 	tmp2 = NULL;
 	bef = NULL;
+	fri = NULL;
 	a = 0;
 	b = 0;
 	err = 0;
@@ -26,6 +28,7 @@ int ft_export(shell *st, char **envp)
 		{	
 			tmp = ft_strdup("declare -x ");
 			write(1, tmp, ft_strlen(tmp));
+			free(tmp);
 			tmp = ft_strdup((char *)st->envv->content);
 			i = 0;
 			tmp2 = ft_strdup("");
@@ -35,19 +38,31 @@ int ft_export(shell *st, char **envp)
 //				printf("tmp|%c|\n", tmp[i]);
 				if (ft_strchr("\\\"$", tmp[i]))
 					tmp2 = ft_charjoin(tmp2, '\\');
+				fri = tmp2;
 				tmp2 = ft_charjoin(tmp2, tmp[i]);
+				free(fri);
 				if (tmp[i] == '=' && !a)
 				{
+					fri = tmp2;
 					tmp2 = ft_charjoin(tmp2, '"');
+					free(fri);
 					a = 1;
 				}
 				i++;
 				if (tmp[i] == '\0')
+				{
+					fri = tmp2;
 					tmp2 = ft_charjoin(tmp2, '"');
+					free(fri);
+				}
 			}
+			fri = tmp2;
 			tmp2 = ft_strjoin(tmp2, "\n");
+			free(fri);
 			i = 0;
 			write(1, tmp2, ft_strlen(tmp2));
+			free(tmp);
+			free(tmp2);
 			st->envv = st->envv->next;
 		}
 		st->envv = st->firstenv;
@@ -84,7 +99,9 @@ int ft_export(shell *st, char **envp)
 			bef = ft_strdup("");
 			while (tmp[b] && tmp[b] != '=')
 			{
+				fri = bef;
 				bef = ft_charjoin(bef, tmp[b]);
+				free(fri);
 				b++;
 			}
 			if (ft_isdigit(bef[0]) || ft_strchr(bef, '\\') || ft_strchr(bef, '\'') || ft_strchr(bef, '"') || ft_strchr(bef, '$') || ft_strchr(bef, '|') || ft_strchr(bef, ';') || ft_strchr(bef, '&') || ft_strchr(bef, '!') ||  ft_strchr(bef, '@'))
@@ -150,7 +167,7 @@ int ft_export(shell *st, char **envp)
 							st->pwd = ft_strdup(&tmp[i]);		
 						if (!ft_strncmp(tmp, "OLDPWD=", i))
 							st->oldpwd = ft_strdup(&tmp[i]);		
-						st->envv->content = ft_strdup(tmp);
+						st->envv->content = ft_strdup(tmp);                                      //// free
 					}
 					a = 1;
 				}
@@ -158,7 +175,7 @@ int ft_export(shell *st, char **envp)
 			}	
 			st->envv = st->firstenv;
 			if (a == 0)
-				ft_lstadd_back(&st->envv, ft_lstnew(ft_strdup(tmp)));
+				ft_lstadd_back(&st->envv, ft_lstnew(ft_strdup(tmp)));                           /////// free new
 			st->tokens = st->tokens->next;
 		}
 	}

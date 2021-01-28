@@ -23,7 +23,7 @@ int oldpwd(shell *st)
 				i++;
 			if (tmp[i] == '=')
 				i++;
-			st->envv->content = ft_strjoin("OLDPWD=", st->oldpwd);
+			st->envv->content = ft_strjoin("OLDPWD=", st->oldpwd);                      //// free envv
 			break;
 		}
 		st->envv = st->envv->next;

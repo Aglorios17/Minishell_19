@@ -45,7 +45,7 @@ int ft_command(shell *st, char **envp)
 						if (tmp[i] == '=')
 							i++;
 					//	if (!ft_strcmp(st->pwd, st->oldpwd))
-						st->envv->content = ft_strjoin("PWD=", st->pwd);
+						st->envv->content = ft_strjoin("PWD=", st->pwd);                          //// free ft_strjoin
 //					printf("envv||%s||\n", (char *)st->envv->content);
 						break;
 					}
@@ -58,10 +58,7 @@ int ft_command(shell *st, char **envp)
 	else if (!ft_strncmp((char *)st->tokens->content, "export", 7))
 	{
 	//	printf("|okexport|\n");
-		if (st->pipe->next || st->pipe != st->firstpipe)
-			return (0);
-		else
-			ft_export(st, envp);
+		ft_export(st, envp);
 	}
 	else if (!ft_strncmp((char *)st->tokens->content, "unset", 6))
 	{

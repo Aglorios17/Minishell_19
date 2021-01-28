@@ -43,6 +43,7 @@ int ft_cd(shell *st)
 	i = 0;
 	tmp = st->oldpwd;
 	st->oldpwd = st->pwd;
+	line = NULL;
 	if (st->tokens->next && st->tokens->next->next)
 	{
 		st->oldpwd = tmp;
@@ -69,27 +70,37 @@ int ft_cd(shell *st)
 			st->envv = st->envv->next;
 		}
 		st->envv = st->firstenv;
-		st->pwd = line;
+		st->pwd = ft_strdup(line);
 		if (chdir(st->pwd) < 0)
 		{
 			st->oldpwd = tmp;
 			write(1, "minishell: ", 11);
 			write(1, "cd: ", 4);
 			write(1, "HOME not set\n", 13);
+			if (line)
+				free(line);
 			return (0);
 		}
 		oldpwd(st);
+		if (line)
+			free(line);
 		return (1);
 	}
-	line = st->tokens->next->content;
+	if (line)
+		free(line);
+	line = ft_strdup((char *)st->tokens->next->content);
 	if (st->tokens->next && line[0] != '\0')
 		st->pwd = ft_strdup(&line[i]);
 	if (chdir(st->pwd) < 0)
 	{
 		open_pathcd(st, (char *)st->tokens->next->content);
 		st->oldpwd = tmp;
+		if (line)
+			free(line);
 		return (0);
 	}
+	if (line)
+		free(line);
 	oldpwd(st);
 	return (1);
 }

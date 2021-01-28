@@ -129,14 +129,6 @@ int mainprocess(int argc, char **argv, char **envp, shell *st)
 	ft_freecutline(st, tmp);
 	return (0);
 }
-
-void signalhandler(int signum)
-{
-	(void)signum;
-	ft_putchar('\n');
-	write(2,">>",2);
-}
-
 int main(int argc, char **argv, char **envp)
 {
 	shell	st;
@@ -155,7 +147,6 @@ int main(int argc, char **argv, char **envp)
 	}
 	else
 	{
-		signal(SIGINT, signalhandler);
 		while(1)
 		{
 			write(2,">>",2);
