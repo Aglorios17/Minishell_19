@@ -117,7 +117,11 @@ int mainprocess(int argc, char **argv, char **envp, shell *st)
 		while (st->pipe)
 		{
 			if (ft_pipe(argc, argv, envp, st) == 1)
+			{
+				ft_freecutpipe(st, tmp);
+				ft_freecutline(st, tmp);
 				return (1);
+			}
 			st->pipe = st->pipe->next;	
 		}
 		ft_freecutpipe(st, tmp);
@@ -147,10 +151,12 @@ void signalhandler(int signum)
 int main(int argc, char **argv, char **envp)
 {
 	shell	st;
+	t_list	*tmp;
 
 	ft_init_struct(&st);
 	pid = 1;
 	prompt = 0;
+	tmp = NULL;
 //	write(1,"\n",1);
 //	write(1,"by Aglorios and Gverhelp\n",25);
 //	write(1,"\n",1);
@@ -171,7 +177,7 @@ int main(int argc, char **argv, char **envp)
 			prompt = 0;
 			if (get_next_line3d(0, &st.line) != 1)
 			{
-				free(st.line);
+				ft_exfree2(&st, tmp);
 				write(1, "exit\n", 5);
 				return(0);
 			}
@@ -179,6 +185,7 @@ int main(int argc, char **argv, char **envp)
 				break;
 		}
 	}
+//	ft_freetab(envp);
 	if (st.status != 0)
 		return (st.status);
 	return (0);

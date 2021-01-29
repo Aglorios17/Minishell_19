@@ -196,7 +196,6 @@ char *ft_traduction(shell *st, char *tmp)
 				fri = st->new;
 				st->new = ft_charjoin(st->new, tmp[i]);
 				free(fri);
-				tmp = ft_strjoin(st->new, &tmp[i + 1]);
 			}
 		}
 		i++;

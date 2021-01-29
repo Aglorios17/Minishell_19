@@ -34,17 +34,18 @@ int lstcmd(shell *st, char *line)
 		i++;
 	}
 	a = 0;
-	tmp2 = ft_strdup("_=");
-	fri = tmp2;
-	tmp2 = ft_strjoin(tmp2, tmp); //////////// free
-	free(fri);
+	free(tmp2);
+	tmp2 = NULL;
+	tmp2 = ft_strjoin("_=", tmp); //////////// free
 	while (st->envv)
 	{
 		if (!ft_strcmp((char *)st->envv->content, tmp2))
 			a = 1;
 		else if (!ft_strncmp((char *)st->envv->content, "_=", 2))
 		{
-			st->envv->content = ft_strjoin("_=", tmp);
+			free(st->envv->content);
+			st->envv->content = NULL; 
+			st->envv->content = ft_strjoin("_=" ,tmp);
 			a = 1;
 		}
 		st->envv = st->envv->next;
@@ -54,5 +55,6 @@ int lstcmd(shell *st, char *line)
 		ft_lstadd_back(&st->envv, ft_lstnew("_=/bin/bash"));                 ////// free ft_strjoin
 	st->envv = st->firstenv;
 	free(tmp);
+	free(tmp2);
 	return (1);
 }

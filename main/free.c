@@ -19,7 +19,6 @@ int	ft_exfree2(shell *st, t_list *tmp)
 	}
 //	free(st->pwd);
 	st->tokens = st->firsttok;
-	st->firsttok = NULL;
 	while (st->tokens != NULL)
 	{
 //		printf("|%s|", (char *)st->tokens->content);
@@ -31,8 +30,8 @@ int	ft_exfree2(shell *st, t_list *tmp)
 		tmp = NULL;
 	}
 	st->tokens = NULL;
+	st->firsttok = NULL;
 	st->envv = st->firstenv;
-	st->firstenv = NULL;
 	while (st->envv != NULL)
 	{
 //		printf("|%s|", (char *)st->tokens->content);
@@ -44,6 +43,7 @@ int	ft_exfree2(shell *st, t_list *tmp)
 		tmp = NULL;
 	}
 	st->envv = NULL;
+	st->firstenv = NULL;
 	if (st->status != 0)
 		return (st->status);
 	return (0);

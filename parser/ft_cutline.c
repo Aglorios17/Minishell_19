@@ -165,7 +165,7 @@ int	ft_cutpipe(shell *st)
 //	fri->next->content = NULL;
 	while (line[a])
 	{
-		ft_lstadd_back(&st->pipe, ft_lstnew(ft_strdup(line[a])));                     //// free
+		ft_lstadd_back(&st->pipe, ft_lstnew(ft_strdup(line[a])));    //// free
 //		fri->content = NULL;
 		a++;
 	}
