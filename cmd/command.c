@@ -90,6 +90,7 @@ int ft_command(shell *st, char **envp)
 	//	printf("|ok|\n");
 		ft_exec(st);
 	}
+//	free(st->cmdexec);
 //	st->oldpwd = ft_pwd(st);
 	return (0);
 }
@@ -101,9 +102,7 @@ int	ft_checkcommand(shell *st)
 	tmp = (char *)st->tokens->content;
 //	printf("|ok|\n");
 	if (check_path(st, tmp) == 1)
-	{
 		return (1);
-	}
 //	printf("|ok2|\n");
 	if (!ft_strcmp(tmp, "echo") || !ft_strcmp(tmp, "cd") || !ft_strcmp(tmp, "pwd") ||
 		!ft_strcmp(tmp, "env") || !ft_strcmp(tmp, "export") ||

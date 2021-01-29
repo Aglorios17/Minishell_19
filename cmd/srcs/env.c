@@ -9,6 +9,7 @@ int	ft_envv(shell *st, char **envp)
 	int s;
 	char *tmp;
 	int num;
+	char *fri;
 	
 	a = 0;
 	p = 0;
@@ -17,6 +18,7 @@ int	ft_envv(shell *st, char **envp)
 	tmp = NULL;
 	num = 0;
 	i = 0;
+	fri = NULL;
 //	printf("envv1|%s|\n", (char *)st->envv->content);
 //	printf("ok\n");
 	while (envp[a])
@@ -41,7 +43,9 @@ int	ft_envv(shell *st, char **envp)
 			if (tmp[i] && tmp[i] == '=')
 				i++;
 			num = ft_atoi2(&tmp[i]) + 1;
-			st->envv->content = ft_strjoin("SHLVL=", ft_itoa(num));                            /// free join;
+			st->envv->content = ft_strjoin("SHLVL=", fri = ft_itoa(num));   
+			/// free join;
+			free(fri);
 			s = 1;
 		}
 		st->envv = st->envv->next;

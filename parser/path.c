@@ -67,7 +67,7 @@ int	check_path(shell *st, char *dollars)
 	(void)dollars;
 	cmd = (char *)st->tokens->content;
 	tab = recuppath(st, tab);
-	st->cmdexec = ft_strdup((char *)st->tokens->content);                              //// free st->cmdexec si pas déjà fait
+	st->cmdexec = cmd;                              //// free st->cmdexec si pas déjà fait
 	if (tab == NULL)
 		return (0);
 	while (tab[i])
@@ -92,6 +92,7 @@ int	check_path(shell *st, char *dollars)
 				else
 					st->cmdexec = ft_strdup(tmp);                                       //// free st->cmdexec si pas déjà fait
 				free(tmp);
+				ft_freetab(tab);
 				return (1);
 			}
 		}

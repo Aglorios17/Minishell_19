@@ -7,12 +7,8 @@ int	ft_checkspace(char *line)
 
 	i = 0;
 	a = 0;
-	//printf("|%c|", line[i]);
 	while (line[i])
 	{
-//		printf("1|%c|\n", line[i]);
-//		printf("in1  |%i|\n", i);
-//		printf("111111111111111111|%c|\n", line[i]);
 		if (line[i] != ' ' && line[i] != '\t' && line[i] != '\'' && line[i] != '"' && line[i] != '>' && line[i] != '<')
 		{
 			i++;
@@ -35,36 +31,19 @@ int	ft_checkspace(char *line)
 			}
 			while (line[i] && line[i] != '\'')
 			{
-/*
-				a = i; ////////////////////////////////////////////////// modif space end string
-//				printf("1|%c|\n", line[a]);
-				while (line[a] == ' ' || line[a] == '\t')
-				{
-//					printf("2|%c|\n", line[a]);
-					a++;
-				}
-				if (line[a] == '\0')
-					return (i);
-*/
 				i++;
 			}
 			if (line[i + 1] == ' ' || line[i + 1] == '\0')
 				return i + 1;
-///*
 			a = i + 1;
-//			printf("line[a] : |%c|\n", line[a]);
 			while (line[a] && line[a] != ' ' && line[a] != '\t' && line[a] != '\'' && line[a] != '\'') ////////////////// modif split tok "@"$a "@"
 				a++;
-//			printf("a|%c|\n", line[a]);
 			if (line[a] == ' ' || line[a] == '\t')
 				return (a);
-//*/
 		}
 		else if (line[i] == '"')
 		{
 			i++;
-//			printf("222222222222222|%c|\n", line[i]);
-//			printf("1|%c|\n", line[i]);
 			while (line[i] == '"')
 			{	
 				if (line[i + 1] != '"')
@@ -77,47 +56,15 @@ int	ft_checkspace(char *line)
 				}
 				i++;
 			}
-	//		printf("c1 : |%c|\n", line[i]);
 			while (line[i] && line[i] != '"')
-			{
-/*
-				a = i; ////////////////////////////////////////////////// modif space end string
-//				printf("1|%c|\n", line[a]);
-				while (line[a] == ' ' || line[a] == '\t')
-				{
-//					printf("2|%c|\n", line[a]);
-					a++;
-				}
-				if (line[a] == '\0')
-					return (i);
-*/
 				i++;
-			}
-//			printf("c2 : %d |%s|\n", i, &line[i]);
-/*
-			printf("c2 : |%c| \n", line[i - 1]);
-			printf("c3 : |%c| \n", line[i]);
-			printf("c4 : %d |%s|\n", i, &line[i]);
-*/
 			if (line[i] && line[i] == '"' && line[i - 1] == '\\') //////// modif tokens = " \" "
 				i++;
 			a = i + 1;
 			if (line[a] == '"' && line[a - 1] != '"')
 				return (a + 1);
-//			printf("c2 : |%c| \n", line[a - 1]);
-//			printf("c3 : |%c| \n", line[a]);
-//			printf("c4 : %d |%s|\n", a, &line[a]);
-//			if (line[a] && line[a] == '"' && line[a - 1] == '\\') //////// modif tokens = " \" "
-//				a++;		
-//			printf("c3 : %d |%c|\n", a, line[a]);
 			while (line[a] && line[a] != ' ' && line[a] != '\t' && line[a] != '"' && line[a] != '\'') ////////////////// modif split tok "@"$a "@"
 				a++;
-//			printf("c2 : |%c| \n", line[a - 1]);
-//			printf("c3 : |%c| \n", line[a]);
-//			if (line[a] && line[a] == '"' && line[a - 1] == '\\') //////// modif tokens = " \" "
-//				a++;
-//			printf("c4 : %d |%c|\n", a, line[a]);
-//			printf("a|%c|\n", line[a]);
 			if (line[a] == ' ' || line[a] == '\t')
 				return (a);
 //*/
@@ -127,24 +74,11 @@ int	ft_checkspace(char *line)
 		else if (line[i] == ' ' || line[i] == '\t')
 		{
 			(void)a;
-//			printf("in3  |%i|\n", i);
 			if (line[i - 1] == '\\')
 				i++;
 			else
 				return i;
 		}
-/*		else
-		{
-			a = i;
-			printf("1|%c|\n", line[a]);
-			while (line[a] == ' ' || line[a] == '\t')
-			{
-				printf("2|%c|\n", line[a]);
-				a++;
-			}
-			if (line[a] == '\0')
-				return (i);
-		}*/
 	}
 	return (i);
 }
@@ -199,13 +133,7 @@ int ft_tokens(shell *st)
 			fri = ft_substr(tmp, i, a = ft_checkspace(&tmp[i]));
 			i += a;
 		}
-//		printf("aacheck  |%i|\n", a);
-//		printf("tokkkkk  |%s|\n", fri);
-//		printf("iiiiiii  |%i|\n", i);
 		ft_lstadd_back(&st->tokens, ft_lstnew(fri));
-//		free(fri);
-//		fri = NULL;
-//		i += a; //ft_checkspace(&tmp[i]);
 	}
 /*	while (st->envv)
 	{

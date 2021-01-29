@@ -9,14 +9,12 @@ void ft_init_struct(shell *st)
 	st->pwd = NULL;
 	st->pwdcp = NULL;
 	st->oldpwd = NULL;
-	st->home = NULL;
 	st->firsttok = NULL;
 	st->tmpq = NULL;
 	st->tokens = NULL;
 	st->envv = NULL;
 	st->firstenv = NULL;
 	st->flagdq = 0;
-	st->home = ft_pwd(st);
 	st->status = 0;
 	st->cutline = 0;
 	st->pipe = NULL;
@@ -40,7 +38,6 @@ int commandline(int argc, char **argv, char **envp, shell *st)
 	{	
 //		if (st->status == 2)
 //		{
-//			free(st->home);
 //			ft_exfree2(st, tmp);
 //			return (1);
 //		}
@@ -53,7 +50,6 @@ int commandline(int argc, char **argv, char **envp, shell *st)
 			ft_cleantokens(st);
 		if (ft_command(st, envp) == 1)
 		{
-	//		free(st->home);                                             //// demander à Alessio
 			ft_exfree2(st, tmp);
 			return (1);
 		}
@@ -158,7 +154,6 @@ int main(int argc, char **argv, char **envp)
 //	write(1,"\n",1);
 //	write(1,"by Aglorios and Gverhelp\n",25);
 //	write(1,"\n",1);
-//	st.home = "/Users/aglorios";
 //	envp = 0;
 	ft_envv(&st, envp);
 	if  (argc > 1 && !ft_strncmp(argv[1], "-c", 2))
@@ -176,6 +171,7 @@ int main(int argc, char **argv, char **envp)
 			prompt = 0;
 			if (get_next_line3d(0, &st.line) != 1)
 			{
+				free(st.line);
 				write(1, "exit\n", 5);
 				return(0);
 			}
@@ -183,7 +179,6 @@ int main(int argc, char **argv, char **envp)
 				break;
 		}
 	}
-	free(st.home);
 	if (st.status != 0)
 		return (st.status);
 	return (0);

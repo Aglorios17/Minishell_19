@@ -11,8 +11,8 @@ int lstcmd(shell *st, char *line)
 	i = 0;
 	a = 0;
 	tmp = NULL;
-	fri = NULL;
 	tmp2 = NULL;
+	fri = NULL;
 	while (st->envv)
 	{
 		tmp = (char *)st->envv->content;
@@ -29,27 +29,30 @@ int lstcmd(shell *st, char *line)
 	while (line[i] && line[i] != ' ')
 	{
 		fri = tmp;
-		tmp = ft_charjoin(tmp, line[i]);
+		tmp = ft_charjoin(tmp, line[i]); ///////////////////// free
 		free(fri);
 		i++;
 	}
 	a = 0;
 	tmp2 = ft_strdup("_=");
-	tmp2 = ft_strjoin(tmp2, tmp);
+	fri = tmp2;
+	tmp2 = ft_strjoin(tmp2, tmp); //////////// free
+	free(fri);
 	while (st->envv)
 	{
 		if (!ft_strcmp((char *)st->envv->content, tmp2))
 			a = 1;
 		else if (!ft_strncmp((char *)st->envv->content, "_=", 2))
 		{
-			st->envv->content = ft_strjoin("_=", tmp);                                    /////// free ft_strjoin
+			st->envv->content = ft_strjoin("_=", tmp);
 			a = 1;
 		}
 		st->envv = st->envv->next;
 	}
 	st->envv = st->firstenv;
 	if (a == 0)
-		ft_lstadd_back(&st->envv, ft_lstnew(ft_strjoin("_=", "/bin/bash")));                 ////// free ft_strjoin
+		ft_lstadd_back(&st->envv, ft_lstnew("_=/bin/bash"));                 ////// free ft_strjoin
 	st->envv = st->firstenv;
+	free(tmp);
 	return (1);
 }

@@ -130,5 +130,7 @@ int ft_exec(shell *st)
 		wait(&a);
 		st->status = a/256;
 	}
+	ft_freetab(ar);
+	ft_freetab(en);
 	return (i);
 }
