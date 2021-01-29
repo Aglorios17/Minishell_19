@@ -1,16 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   unset.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aglorios <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/22 15:42:11 by aglorios          #+#    #+#             */
+/*   Updated: 2019/10/22 16:43:58 by aglorios         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
 
-int ft_unset(shell *st)
+int	ft_error_unset(shell *st, char *un)
 {
-	t_list *tmp;
-	t_list *previous;
-	char *un;
-	char *fri;
-
-	tmp = NULL;
-	previous = NULL;
-	fri = NULL;
-	un = ft_strdup((char *)st->tokens->content);
 	if (!ft_strncmp(un, "PWD\0", ft_strlen(un)))
 		st->pwd = ft_strdup("");
 	if (!ft_strncmp(un, "PATH\0", ft_strlen(un)))
@@ -34,10 +37,11 @@ int ft_unset(shell *st)
 		free(un);
 		return (0);
 	}
-	fri = un;
-	un = ft_charjoin(un, '=');
-	free(fri);
-	previous = st->envv;
+	return (1);
+}
+
+int	do_unset(shell *st, char *un, t_list *tmp, t_list *previous)
+{
 	if (!ft_strncmp(un, (char *)previous->content, ft_strlen(un)))
 	{
 		st->envv = previous->next;
@@ -61,6 +65,28 @@ int ft_unset(shell *st)
 		previous = tmp;
 		tmp = tmp->next;
 	}
+	return (1);
+}
+
+int	ft_unset(shell *st)
+{
+	t_list	*tmp;
+	t_list	*previous;
+	char	*un;
+	char	*fri;
+
+	tmp = NULL;
+	previous = NULL;
+	fri = NULL;
+	un = ft_strdup((char *)st->tokens->content);
+	if (ft_error_unset(st, un) == 0)
+		return (0);
+	fri = un;
+	un = ft_charjoin(un, '=');
+	free(fri);
+	previous = st->envv;
+	if (do_unset(st, un, tmp, previous) == 0)
+		return (0);
 	st->envv = st->firstenv;
 	free(un);
 	return (0);

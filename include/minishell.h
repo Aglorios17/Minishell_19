@@ -65,9 +65,13 @@ int ft_command(shell *st, char **envp);
 int	ft_checkcommand(shell *st);
 int ft_echo(shell *st);
 int ft_exit(shell *st);
-int ft_cd(shell *st);
 char *ft_pwd(shell *st);
 int oldpwd(shell *st);
+
+/////////// cd //////////////////
+int ft_cd(shell *st);
+int	cdhomereturn(shell *st, char *line, char *tmp);
+int	open_pathcd(shell *st, char *path);
 
 ////////// export //////////////
 

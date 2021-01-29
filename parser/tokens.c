@@ -135,20 +135,6 @@ int ft_tokens(shell *st)
 		}
 		ft_lstadd_back(&st->tokens, ft_lstnew(fri));
 	}
-/*	while (st->envv)
-	{
-		tmp = (char *)st->envv->content;
-		if (!ft_strncmp(tmp, "_=", 2))
-		{
-	//		printf("envv|%s|\n", (char *)st->envv->content);
-	//		printf("tokens|%s|\n", (char *)st->tokens->content);
-			st->envv->content = ft_strjoin("_=", (char *)st->tokens->content);
-			break;
-		}
-		st->envv = st->envv->next;
-	}
-	st->envv = st->firstenv;
-*/
 	st->firsttok = st->tokens;
 	if (ft_redirections(st) == 1)
 		return (1);

@@ -26,6 +26,7 @@ SRCS 			= main/main.c \
 					cmd/srcs/env.c \
 					cmd/srcs/unset.c \
 					cmd/srcs/cd.c \
+					cmd/srcs/cd_error.c \
 					cmd/srcs/echo.c \
 					cmd/srcs/pwd.c \
 					utils/dollars.c \

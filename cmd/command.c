@@ -1,115 +1,104 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   command.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aglorios <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/22 15:42:11 by aglorios          #+#    #+#             */
+/*   Updated: 2019/10/22 16:43:58 by aglorios         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
-int ft_command(shell *st, char **envp)
+int	ft_commandcd(shell *st, char *tmp, int i)
 {
-	char *tmp;
-	int i;
-//	int a;
-//	printf("|%s|\n", (char *)st->tokens->content);
+	if (ft_cd(st) == 1)
+	{
+		st->pwd = ft_pwd(st);
+		while (st->envv)
+		{
+			tmp = (char *)st->envv->content;
+			if (!ft_strncmp(tmp, "PWD=", 4))
+			{
+				if (st->pwd)
+				{
+					i = 0;
+					while (tmp[i] != '=')
+						i++;
+					if (tmp[i] == '=')
+						i++;
+					st->envv->content = ft_strjoin("PWD=", st->pwd);
+					break ;
+				}
+			}
+			st->envv = st->envv->next;
+		}
+		st->envv = st->firstenv;
+	}
+	return (0);
+}
+
+int	ft_commandenv(shell *st, char *tmp)
+{
+	while (st->envv)
+	{
+		tmp = (char *)st->envv->content;
+		if (!ft_strcmp(tmp, "_=env"))
+			write(1, "_=/home/user42/Bureau/minishell_test/bin/env", 44);
+		else
+			write(st->fdout, tmp, ft_strlen(tmp));
+		write(1, "\n", 1);
+		st->envv = st->envv->next;
+	}
+	st->envv = st->firstenv;
+	return (0);
+}
+
+int	ft_commandunset(shell *st)
+{
+	st->tokens = st->tokens->next;
+	while (st->tokens)
+	{
+		ft_unset(st);
+		st->tokens = st->tokens->next;
+	}
+	st->tokens = st->firsttok;
+	return (0);
+}
+
+int	ft_commandpwd(shell *st)
+{
+	write(1, ft_pwd(st), ft_strlen(ft_pwd(st)));
+	write(1, "\n", 1);
+	return (0);
+}
+
+int	ft_command(shell *st, char **envp)
+{
+	char	*tmp;
+	int		i;
 
 	tmp = NULL;
 	i = 0;
-//	a = 0;
 	if (!st->tokens)
 		return (0);
 	if (!(ft_strncmp((char *)st->tokens->content, "exit", 5)))
 		return (ft_exit(st));
 	else if (!(ft_strncmp((char *)st->tokens->content, "echo", 5)))
-	{
 		ft_echo(st);
-		st->status = 0;
-//		if (st->errorredir == 1)
-//			st->status = 1;
-//		st->errorredir = 0;
-	}
 	else if (!ft_strncmp((char *)st->tokens->content, "pwd", 4))
-	{
-		write(1, ft_pwd(st), ft_strlen(ft_pwd(st)));
-		write(1, "\n", 1);
-	}
+		ft_commandpwd(st);
 	else if (!ft_strncmp((char *)st->tokens->content, "cd", 3))
-	{
-		if (ft_cd(st) == 1)
-		{
-			st->pwd = ft_pwd(st);
-			while (st->envv)
-			{
-				tmp = (char *)st->envv->content;
-				if (!ft_strncmp(tmp, "PWD=", 4))
-				{
-					if (st->pwd)
-					{
-						i = 0;
-						while (tmp[i] != '=')
-							i++;
-						if (tmp[i] == '=')
-							i++;
-					//	if (!ft_strcmp(st->pwd, st->oldpwd))
-						st->envv->content = ft_strjoin("PWD=", st->pwd);                          //// free ft_strjoin
-//					printf("envv||%s||\n", (char *)st->envv->content);
-						break;
-					}
-				}
-				st->envv = st->envv->next;
-			}
-			st->envv = st->firstenv;
-		}
-	}
+		ft_commandcd(st, tmp, i);
 	else if (!ft_strncmp((char *)st->tokens->content, "export", 7))
-	{
-		if (st->pipe->next || st->pipe != st->firstpipe)
-			return (0);
-		else
-			ft_export(st, envp);
-	}
+		ft_export(st, envp);
 	else if (!ft_strncmp((char *)st->tokens->content, "unset", 6))
-	{
-		st->tokens = st->tokens->next;
-		while (st->tokens)
-		{
-			ft_unset(st);
-			st->tokens = st->tokens->next;
-		}
-		st->tokens = st->firsttok;
-	}
+		ft_commandunset(st);
 	else if (!ft_strncmp((char *)st->tokens->content, "env", 4))
-	{
-		while (st->envv)
-		{
-			if (!ft_strcmp((char *)st->envv->content, "_=env"))
-				write(1, "_=/home/user42/Bureau/minishell_test/bin/env", 44);
-			else
-				write(st->fdout, (char *)st->envv->content, ft_strlen((char *)st->envv->content));
-			write(1, "\n", 1);
-			st->envv = st->envv->next;
-		}
-		st->envv = st->firstenv;
-	}
-	else	
-	{
-	//	printf("|ok|\n");
-		ft_exec(st);
-	}
-//	free(st->cmdexec);
-//	st->oldpwd = ft_pwd(st);
-	return (0);
-}
-
-int	ft_checkcommand(shell *st)
-{
-	char *tmp;
-
-	tmp = (char *)st->tokens->content;
-//	printf("|ok|\n");
-	if (check_path(st, tmp) == 1)
-		return (1);
-//	printf("|ok2|\n");
-	if (!ft_strcmp(tmp, "echo") || !ft_strcmp(tmp, "cd") || !ft_strcmp(tmp, "pwd") ||
-		!ft_strcmp(tmp, "env") || !ft_strcmp(tmp, "export") ||
-		!ft_strcmp(tmp, "unset") || !ft_strcmp(tmp, "exit") || !ft_strcmp(tmp, "exec"))
-	{
-		return (1);
-	}
+		ft_commandenv(st, tmp);
 	else
-		return (0);
+		ft_exec(st);
+	return (0);
 }

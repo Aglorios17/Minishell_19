@@ -20,8 +20,8 @@ int ft_export(shell *st, char **envp)
 	err = 0;
 	i = 0;
 	(void)envp;
-//	if (!st->tokens->next)
-//		return (0);
+	if (st->pipe->next || st->pipe != st->firstpipe)
+		return (0);
 	if (!st->tokens->next)
 	{
 		while (st->envv->next)

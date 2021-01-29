@@ -1,16 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   echo.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aglorios <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/22 15:42:11 by aglorios          #+#    #+#             */
+/*   Updated: 2019/10/22 16:43:58 by aglorios         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
 
-int ft_echo(shell *st)
+int	ft_echo_n(shell *st, char *tm, t_list *tmp, int i)
 {
-	t_list	*tmp;
-	char 	*tm;
-	int		i;
-
-	i = 0;
-	tmp = 0;
-	tm = 0;
-//	printf("||%s||\n", st->tokens->content);
-//	write(1,"1\n",2);
 	while (st->tokens->next != NULL)
 	{
 		tmp = st->tokens->next;
@@ -23,24 +26,30 @@ int ft_echo(shell *st)
 				i++;
 			}
 			if (i == (int)ft_strlen((char *)tmp->content))
-			{
-			//	write(1, "1\n", 1);
 				st->tokens = tmp;
-				i = 1;
-			}
 			else
 			{
 				i = 0;
-				break;
+				break ;
 			}
-//			free(tm);
 		}
 		else
-			break;
-//		free(tmp);
+			break ;
 	}
-//	printf("%s\n", (char *)st->tokens->content);
 	st->tokens = st->tokens->next;
+	return (i);
+}
+
+int	ft_echo(shell *st)
+{
+	t_list	*tmp;
+	char	*tm;
+	int		i;
+
+	tmp = NULL;
+	tm = NULL;
+	i = 0;
+	i = ft_echo_n(st, tm, tmp, i);
 	while (st->tokens != NULL)
 	{
 		ft_putendl_fd((char *)st->tokens->content, 1);
@@ -50,5 +59,6 @@ int ft_echo(shell *st)
 	}
 	if (i == 0)
 		write(1, "\n", 1);
+	st->status = 0;
 	return (0);
 }

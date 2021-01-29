@@ -105,3 +105,21 @@ int	check_path(shell *st, char *dollars)
 		return (0);
 	return (1);
 }
+
+int	ft_checkcommand(shell *st)
+{
+	char	*tmp;
+
+	tmp = (char *)st->tokens->content;
+	if (check_path(st, tmp) == 1)
+		return (1);
+	if (!ft_strcmp(tmp, "echo") || !ft_strcmp(tmp, "cd") ||
+		!ft_strcmp(tmp, "pwd") || !ft_strcmp(tmp, "env") ||
+		!ft_strcmp(tmp, "export") || !ft_strcmp(tmp, "unset") ||
+		!ft_strcmp(tmp, "exit") || !ft_strcmp(tmp, "exec"))
+	{
+		return (1);
+	}
+	else
+		return (0);
+}

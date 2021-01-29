@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aglorios <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/22 15:42:11 by aglorios          #+#    #+#             */
+/*   Updated: 2019/10/22 16:43:58 by aglorios         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
 
-int	ft_envv(shell *st, char **envp)
+int		ft_envv(shell *st, char **envp)
 {
 	int a;
 	int i;
@@ -19,8 +31,6 @@ int	ft_envv(shell *st, char **envp)
 	num = 0;
 	i = 0;
 	fri = NULL;
-//	printf("envv1|%s|\n", (char *)st->envv->content);
-//	printf("ok\n");
 	while (envp[a])
 	{
 		ft_lstadd_back(&st->envv, ft_lstnew(ft_strdup(envp[a])));                              ///// free strdup
@@ -51,8 +61,6 @@ int	ft_envv(shell *st, char **envp)
 		st->envv = st->envv->next;
 	}
 	st->envv = st->firstenv;
-//	printf("_|%i|\n", e);
-//	printf("s|%i|\n", s);
 	if (p == 0)
 		ft_lstadd_back(&st->envv, ft_lstnew(ft_strjoin("PWD=", ft_pwd(st))));                     //// free join
 	if (s == 0)
@@ -60,18 +68,10 @@ int	ft_envv(shell *st, char **envp)
 	if (e == 0)   
 		(void)st;
 	st->envv = st->firstenv;
-/*
-	while (st->envv != NULL)
-	{
-		printf("envv|%s|\n", (char *)st->envv->content);
-		st->envv = st->envv->next;
-	}
-	st->envv = st->firstenv;
-*/
     return (0);
 }
 
-char *ft_shlvl(char *line, int i)
+char	*ft_shlvl(char *line, int i)
 {
 	int a;
 
