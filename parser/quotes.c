@@ -23,13 +23,17 @@ int ft_double_quote(shell *st, char *tmp, int a)
 {
 	char	*tmp2;
 	char	*re;
+	char	*fri;
 	int 	b;
 	int		c;
 	int		bol;
 	int		back;
 
-	tmp2 = NULL;
+	tmp2 = ft_strdup("");
+	fri = NULL;
 	re = NULL;
+	if (st->tmpq)
+		free(st->tmpq);
 	st->tmpq = ft_strdup("");
 	b = a;
 	c = 0;
@@ -44,6 +48,7 @@ int ft_double_quote(shell *st, char *tmp, int a)
 			back = ft_back(tmp, bol + 1);
 			if (back%2 == 0 || tmp[a - 1] != '\\')
 			{
+				free(tmp2);
 				tmp2 = ft_substr(tmp, b + 1, c);
 				st->quotes++;
 				break;
@@ -61,7 +66,9 @@ int ft_double_quote(shell *st, char *tmp, int a)
 		{
 			st->flagdq = 1;
 			ft_dolredic(st, tmp2, b);
+			fri = re;
 			re = ft_strjoin(re, st->tmpq);
+			free(fri);
 			b = st->pass;
 			st->flagdq = 0;
 		}
@@ -69,7 +76,9 @@ int ft_double_quote(shell *st, char *tmp, int a)
 		{
 			st->flagdq = 1;
 			ft_dollars(st, tmp2, b);
+			fri = re;
 			re = ft_strjoin(re, st->tmpq);
+			free(fri);
 			b = st->pass;
 			st->flagdq = 0;
 		}
@@ -77,11 +86,15 @@ int ft_double_quote(shell *st, char *tmp, int a)
 		{
 			if (tmp2[b] == '\\' && ft_strchr("\\$\"", tmp2[b + 1]))
 				b++;
+			fri = re;
 			re = ft_charjoin(re, tmp2[b]);
+			free(fri);
 		}
 		b++;
 	}
+	free(st->tmpq);
 	st->tmpq = ft_strdup(re);
+	free(re);
 	free(tmp2);
 	return (a);
 }
@@ -93,13 +106,13 @@ int ft_simple_quote(shell *st, char *tmp, int a)
 
 	b = a;
 	c = 0;
-	st->tmpq = NULL;
 	a++;
 	st->quotes2++;
 	while (tmp[a])
 	{
 		if (tmp[a] == '\'')
 		{
+			free(st->tmpq);
 			st->tmpq = ft_substr(tmp, b + 1, c);
 			st->quotes2++;
 			return (a);
@@ -120,7 +133,7 @@ char *ft_traduction(shell *st, char *tmp)
 	i = 0;
 	b = 0;
 	back = NULL;
-	st->tmpq = NULL;
+	st->tmpq = ft_strdup("");
 	fri = NULL;
     st->new = ft_strdup("");
 	while (tmp[i] && tmp[i] != '\0')
@@ -165,30 +178,41 @@ char *ft_traduction(shell *st, char *tmp)
 				(ft_isalnum(tmp[i + 1]) || tmp[i + 1] == '_' || tmp[i + 1] == '?')))
 			{
 				st->ret = 0;
+				free(st->tmpq);
 				st->tmpq = ft_strdup("");                                                       //// here
 				st->firstd++;
 				ft_dolredic(st, tmp, i);
 				free(st->new); 
 				st->new = ft_strdup(st->tmpq);
 				if (st->ret == 0)
+				{
 					tmp = ft_strjoin(st->new, &tmp[st->pass + 1]);                            ///// here
+				}
 				else
+				{
 					tmp = ft_strdup(st->new);                                                   //// here
+				}
 				i = ft_strlen(st->new) - 1;
 			}
 			else if (st->rd == 0 && (tmp[i] == '$' && b == 0 && tmp[i + 1] != '\\' &&
 				(ft_isalnum(tmp[i + 1]) || tmp[i + 1] == '_' || tmp[i + 1] == '?')))
 			{
 				st->ret = 0;
+				free(st->tmpq);
 				st->tmpq = ft_strdup("");                                                       //// here
 				st->firstd++;
 				ft_dollars(st, tmp, i);
 				free(st->new); 
 				st->new = ft_strdup(st->tmpq);
 				if (st->ret == 0)
+				{
 					tmp = ft_strjoin(st->new, &tmp[st->pass + 1]);                            ///// here
+				}
 				else
-					tmp = ft_strdup(st->new);                                                   //// here
+				{
+					free(tmp);
+					tmp = ft_strdup(st->new);
+				}
 				i = ft_strlen(st->new) - 1;
 			}
 			else
@@ -219,8 +243,9 @@ int    ft_cleantokens(shell *st)
 	st->firstd = 1;
 	st->ddone = 0;
     st->firsttok = st->tokens;
-	tmp = (char*)st->tokens->content;
+	tmp = ft_strdup((char*)st->tokens->content);
     st->tokens->content = ft_strdup(ft_traduction(st, tmp));                                   //// here
+	free(tmp);
 	if (!st->tokens->next)
 	{
 		while (st->envv)
@@ -297,4 +322,23 @@ int    ft_cleantokens(shell *st)
 	st->envv = st->firstenv;
     st->tokens = st->firsttok;
     return (0);
+}
+
+int	ft_checkcommand(shell *st)
+{
+	char *tmp;
+
+	tmp = (char *)st->tokens->content;
+//	printf("|ok|\n");
+	if (check_path(st, tmp) == 1)
+		return (1);
+//	printf("|ok2|\n");
+	if (!ft_strcmp(tmp, "echo") || !ft_strcmp(tmp, "cd") || !ft_strcmp(tmp, "pwd") ||
+		!ft_strcmp(tmp, "env") || !ft_strcmp(tmp, "export") ||
+		!ft_strcmp(tmp, "unset") || !ft_strcmp(tmp, "exit") || !ft_strcmp(tmp, "exec"))
+	{
+		return (1);
+	}
+	else
+		return (0);
 }

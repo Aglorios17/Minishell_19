@@ -145,7 +145,8 @@ static int      ft_verif_syntax(shell *st)
 				}
 			}
 		}
-        a++;
+		if (st->line[a])
+        	a++;
     }
     return (0);
 }

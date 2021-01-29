@@ -307,6 +307,7 @@ int	ft_dollars(shell *st, char *tmp, int i)
 	free(new);
 	free(first);
 	free(after);
+	free(env);
 	if (space)
 		free(space);
 	return (1);

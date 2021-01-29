@@ -44,7 +44,7 @@ int lstcmd(shell *st, char *line)
 		else if (!ft_strncmp((char *)st->envv->content, "_=", 2))
 		{
 			free(st->envv->content);
-			st->envv->content = NULL; 
+			st->envv->content = NULL;
 			st->envv->content = ft_strjoin("_=" ,tmp);
 			a = 1;
 		}

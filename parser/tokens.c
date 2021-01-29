@@ -14,7 +14,7 @@ int	ft_checkspace(char *line)
 			i++;
 //			printf("in2  |%i|\n", i);
 		}
-		else if (line[i] == '\'')
+		else if (line[i] && line[i] == '\'')
 		{
 			i++;
 			while (line[i] == '\'')
@@ -41,7 +41,7 @@ int	ft_checkspace(char *line)
 			if (line[a] == ' ' || line[a] == '\t')
 				return (a);
 		}
-		else if (line[i] == '"')
+		else if (line[i] && line[i] == '"')
 		{
 			i++;
 			while (line[i] == '"')
@@ -61,17 +61,17 @@ int	ft_checkspace(char *line)
 			if (line[i] && line[i] == '"' && line[i - 1] == '\\') //////// modif tokens = " \" "
 				i++;
 			a = i + 1;
-			if (line[a] == '"' && line[a - 1] != '"')
+			if (line[a - 1] && line[a] == '"' && line[a - 1] != '"')
 				return (a + 1);
 			while (line[a] && line[a] != ' ' && line[a] != '\t' && line[a] != '"' && line[a] != '\'') ////////////////// modif split tok "@"$a "@"
 				a++;
-			if (line[a] == ' ' || line[a] == '\t')
+			if (line[a] && (line[a] == ' ' || line[a] == '\t'))
 				return (a);
 //*/
 		}
-		else if (line[i] == '>' || line[i] == '<')
+		else if (line[i] && (line[i] == '>' || line[i] == '<'))
 			return (i);
-		else if (line[i] == ' ' || line[i] == '\t')
+		else if (line[i] && (line[i] == ' ' || line[i] == '\t'))
 		{
 			(void)a;
 			if (line[i - 1] == '\\')
