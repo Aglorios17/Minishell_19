@@ -12,6 +12,8 @@
 # include "../libft/libft.h"
 int prompt;
 int pid;
+int pid2;
+int nc;
 
 typedef struct	mini
 {

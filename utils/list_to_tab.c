@@ -9,7 +9,7 @@ char **ft_tabreturn(t_list *list)
 	tab = NULL;
 	i = 0;
 	tmp = list;
-	if ((tab = malloc(sizeof(char *) * ft_lstsize(list) + 1)) == NULL)
+	if ((tab = malloc(sizeof(char *) * (ft_lstsize(list) + 1))) == NULL)
 		return (0);
 	while (list)
 	{

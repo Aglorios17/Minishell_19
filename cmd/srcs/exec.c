@@ -125,8 +125,11 @@ int ft_exec(shell *st)
 		st->status = 126;
 		return (0);
 	}
+	if (st->cutline->next)
+		nc = 1;
 	if (!st->pipe->next)
 	{
+		pid2 = a;
 		wait(&a);
 		st->status = a/256;
 	}
