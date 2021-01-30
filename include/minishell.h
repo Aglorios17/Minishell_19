@@ -55,11 +55,13 @@ typedef struct	mini
 //////////// tokens /////////////
 
 int ft_tokens(shell *st);
+int ft_checkspace(char *tmp);
 int	ft_checkspace(char *line);
 int ft_cleantokens(shell *st);
 char *ft_traduction(shell *st, char *tmp);
 int ft_simple_quote(shell *st, char *tmp, int a);
 int ft_double_quote(shell *st, char *tmp, int a);
+int	ft_back(char *tmp, int a);
 
 /////////// command /////////////
 
@@ -111,6 +113,7 @@ int		ft_error2(shell *st, char *tmp, int i, struct stat b);
 int		ft_error3(shell *st, char *tmp, int i, struct stat b);
 int		ft_error4(shell *st, char *cmd, struct stat b);
 int 	check_path(shell *st, char *dollars);
+char	**recuppath(shell *st, char **tab);
 int 	open_pathcd(shell *st, char *path);
 int		ft_directory_error(shell *st, int nb);
 int		ft_directory_error2(shell *st, int nb);
@@ -132,6 +135,7 @@ int statusenv(shell *st, int status);
 int	lstcmd(shell *st, char *line);
 char **ft_tabreturn(t_list *list);
 void    ft_freetab(char **tab);
+int	ft_verif_syntax(shell *st);
 
 /////////// main fonction /////////////
 void signalhandler(int signum);

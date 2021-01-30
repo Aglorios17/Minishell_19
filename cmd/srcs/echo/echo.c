@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../../include/minishell.h"
 
 int	ft_echo_n(shell *st, char *tm, t_list *tmp, int i)
 {

@@ -1,4 +1,4 @@
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 static int ft_isinstring(char *str, char c)
 {

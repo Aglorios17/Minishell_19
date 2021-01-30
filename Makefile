@@ -15,26 +15,33 @@ LIBFT_PATH 		= ./libft
 SRCS 			= main/main.c \
 					main/free.c \
 					main/signal.c \
-					parser/tokens.c \
-					parser/quotes.c \
-					parser/path.c \
-					parser/ft_cutline.c \
-					parser/redirections.c \
+					parser/token/tokens.c \
+					parser/token/checkspace.c \
+					parser/token/ft_cutline.c \
+					parser/token/ft_syntax_error.c \
+					parser/cleantoken/quotes.c \
+					parser/traduction/traduction.c \
+					parser/traduction/ft_double_quote.c \
+					parser/traduction/ft_single_quote.c \
+					parser/traduction/ft_back.c \
+					parser/path/path.c \
+					parser/path/recup_path.c \
+					parser/redirection/redirections.c \
 					cmd/command.c \
-					cmd/srcs/export.c \
-					cmd/srcs/exporterror.c \
-					cmd/srcs/exportnoparams.c \
-					cmd/srcs/exec.c \
-					cmd/srcs/exec_error.c \
-					cmd/srcs/exit.c \
-					cmd/srcs/env.c \
-					cmd/srcs/unset.c \
-					cmd/srcs/cd.c \
-					cmd/srcs/cd_error.c \
-					cmd/srcs/echo.c \
-					cmd/srcs/pwd.c \
-					utils/dollars.c \
-					utils/dolredic.c \
+					cmd/srcs/export/export.c \
+					cmd/srcs/export/exporterror.c \
+					cmd/srcs/export/exportnoparams.c \
+					cmd/srcs/exec/exec.c \
+					cmd/srcs/exec/exec_error.c \
+					cmd/srcs/exit/exit.c \
+					cmd/srcs/env/env.c \
+					cmd/srcs/unset/unset.c \
+					cmd/srcs/cd/cd.c \
+					cmd/srcs/cd/cd_error.c \
+					cmd/srcs/echo/echo.c \
+					cmd/srcs/pwd/pwd.c \
+					utils/dollars/dollars.c \
+					utils/dollars/dolredic.c \
 					utils/ft_splitms.c \
 					utils/status.c \
 					utils/lst_cmd.c \

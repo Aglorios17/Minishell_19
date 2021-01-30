@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../../include/minishell.h"
 
 char	*ft_lstenvchar(char *tmp, char *tmp2, int i)
 {

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../../include/minishell.h"
 
 int		ft_addexit(shell *st, char *tmp, char *tmp2, int i)
 {
