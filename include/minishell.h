@@ -129,7 +129,6 @@ int 	ft_check_errorredir2(shell *st);
 /////////// utils /////////////
 
 int statusenv(shell *st, int status);
-t_list *lst_addin(char **tab, t_list *list, int i);
 int	lstcmd(shell *st, char *line);
 char **ft_tabreturn(t_list *list);
 void    ft_freetab(char **tab);

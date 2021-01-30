@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   dolredic.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aglorios <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/22 15:42:11 by aglorios          #+#    #+#             */
+/*   Updated: 2019/10/22 16:43:58 by aglorios         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 int	ft_retokensrd(shell *st, char *env, char *first, char *after, char *tmp)
 {
-	int 	a;
+	int		a;
 	int		b;
 	char	**trad;
 	char	*backs;
@@ -19,7 +31,7 @@ int	ft_retokensrd(shell *st, char *env, char *first, char *after, char *tmp)
 			b += 2;
 		}
 		else
-		{	
+		{
 			if (after[b] == '\\' && after[b + 1] == '\\')
 				b++;
 			backs = ft_charjoin(backs, after[b]);
@@ -103,16 +115,12 @@ int	ft_retokensrd(shell *st, char *env, char *first, char *after, char *tmp)
 	}
 	else if (env[a + 1] == ' ')
 	{
-	//	printf("first|%s|\n", first);
 		if (first[0] != '\0')
 		{
 			tmp = ft_strdup(first);
 			a = 0;
 			if (after[0] != '\0' && env[ft_strlen(env) - 1] != ' ')
-			{
 				trad[0] = ft_strjoin(trad[0], after);
-		//		st->pass += ft_strlen(after);
-			}
 		}
 		else
 		{
@@ -180,17 +188,16 @@ int	ft_dolredic(shell *st, char *tmp, int i)
 	while (tmp[i] && !ft_strchr("\'\"", tmp[i]) && tmp[i] != '\0')
 	{
 		if (!ft_isalnum(tmp[i]) && tmp[i] != '_' && tmp[i] != '?')
-			break;
+			break ;
 		if (tmp[i] == '$' || tmp[i] == '\\')
 		{
 			if (tmp[i] == '\\' && !tmp[i + 1])
 				space = ft_strdup(" ");
-			break;
+			break ;
 		}
 		new = ft_charjoin(new, tmp[i]);
 		i++;
 	}
-
 	after = ft_strdup(&tmp[i]);
 	st->pass = i - 1;
 	new = ft_charjoin(new, '=');
@@ -198,7 +205,7 @@ int	ft_dolredic(shell *st, char *tmp, int i)
 	{
 		env = ft_strdup((char *)st->envv->content);
 		if (!ft_strncmp(new, env, ft_strlen(new)))
-			break;
+			break ;
 		st->envv = st->envv->next;
 		free(env);
 		env = NULL;
@@ -207,10 +214,10 @@ int	ft_dolredic(shell *st, char *tmp, int i)
 	if (!ft_strncmp(new, "SHLVL=", ft_strlen(new)))
 	{
 		a = ft_atoi(&tmp[i]);
-		st->tmpq = ft_strdup(&ft_shlvl(&env[i], a)[6]);	
+		st->tmpq = ft_strdup(&ft_shlvl(&env[i], a)[6]);
 	}
 	else if (!ft_strncmp(new, "?=", ft_strlen(new)))
-		st->tmpq = ft_itoa(st->status);	
+		st->tmpq = ft_itoa(st->status);
 	else if (env == NULL && !ft_strncmp("$OLDPWD", tmp2, 7))
 		ft_lstadd_back(&st->envv, ft_lstnew(ft_strjoin("OLDPWD=", "")));
 	else

@@ -37,7 +37,6 @@ SRCS 			= main/main.c \
 					utils/dolredic.c \
 					utils/ft_splitms.c \
 					utils/status.c \
-					utils/lst_addin.c \
 					utils/lst_cmd.c \
 					utils/list_to_tab.c \
 

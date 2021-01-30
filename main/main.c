@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aglorios <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/22 15:42:11 by aglorios          #+#    #+#             */
+/*   Updated: 2019/10/22 16:43:58 by aglorios         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
-void ft_init_struct(shell *st)
+void	ft_init_struct(shell *st)
 {
 	st->ret = 0;
 	st->quotes = 0;
@@ -27,7 +39,7 @@ void ft_init_struct(shell *st)
 	st->rd = 0;
 }
 
-int commandline(int argc, char **argv, shell *st)
+int		commandline(int argc, char **argv, shell *st)
 {
 	(void)argc;
 	(void)argv;
@@ -52,7 +64,7 @@ int commandline(int argc, char **argv, shell *st)
 	return (0);
 }
 
-int ft_pipe(int argc, char **argv, shell *st)
+int		ft_pipe(int argc, char **argv, shell *st)
 {
 	int		pop[2];
 	pid_t	cpid;
@@ -88,7 +100,7 @@ int ft_pipe(int argc, char **argv, shell *st)
 	return (0);
 }
 
-int mainprocess(int argc, char **argv, shell *st)
+int		mainprocess(int argc, char **argv, shell *st)
 {
 	lstcmd(st, st->line);
 	ft_cutline(st);
@@ -104,7 +116,7 @@ int mainprocess(int argc, char **argv, shell *st)
 				ft_free_list(st->cutline, st->firstcut);
 				return (1);
 			}
-			st->pipe = st->pipe->next;	
+			st->pipe = st->pipe->next;
 		}
 		ft_free_list(st->pipe, st->firstpipe);
 		st->cutline = st->cutline->next;
@@ -113,7 +125,7 @@ int mainprocess(int argc, char **argv, shell *st)
 	return (0);
 }
 
-int main(int argc, char **argv, char **envp)
+int		main(int argc, char **argv, char **envp)
 {
 	shell	st;
 
@@ -123,7 +135,7 @@ int main(int argc, char **argv, char **envp)
 	prompt = 0;
 	nc = 0;
 	ft_envv(&st, envp);
-	if  (argc > 1 && !ft_strncmp(argv[1], "-c", 2))
+	if (argc > 1 && !ft_strncmp(argv[1], "-c", 2))
 	{
 		st.line = ft_strdup(argv[2]);
 		mainprocess(argc, argv, &st);
@@ -132,19 +144,19 @@ int main(int argc, char **argv, char **envp)
 	{
 		signal(SIGINT, signalhandler);
 		signal(SIGQUIT, signalhandler2);
-		while(1)
+		while (1)
 		{
 			if (prompt == 0)
-				write(2,">>",2);
+				write(2, ">>", 2);
 			prompt = 0;
 			if (get_next_line3d(0, &st.line) != 1)
 			{
 				ft_exfree2(&st);
 				write(1, "exit\n", 5);
-				return(0);
+				return (0);
 			}
 			if (mainprocess(argc, argv, &st) == 1)
-				break;
+				break ;
 		}
 	}
 	if (st.status != 0)

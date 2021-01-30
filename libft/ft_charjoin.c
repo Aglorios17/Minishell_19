@@ -30,7 +30,7 @@ char	*ft_charjoin(char const *s1, char c)
 		str[a] = s1[a];
 		a++;
 	}
-    str[a] = c;
+	str[a] = c;
 	str[a + 1] = '\0';
 	return (str);
 }

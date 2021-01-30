@@ -1,13 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   status.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aglorios <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/22 15:42:11 by aglorios          #+#    #+#             */
+/*   Updated: 2019/10/22 16:43:58 by aglorios         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
-int statusenv(shell *st, int status)
+int	statusenv(shell *st, int status)
 {
 	char	*env;
 	int		i;
 
 	env = NULL;
 	i = 0;
-//	printf("status|%i|\n" , status);
 	while (st->envv)
 	{
 		env = ft_strdup((char *)st->envv->content);
@@ -25,7 +36,6 @@ int statusenv(shell *st, int status)
 		st->envv = st->envv->next;
 	}
 	st->envv = st->firstenv;
-//	printf("|%s|\n" ,ft_strjoin("?=", ft_itoa(status)));
 	ft_lstadd_back(&st->envv, ft_lstnew(ft_strjoin("?=", ft_itoa(status))));
 	st->envv = st->firstenv;
 	return (status);

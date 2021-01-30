@@ -1,13 +1,25 @@
-#include "../include/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   dollars.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aglorios <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/22 15:42:11 by aglorios          #+#    #+#             */
+/*   Updated: 2019/10/22 16:43:58 by aglorios         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "../include/minishell.h"
 
 int	ft_cmddollars(shell *st, char *tmp)
 {
 	if (check_path(st, tmp) == 1)
 		return (1);
-	if (!ft_strcmp(tmp, "echo") || !ft_strcmp(tmp, "cd") || !ft_strcmp(tmp, "pwd") ||
-		!ft_strcmp(tmp, "env") || !ft_strcmp(tmp, "export") ||
-		!ft_strcmp(tmp, "unset") || !ft_strcmp(tmp, "exit") || !ft_strcmp(tmp, "exec"))
+	if (!ft_strcmp(tmp, "echo") || !ft_strcmp(tmp, "cd") ||
+		!ft_strcmp(tmp, "pwd") || !ft_strcmp(tmp, "env") ||
+		!ft_strcmp(tmp, "export") || !ft_strcmp(tmp, "unset") ||
+		!ft_strcmp(tmp, "exit") || !ft_strcmp(tmp, "exec"))
 	{
 		return (1);
 	}
@@ -17,7 +29,7 @@ int	ft_cmddollars(shell *st, char *tmp)
 
 int	ft_retokens(shell *st, char *env, char *first, char *after)
 {
-	int 	a;
+	int		a;
 	int		b;
 	int		c;
 	char	**trad;
@@ -48,7 +60,7 @@ int	ft_retokens(shell *st, char *env, char *first, char *after)
 			b += 2;
 		}
 		else
-		{	
+		{
 			if (after[b] == '\\' && after[b + 1] == '\\')
 				b++;
 			fri = backs;
@@ -72,7 +84,7 @@ int	ft_retokens(shell *st, char *env, char *first, char *after)
 		st->tokens->content = ft_strdup(&env[a + 1]);
 		free(st->tmpq);
 		st->tmpq = NULL;
-		st->tmpq = ft_strdup((char *)st->tokens->content);									//// free
+		st->tmpq = ft_strdup((char *)st->tokens->content);
 		return (1);
 	}
 	if (trad[0] == NULL)
@@ -87,7 +99,7 @@ int	ft_retokens(shell *st, char *env, char *first, char *after)
 				st->tokens->content = ft_strdup(first);
 			free(st->tmpq);
 			st->tmpq = NULL;
-			st->tmpq = ft_strdup((char *)st->tokens->content);                          //// free
+			st->tmpq = ft_strdup((char *)st->tokens->content);
 		}
 		ft_freetab(trad);
 		return (1);
@@ -140,7 +152,7 @@ int	ft_retokens(shell *st, char *env, char *first, char *after)
 					while (trad[b])
 						b++;
 					(void)c;
-					if (after[0] == '\\')////////////////////////// mouais
+					if (after[0] == '\\')
 					{
 						if (c == 1)
 						{
@@ -176,7 +188,6 @@ int	ft_retokens(shell *st, char *env, char *first, char *after)
 	}
 	else if (env[a + 1] == ' ')
 	{
-	//	printf("first|%s|\n", first);
 		if (first[0] != '\0')
 		{
 			free((char *)st->tokens->content);
@@ -191,7 +202,6 @@ int	ft_retokens(shell *st, char *env, char *first, char *after)
 				fri = trad[b - 1];
 				trad[b - 1] = ft_strjoin(trad[b - 1], after);
 				free(fri);
-		//		st->pass += ft_strlen(after);
 			}
 		}
 		else
@@ -232,7 +242,7 @@ int	ft_retokens(shell *st, char *env, char *first, char *after)
 	}
 	free(st->tmpq);
 	st->tmpq = NULL;
-	st->tmpq = ft_strdup((char *)st->tokens->content);									///// free
+	st->tmpq = ft_strdup((char *)st->tokens->content);
 	b = 0;
 	while (trad[b])
 		b++;
@@ -296,12 +306,12 @@ int	ft_dollars(shell *st, char *tmp, int i)
 	while (tmp[i] && !ft_strchr("\'\"", tmp[i]) && tmp[i] != '\0')
 	{
 		if (!ft_isalnum(tmp[i]) && tmp[i] != '_' && tmp[i] != '?')
-			break;
+			break ;
 		if (tmp[i] == '$' || tmp[i] == '\\')
 		{
 			if (tmp[i] == '\\' && !tmp[i + 1])
 				space = ft_strdup(" ");
-			break;
+			break ;
 		}
 		fri = new;
 		new = ft_charjoin(new, tmp[i]);
@@ -317,7 +327,7 @@ int	ft_dollars(shell *st, char *tmp, int i)
 	{
 		env = ft_strdup((char *)st->envv->content);
 		if (!ft_strncmp(new, env, ft_strlen(new)))
-			break;
+			break ;
 		st->envv = st->envv->next;
 		free(env);
 		env = NULL;
@@ -326,10 +336,10 @@ int	ft_dollars(shell *st, char *tmp, int i)
 	if (!ft_strncmp(new, "SHLVL=", ft_strlen(new)))
 	{
 		a = ft_atoi(&tmp[i]);
-		st->tmpq = ft_strdup(&ft_shlvl(&env[i], a)[6]);	
+		st->tmpq = ft_strdup(&ft_shlvl(&env[i], a)[6]);
 	}
 	else if (!ft_strncmp(new, "?=", ft_strlen(new)))
-		st->tmpq = ft_itoa(st->status);	
+		st->tmpq = ft_itoa(st->status);
 	else if (env == NULL && !ft_strncmp("$OLDPWD", tmp2, 7))
 		ft_lstadd_back(&st->envv, ft_lstnew(ft_strjoin("OLDPWD=", "")));
 	else

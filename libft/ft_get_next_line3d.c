@@ -55,7 +55,8 @@ int		ft_line_creation(char **stat, char **line, int idx)
 	{
 		if (!(*line = ft_substr_gnl(*stat, 0, idx)))
 			return (ft_free_stat(stat, -1));
-		if (!(tmp = ft_substr_gnl(*stat, idx + 1, (ft_strlen(*stat) - idx - 1))))
+		if (!(tmp = ft_substr_gnl(*stat, idx + 1,
+			(ft_strlen(*stat) - idx - 1))))
 			return (ft_free_stat(stat, -1));
 		result = 1;
 	}

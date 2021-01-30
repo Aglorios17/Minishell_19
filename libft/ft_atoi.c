@@ -40,10 +40,7 @@ long long	ft_atoi(const char *str)
 	if (!(str[i] >= '0' && str[i] <= '9'))
 		return (0);
 	while (str[i] >= '0' && str[i] <= '9')
-	{
-		result = result * 10 + (str[i] - 48);
-		i++;
-	}
+		result = result * 10 + (str[i++] - 48);
 	if (signe == -1 && (result - 1) == 9223372036854775807)
 		return (result * signe);
 	if (result > 9223372036854775807)

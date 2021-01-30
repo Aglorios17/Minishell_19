@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_free.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aglorios <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/22 15:42:11 by aglorios          #+#    #+#             */
+/*   Updated: 2019/10/22 16:43:58 by aglorios         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 void	ft_free_list(t_list *list, t_list *first)
@@ -18,9 +30,7 @@ void	ft_free_list(t_list *list, t_list *first)
 	list = NULL;
 }
 
-
-
-int	ft_exfree2(shell *st)
+int		ft_exfree2(shell *st)
 {
 	if (st->pat)
 	{
@@ -37,7 +47,6 @@ int	ft_exfree2(shell *st)
 		free(st->line);
 		st->line = NULL;
 	}
-//	free(st->pwd);
 	ft_free_list(st->tokens, st->firsttok);
 	ft_free_list(st->envv, st->firstenv);
 	if (st->status != 0)
@@ -45,7 +54,7 @@ int	ft_exfree2(shell *st)
 	return (0);
 }
 
-int	ft_exfree(shell *st)
+int		ft_exfree(shell *st)
 {
 	if (st->pat)
 	{
@@ -62,10 +71,9 @@ int	ft_exfree(shell *st)
 		free(st->line);
 		st->line = NULL;
 	}
-//	free(st->pwd);
 	ft_free_list(st->tokens, st->firsttok);
 	st->tokens = NULL;
 	if (st->status != 0)
-		return (st->status);	
+		return (st->status);
 	return (0);
 }
