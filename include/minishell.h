@@ -63,7 +63,7 @@ int ft_double_quote(shell *st, char *tmp, int a);
 
 /////////// command /////////////
 
-int ft_command(shell *st, char **envp);
+int ft_command(shell *st);
 int	ft_checkcommand(shell *st);
 int ft_echo(shell *st);
 int ft_exit(shell *st);
@@ -77,8 +77,20 @@ int	open_pathcd(shell *st, char *path);
 
 ////////// export //////////////
 
-int ft_export(shell *st, char **envp);
+int ft_export(shell *st);
+int ft_export_noparam(shell *st);
+int	ft_errornoval(shell *st, char *tmp);
+int	ft_errorbefegal(shell *st, char *tmp);
+int	ft_write_error(shell *st, char *tmp);
+int	ft_exporterror(shell *st, char *tmp);
+
+
+////////// unset //////////////
+
 int ft_unset(shell *st);
+
+////////// envv //////////////
+
 int ft_envv(shell *st, char **envp);
 int	ft_dollars(shell *st, char *tmp, int i);
 int	ft_dolredic(shell *st, char *tmp, int i);
@@ -114,10 +126,11 @@ char **ft_tabreturn(t_list *list);
 void    ft_freetab(char **tab);
 
 /////////// main fonction /////////////
+void signalhandler(int signum);
+void signalhandler2(int signum);
 void ft_init_struct(shell *st);
-int	ft_exfree(shell *st, t_list *tmp);
-int	ft_exfree2(shell *st, t_list *tmp);
-int	ft_freecutline(shell *st, t_list *tmp);
-int	ft_freecutpipe(shell *st, t_list *tmp);
+int	ft_exfree(shell *st);
+int	ft_exfree2(shell *st);
+void ft_free_list(t_list *list, t_list *first);
 
 #endif

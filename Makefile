@@ -14,6 +14,7 @@ NAME 			= minishell
 LIBFT_PATH 		= ./libft
 SRCS 			= main/main.c \
 					main/free.c \
+					main/signal.c \
 					parser/tokens.c \
 					parser/quotes.c \
 					parser/path.c \
@@ -21,6 +22,8 @@ SRCS 			= main/main.c \
 					parser/redirections.c \
 					cmd/command.c \
 					cmd/srcs/export.c \
+					cmd/srcs/exporterror.c \
+					cmd/srcs/exportnoparams.c \
 					cmd/srcs/exec.c \
 					cmd/srcs/exit.c \
 					cmd/srcs/env.c \

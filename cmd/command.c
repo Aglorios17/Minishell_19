@@ -75,7 +75,7 @@ int	ft_commandpwd(shell *st)
 	return (0);
 }
 
-int	ft_command(shell *st, char **envp)
+int	ft_command(shell *st)
 {
 	char	*tmp;
 	int		i;
@@ -93,7 +93,7 @@ int	ft_command(shell *st, char **envp)
 	else if (!ft_strncmp((char *)st->tokens->content, "cd", 3))
 		ft_commandcd(st, tmp, i);
 	else if (!ft_strncmp((char *)st->tokens->content, "export", 7))
-		ft_export(st, envp);
+		ft_export(st);
 	else if (!ft_strncmp((char *)st->tokens->content, "unset", 6))
 		ft_commandunset(st);
 	else if (!ft_strncmp((char *)st->tokens->content, "env", 4))

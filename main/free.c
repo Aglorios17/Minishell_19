@@ -1,6 +1,26 @@
 #include "../include/minishell.h"
 
-int	ft_exfree2(shell *st, t_list *tmp)
+void	ft_free_list(t_list *list, t_list *first)
+{
+	t_list *tmp;
+
+	list = first;
+	first = NULL;
+	while (list != NULL)
+	{
+		free(list->content);
+		list->content = NULL;
+		tmp = list;
+		list = list->next;
+		free(tmp);
+		tmp = NULL;
+	}
+	list = NULL;
+}
+
+
+
+int	ft_exfree2(shell *st)
 {
 	if (st->pat)
 	{
@@ -18,38 +38,14 @@ int	ft_exfree2(shell *st, t_list *tmp)
 		st->line = NULL;
 	}
 //	free(st->pwd);
-	st->tokens = st->firsttok;
-	while (st->tokens != NULL)
-	{
-//		printf("|%s|", (char *)st->tokens->content);
-		free(st->tokens->content);
-		st->tokens->content = NULL;
-		tmp = st->tokens;
-		st->tokens = st->tokens->next;
-		free(tmp);
-		tmp = NULL;
-	}
-	st->tokens = NULL;
-	st->firsttok = NULL;
-	st->envv = st->firstenv;
-	while (st->envv != NULL)
-	{
-//		printf("|%s|", (char *)st->tokens->content);
-		free(st->envv->content);
-		st->envv->content = NULL;
-		tmp = st->envv;
-		st->envv = st->envv->next;
-		free(tmp);
-		tmp = NULL;
-	}
-	st->envv = NULL;
-	st->firstenv = NULL;
+	ft_free_list(st->tokens, st->firsttok);
+	ft_free_list(st->envv, st->firstenv);
 	if (st->status != 0)
 		return (st->status);
 	return (0);
 }
 
-int	ft_exfree(shell *st, t_list *tmp)
+int	ft_exfree(shell *st)
 {
 	if (st->pat)
 	{
@@ -67,56 +63,9 @@ int	ft_exfree(shell *st, t_list *tmp)
 		st->line = NULL;
 	}
 //	free(st->pwd);
-	st->tokens = st->firsttok;
-	st->firsttok = NULL;
-	while (st->tokens != NULL)
-	{
-//		printf("|%s|", (char *)st->tokens->content);
-		free(st->tokens->content);
-		st->tokens->content = NULL;
-		tmp = st->tokens;
-		st->tokens = st->tokens->next;
-		free(tmp);
-		tmp = NULL;
-	}
+	ft_free_list(st->tokens, st->firsttok);
 	st->tokens = NULL;
 	if (st->status != 0)
 		return (st->status);	
-	return (0);
-}
-
-int	ft_freecutline(shell *st, t_list *tmp)
-{
-	st->cutline = st->firstcut;
-	st->firstcut = NULL;
-	while (st->cutline != NULL)
-	{
-//		printf("|%s|", (char *)st->tokens->content);
-		free(st->cutline->content);
-		st->cutline->content = NULL;
-		tmp = st->cutline;
-		st->cutline = st->cutline->next;
-		free(tmp);
-		tmp = NULL;
-	}
-	st->cutline = NULL;
-	return (0);
-}
-
-
-int	ft_freecutpipe(shell *st, t_list *tmp)
-{
-	st->pipe = st->firstpipe;
-	st->firstpipe = NULL;
-	while (st->pipe != NULL)
-	{
-		free(st->pipe->content);
-		st->pipe->content = NULL;
-		tmp = st->pipe;
-		st->pipe = st->pipe->next;
-		free(tmp);
-		tmp = NULL;
-	}
-	st->pipe = NULL;
 	return (0);
 }
