@@ -225,6 +225,7 @@ char *ft_traduction(shell *st, char *tmp)
 		i++;
 	}
 	free(st->new);
+//	free(st->tmpq);
 	return (tmp);
 }
 

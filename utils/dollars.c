@@ -29,6 +29,12 @@ int	ft_retokens(shell *st, char *env, char *first, char *after)
 	b = 0;
 	c = 0;
 	trad = NULL;
+	if (st->tmpq)
+	{
+		free(st->tmpq);
+		st->tmpq = NULL;
+	}
+	st->tmpq = ft_strdup("");
 	backs = ft_strdup("");
 	nex = NULL;
 	fri = NULL;
@@ -58,12 +64,14 @@ int	ft_retokens(shell *st, char *env, char *first, char *after)
 	while (env[a] && env[a] != '=')
 		a++;
 	if (st->flagdq == 0 && env[a])
-	{
 		trad = ft_split(&env[a + 1], ' ');
-	}
 	else if (st->flagdq == 1)
 	{
-		st->tokens->content = ft_strdup(&env[a + 1]);										//// free
+		free((char *)st->tokens->content);
+		st->tokens->content = NULL;
+		st->tokens->content = ft_strdup(&env[a + 1]);
+		free(st->tmpq);
+		st->tmpq = NULL;
 		st->tmpq = ft_strdup((char *)st->tokens->content);									//// free
 		return (1);
 	}
@@ -71,13 +79,17 @@ int	ft_retokens(shell *st, char *env, char *first, char *after)
 	{
 		if (first[0] != '\0')
 		{
+			free((char *)st->tokens->content);
+			st->tokens->content = NULL;
 			if (env[a + 1] == ' ' && after[0] != '\0')
-				st->tokens->content = ft_strjoin(first, " ");                            //// free
+				st->tokens->content = ft_strjoin(first, " ");
 			else
-				st->tokens->content = ft_strdup(first);									//// free
+				st->tokens->content = ft_strdup(first);
+			free(st->tmpq);
+			st->tmpq = NULL;
 			st->tmpq = ft_strdup((char *)st->tokens->content);                          //// free
 		}
-		ft_freetab(trad);																//// attention maybe freed
+		ft_freetab(trad);
 		return (1);
 	}
 	if (st->tokens->next)
@@ -88,31 +100,39 @@ int	ft_retokens(shell *st, char *env, char *first, char *after)
 	if (first[0] == '\0' && after[0] == '\0' &&
 		env[a + 1] != ' ' && env[ft_strlen(env) - 1] != ' ')
 	{
-		st->tokens->content = ft_strdup(trad[0]);                                      //// free
+		free((char *)st->tokens->content);
+		st->tokens->content = NULL;
+		st->tokens->content = ft_strdup(trad[0]);
 		a = 1;
 	}
 	else if (env[a + 1] != ' ' && env[ft_strlen(env) - 1] != ' ')
 	{
 		if (first[0] != '\0')
 		{
-			st->tokens->content = ft_strjoin(first, trad[0]);							//// free
+			free((char *)st->tokens->content);
+			st->tokens->content = NULL;
+			st->tokens->content = ft_strjoin(first, trad[0]);
 			a = 1;
 		}
 		if (after[0] != '\0')
 		{
 			if (trad[1] == NULL)
 			{
+				free((char *)st->tokens->content);
+				st->tokens->content = NULL;
 				if (first[0] != '\0')
-					st->tokens->content = ft_strjoin(first, trad[0]);					//// free
+					st->tokens->content = ft_strjoin(first, trad[0]);
 				else
-					st->tokens->content = ft_strdup(trad[0]);							//// free
+					st->tokens->content = ft_strdup(trad[0]);
 			}
 			else
 			{
+				free((char *)st->tokens->content);
+				st->tokens->content = NULL;
 				if (first[0] == '\0')
-					st->tokens->content = ft_strdup(trad[0]);  							/// free
+					st->tokens->content = ft_strdup(trad[0]);
 				else if (first[0] != '\0')
-					st->tokens->content = ft_strjoin(first, trad[0]);					//// free
+					st->tokens->content = ft_strjoin(first, trad[0]);
 				if (after[0] != '\0')
 				{
 					a = 1;
@@ -149,7 +169,9 @@ int	ft_retokens(shell *st, char *env, char *first, char *after)
 	else if (first[0] == '\0' && after[0] == '\0' &&
 		env[a + 1] == ' ' && env[ft_strlen(env) - 1] == ' ')
 	{
-		st->tokens->content = ft_strdup(trad[0]);											//// free
+		free((char *)st->tokens->content);
+		st->tokens->content = NULL;
+		st->tokens->content = ft_strdup(trad[0]);
 		a = 1;
 	}
 	else if (env[a + 1] == ' ')
@@ -157,7 +179,9 @@ int	ft_retokens(shell *st, char *env, char *first, char *after)
 	//	printf("first|%s|\n", first);
 		if (first[0] != '\0')
 		{
-			st->tokens->content = ft_strdup(first);											//// free
+			free((char *)st->tokens->content);
+			st->tokens->content = NULL;
+			st->tokens->content = ft_strdup(first);
 			a = 0;
 			if (after[0] != '\0' && env[ft_strlen(env) - 1] != ' ')
 			{
@@ -172,7 +196,9 @@ int	ft_retokens(shell *st, char *env, char *first, char *after)
 		}
 		else
 		{
-			st->tokens->content = ft_strdup(trad[0]);										///// free
+			free((char *)st->tokens->content);
+			st->tokens->content = NULL;
+			st->tokens->content = ft_strdup(trad[0]);
 			a = 1;
 		}
 		st->ret = 1;
@@ -181,13 +207,19 @@ int	ft_retokens(shell *st, char *env, char *first, char *after)
 	{
 		if (first[0] != '\0')
 		{
-			st->tokens->content = ft_strjoin(first, trad[0]);								//// free
+			free((char *)st->tokens->content);
+			st->tokens->content = NULL;
+			st->tokens->content = ft_strjoin(first, trad[0]);
 			a = 1;
 		}
 		if (after[0] != '\0' && trad[1] == NULL)
 		{
 			if (first[0] == '\0')
-				st->tokens->content = ft_strdup(trad[0]);									//// free
+			{
+				free((char *)st->tokens->content);
+				st->tokens->content = NULL;
+				st->tokens->content = ft_strdup(trad[0]);
+			}
 			a = 1;
 			b = 0;
 			while (trad[b])
@@ -198,18 +230,20 @@ int	ft_retokens(shell *st, char *env, char *first, char *after)
 			st->pass += ft_strlen(after);
 		}
 	}
+	free(st->tmpq);
+	st->tmpq = NULL;
 	st->tmpq = ft_strdup((char *)st->tokens->content);									///// free
 	b = 0;
 	while (trad[b])
 		b++;
 	while (a < b && trad[a])
 	{
-		ft_lstadd_back(&st->tokens, ft_lstnew(ft_strdup(trad[a])));							//// free
+		ft_lstadd_back(&st->tokens, ft_lstnew(ft_strdup(trad[a])));
 		st->ddone += 1;
 		a++;
 	}
 	if (env[ft_strlen(env) - 1] == ' ' && after[0] != '\0')
-		ft_lstadd_back(&st->tokens, ft_lstnew(ft_strdup(after)));                                 ///free
+		ft_lstadd_back(&st->tokens, ft_lstnew(ft_strdup(after)));
 	ft_lstadd_back(&st->tokens, nex);
 	ft_freetab(trad);
 	return (1);

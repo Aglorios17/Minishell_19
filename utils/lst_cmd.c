@@ -45,7 +45,7 @@ int lstcmd(shell *st, char *line)
 		{
 			free(st->envv->content);
 			st->envv->content = NULL;
-			st->envv->content = ft_strjoin("_=" ,tmp);
+			st->envv->content = ft_strdup(tmp2);
 			a = 1;
 		}
 		st->envv = st->envv->next;
