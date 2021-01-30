@@ -27,6 +27,9 @@ SRCS 			= main/main.c \
 					parser/path/path.c \
 					parser/path/recup_path.c \
 					parser/redirection/redirections.c \
+					parser/redirection/redirections2.c \
+					parser/redirection/parse_redir.c \
+					parser/redirection/redirections_error.c \
 					cmd/command.c \
 					cmd/srcs/export/export.c \
 					cmd/srcs/export/exporterror.c \

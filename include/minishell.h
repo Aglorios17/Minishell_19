@@ -37,7 +37,7 @@ typedef struct	mini
 	int			pipefd;
 	int			fdout;
 	int			fdone;
-	int			errorredir;
+	int			fdredir;
 	int			rd;
 	char		**redir;
 	char		*redirnext;
@@ -120,14 +120,24 @@ int		ft_directory_error2(shell *st, int nb);
 int		ft_notfound_error(shell *st, int nb);
 int		ft_permission_error(shell *st, int nb, char *str);
 
-/////////// redirection ///////
+/////////// redirections ///////
 
 int		ft_redirections(shell *st);
+int		ft_redirections_norme(shell *st);
 t_list	*ft_redirections2(shell *st, char *supp, char *supp2, char *supp3);
-int		ft_parse_redir(shell *st, int fd);
-int 	ft_check_redir(shell *st);
-int 	ft_check_errorredir(shell *st);
-int 	ft_check_errorredir2(shell *st);
+int		ft_parse_redir(shell *st);
+int		ft_parse_redir0(shell *st, int a);
+void	ft_parse_redir2(shell *st, int a);
+int		ft_parse_redir3(shell *st, int a);
+int		ft_parse_redir4(shell *st, int a);
+int		ft_check_redir(shell *st);
+int		ft_check_errorredir(shell *st);
+int		ft_check_errorredir2(char *tokens);
+int		ft_check_errorredir3(char *tokens);
+int		ft_check_errorredir4(char *tokens, char *tokensnext);
+int		ft_check_errorredir5(char *tokensnext);
+int		ft_check_errorredir6(char *tokens, char *tokensnext);
+int		ft_isinstring(char *str, char c);
 
 /////////// utils /////////////
 

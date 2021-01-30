@@ -35,7 +35,7 @@ void	ft_init_struct(shell *st)
 	st->fdout = 1;
 	st->fdone = 1;
 	st->pipefd = 0;
-	st->errorredir = 0;
+	st->fdredir = 0;
 	st->rd = 0;
 }
 
