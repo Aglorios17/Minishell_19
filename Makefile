@@ -25,6 +25,7 @@ SRCS 			= main/main.c \
 					cmd/srcs/exporterror.c \
 					cmd/srcs/exportnoparams.c \
 					cmd/srcs/exec.c \
+					cmd/srcs/exec_error.c \
 					cmd/srcs/exit.c \
 					cmd/srcs/env.c \
 					cmd/srcs/unset.c \

@@ -104,9 +104,18 @@ char **ft_splitms(char const *str, char c, shell *st);
 
 ////////// exec ////////////////
 
-int ft_exec(shell *st);
-int check_path(shell *st, char *dollars);
-int open_pathcd(shell *st, char *path);
+int 	ft_exec(shell *st);
+void	ft_exec2(shell *st, int a);
+int		ft_error(shell *st, struct stat b);
+int		ft_error2(shell *st, char *tmp, int i, struct stat b);
+int		ft_error3(shell *st, char *tmp, int i, struct stat b);
+int		ft_error4(shell *st, char *cmd, struct stat b);
+int 	check_path(shell *st, char *dollars);
+int 	open_pathcd(shell *st, char *path);
+int		ft_directory_error(shell *st, int nb);
+int		ft_directory_error2(shell *st, int nb);
+int		ft_notfound_error(shell *st, int nb);
+int		ft_permission_error(shell *st, int nb, char *str);
 
 /////////// redirection ///////
 

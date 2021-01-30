@@ -133,6 +133,8 @@ char *ft_traduction(shell *st, char *tmp)
 	i = 0;
 	b = 0;
 	back = NULL;
+	if (st->tmpq)
+		free(st->tmpq);
 	st->tmpq = ft_strdup("");
 	fri = NULL;
     st->new = ft_strdup("");
