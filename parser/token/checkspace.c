@@ -41,7 +41,8 @@ int	ft_checkspace(char *line)
 			}
 			while (line[i] && line[i] != '\'')
 				i++;
-			if (line[i + 1] && (line[i + 1] == ' ' || line[i + 1] == '\0'))
+			if (line[i] && line[i + 1] && (line[i + 1] &&
+				(line[i + 1] == ' ' || line[i + 1] == '\0')))
 				return (i + 1);
 			if (line[i] && line[i + 1])
 			{

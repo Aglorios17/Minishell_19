@@ -73,6 +73,7 @@ char *ft_pwd(shell *st);
 int oldpwd(shell *st);
 
 /////////// cd //////////////////
+
 int ft_cd(shell *st);
 int	cdhomereturn(shell *st, char *line, char *tmp);
 int	open_pathcd(shell *st, char *path);
@@ -143,19 +144,18 @@ int		ft_isinstring(char *str, char c);
 
 /////////// utils /////////////
 
-int statusenv(shell *st, int status);
-int	lstcmd(shell *st, char *line);
-char **ft_tabreturn(t_list *list);
-void    ft_freetab(char **tab);
-int	ft_verif_syntax(shell *st);
+int		statusenv(shell *st, int status);
+int		lstcmd(shell *st, char *line);
+char	**ft_tabreturn(t_list *list);
+void	ft_freetab(char **tab);
+int		ft_verif_syntax(shell *st);
 
 /////////// main fonction /////////////
-void signalhandler(int signum);
-void signalhandler2(int signum);
-void ft_init_struct(shell *st);
-int	ft_exfree2(shell *st);
-void ft_free_list(t_list *list, t_list *first);
-int	ft_free_end(shell *st);
-int	ft_free_command(shell *st);
+void	signalhandler(int signum);
+void	signalhandler2(int signum);
+void	ft_init_struct(shell *st);
+void	ft_free_list(t_list *list, t_list *first);
+int		ft_free_end(shell *st);
+int		ft_free_command(shell *st);
 
 #endif

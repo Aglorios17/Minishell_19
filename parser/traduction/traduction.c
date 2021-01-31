@@ -26,21 +26,17 @@ char	*ft_traduction(shell *st, char *tmp)
 		free(st->tmpq);
 	st->tmpq = ft_strdup("");
 	fri = NULL;
+	if (st->new != NULL)
+		free(st->new);
 	st->new = ft_strdup("");
 	while (tmp[i] && tmp[i] != '\0')
 	{
-		if (tmp[i] == '"')
+		if (tmp[i] == '"' || tmp[i] == '\'')
 		{
-			i = ft_double_quote(st, tmp, i);
-			fri = st->new;
-			st->new = ft_strjoin(st->new, st->tmpq);
-			free(fri);
-			tmp = ft_strjoin(st->new, &tmp[i + 1]);
-			i = ft_strlen(st->new) - 1;
-		}
-		else if (tmp[i] == '\'')
-		{
-			i = ft_simple_quote(st, tmp, i);
+			if (tmp[i] == '"')
+				i = ft_double_quote(st, tmp, i);
+			else if (tmp[i] == '\'')
+				i = ft_simple_quote(st, tmp, i);
 			fri = st->new;
 			st->new = ft_strjoin(st->new, st->tmpq);
 			free(fri);
@@ -65,42 +61,22 @@ char	*ft_traduction(shell *st, char *tmp)
 				free(back);
 				b = 1;
 			}
-			if (st->rd == 1 && (tmp[i] == '$' && b == 0 && tmp[i + 1] != '\\' &&
+			else if ((tmp[i] == '$' && b == 0 && tmp[i + 1] != '\\' &&
 				(ft_isalnum(tmp[i + 1]) || tmp[i + 1] == '_' || tmp[i + 1] == '?')))
 			{
 				st->ret = 0;
 				free(st->tmpq);
 				st->tmpq = ft_strdup("");
 				st->firstd++;
-				ft_dolredic(st, tmp, i);
+				if (st->rd == 0)
+					ft_dollars(st, tmp, i);
+				if (st->rd == 1)
+					ft_dolredic(st, tmp, i);
 				free(st->new);
 				st->new = ft_strdup(st->tmpq);
 				if (st->ret == 0)
 				{
 					tmp = ft_strjoin(st->new, &tmp[st->pass + 1]);
-				}
-				else
-				{
-					free(tmp);
-					tmp = ft_strdup(st->new);
-				}
-				i = ft_strlen(st->new) - 1;
-			}
-			else if (st->rd == 0 && (tmp[i] == '$' && b == 0 && tmp[i + 1] != '\\' &&
-				(ft_isalnum(tmp[i + 1]) || tmp[i + 1] == '_' || tmp[i + 1] == '?')))
-			{
-				st->ret = 0;
-				free(st->tmpq);
-				st->tmpq = ft_strdup("");
-				st->firstd++;
-				ft_dollars(st, tmp, i);
-				free(st->new);
-				st->new = ft_strdup(st->tmpq);
-				if (st->ret == 0)
-				{
-//					fri = tmp;
-					tmp = ft_strjoin(st->new, &tmp[st->pass + 1]);
-//					free(fri);
 				}
 				else
 				{
@@ -119,5 +95,6 @@ char	*ft_traduction(shell *st, char *tmp)
 		i++;
 	}
 	free(st->new);
+	st->new = NULL;
 	return (tmp);
 }

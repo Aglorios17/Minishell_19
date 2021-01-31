@@ -54,6 +54,7 @@ void				*ft_calloc(size_t nmemb, size_t size);
 char				*ft_strdup(const char *src);
 char				*ft_substr(char const *s, unsigned int start, size_t len);
 char				*ft_strjoin(char const *s1, char const *s2);
+char				*ft_strjoinrf(char const *s1, char *s2);
 char				*ft_strtrim(char const *s1, char const *set);
 char				**ft_split(char const *s, char c);
 char				*ft_itoa(int n);
@@ -93,5 +94,10 @@ int					ft_strlen_gnl(const char *str);
 int					get_next_line3d(const int fd, char **line);
 char				*ft_charjoin(char const *s1, char c);
 char				**ft_tabjoin(char **tab, char **tab2);
+int					get_next_linesh(const int fd, char **line);
+char				*ft_strchr_gnlsh(const char *s, int c);
+char				*ft_strdup_gnlsh(const char *s1);
+char				*ft_strjoin_gnlsh(char const *s1, char const *s2);
+size_t				ft_strlen_gnlsh(const char *s);
 
 #endif

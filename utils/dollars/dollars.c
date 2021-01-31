@@ -100,7 +100,6 @@ int	ft_retokens(shell *st, char *env, char *first, char *after)
 				st->tokens->content = ft_strdup(first);
 			}
 			free(st->tmpq);
-			st->tmpq = NULL;
 			st->tmpq = ft_strdup((char *)st->tokens->content);
 		}
 		ft_freetab(trad);

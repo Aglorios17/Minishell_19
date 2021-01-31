@@ -38,6 +38,7 @@ int		ft_free_end(shell *st)
 	free(st->oldpwd);
 	free(st->tmpq);
 	free(st->pat);
+	free(st->new);
 	if (st->pipe)
 		ft_free_list(st->pipe, st->firstpipe);
 	if (st->cutline)

@@ -37,6 +37,7 @@ void	ft_init_struct(shell *st)
 	st->pipefd = 0;
 	st->fdredir = 0;
 	st->rd = 0;
+	st->new = NULL;
 }
 
 int		commandline(shell *st)
@@ -96,7 +97,6 @@ int		ft_pipe(shell *st)
 
 int		mainprocess(shell *st)
 {
-	lstcmd(st, st->line);
 	ft_cutline(st);
 	while (st->cutline)
 	{
@@ -104,7 +104,6 @@ int		mainprocess(shell *st)
 		st->fdone = dup(st->fdout);
 		while (st->pipe)
 		{
-
 			if (ft_pipe(st) == 1)
 				return (1);
 			ft_free_command(st);
@@ -130,6 +129,7 @@ int		main(int argc, char **argv, char **envp)
 	if (argc > 1 && !ft_strncmp(argv[1], "-c", 2))
 	{
 		st.line = ft_strdup(argv[2]);
+		lstcmd(&st, st.line);
 		mainprocess(&st);
 	}
 	else
@@ -145,7 +145,6 @@ int		main(int argc, char **argv, char **envp)
 			if (get_next_line3d(0, &st.line) != 1)
 			{
 				ft_free_end(&st);
-//				ft_free_list(st.envv, st.firstenv);
 				write(1, "exit\n", 5);
 				return (0);
 			}

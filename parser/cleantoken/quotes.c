@@ -12,61 +12,11 @@
 
 #include "../../include/minishell.h"
 
-int		ft_cleantokens(shell *st)
+int		ft_errorquote(shell *st)
 {
-	char	*tmp;
-	char	*tmp2;
 	char	*fri;
-	int		i;
 
-	st->quotes = 0;
-	i = 0;
-	tmp = 0;
-	tmp2 = 0;
 	fri = NULL;
-	st->firstd = 1;
-	st->ddone = 0;
-	st->firsttok = st->tokens;
-	tmp = ft_strdup((char*)st->tokens->content);
-	fri = ft_strdup(ft_traduction(st, tmp));
-	free(tmp);
-	free((char *)st->tokens->content);
-	st->tokens->content = fri;
-	if (!st->tokens->next)
-	{
-		while (st->envv)
-		{
-			tmp = (char *)st->envv->content;
-			if (!ft_strncmp("_=", tmp, 2))
-			{
-				free((char *)st->envv->content);
-				st->envv->content = ft_strjoin("_=", (char *)st->tokens->content);
-				break ;
-			}
-			st->envv = st->envv->next;
-		}
-		st->envv = st->firstenv;
-	}	
-	if (!(ft_checkcommand(st)))
-		return (0);
-	if (!st->tokens->next)
-		return (0);
-	st->tokens = st->tokens->next;
-	while (st->tokens)
-	{
-		tmp = ft_strdup((char *)st->tokens->content);
-		fri = ft_strdup(ft_traduction(st, tmp));
-		free(tmp);
-		free((char *)st->tokens->content);
-		st->tokens->content = fri;
-		tmp2 = (char *)st->tokens->content;
-		st->ddone += 1;
-		while (st->tokens && st->ddone != 0)
-		{
-			st->tokens = st->tokens->next;
-			st->ddone -= 1;
-		}
-	}
 	if (st->quotes % 2 == 1)
 	{
 		fri = ft_strdup("minishell: unexpected EOF while looking for matching `\"\'\n");
@@ -83,6 +33,21 @@ int		ft_cleantokens(shell *st)
 		st->status = 2;
 		return (-1);
 	}
+	return (1);
+}
+
+int		ft_lastcmd(shell *st, char *fri)
+{
+	char	*tmp;
+	char	*tmp2;
+	int		i;
+
+	tmp = NULL;
+	tmp2 = NULL;
+	i = 0;
+	while (st->tokens->next)
+		st->tokens = st->tokens->next;
+	tmp2 = (char *)st->tokens->content;
 	while (st->envv)
 	{
 		tmp = (char *)st->envv->content;
@@ -111,7 +76,38 @@ int		ft_cleantokens(shell *st)
 		st->envv = st->envv->next;
 	}
 	st->envv = st->firstenv;
+	return (0);
+}
+
+int		ft_cleantokens(shell *st)
+{
+	char	*tmp;
+	char	*fri;
+
+	st->quotes = 0;
+	tmp = 0;
+	fri = NULL;
+	st->firstd = 1;
+	st->ddone = 0;
+	while (st->tokens)
+	{
+		tmp = ft_strdup((char *)st->tokens->content);
+		fri = ft_traduction(st, tmp);
+		free((char *)st->tokens->content);
+		st->tokens->content = fri;
+		st->ddone += 1;
+		while (st->tokens && st->ddone != 0)
+		{
+			st->tokens = st->tokens->next;
+			st->ddone -= 1;
+		}
+	}
+	if (ft_errorquote(st) == -1)
+		return (-1);
 	st->tokens = st->firsttok;
+	ft_lastcmd(st, fri);
+	st->tokens = st->firsttok;
+	ft_checkcommand(st);
 	return (0);
 }
 
