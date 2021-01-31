@@ -40,7 +40,9 @@ char	*ft_traduction(shell *st, char *tmp)
 			fri = st->new;
 			st->new = ft_strjoin(st->new, st->tmpq);
 			free(fri);
+			fri = tmp;
 			tmp = ft_strjoin(st->new, &tmp[i + 1]);
+			free(fri);
 			i = ft_strlen(st->new) - 1;
 		}
 		else if (tmp[i] != '\0')
@@ -57,7 +59,9 @@ char	*ft_traduction(shell *st, char *tmp)
 					free(fri);
 					b++;
 				}
+				fri = tmp;
 				tmp = ft_strjoin(back, &tmp[i + 1]);
+				free(fri);
 				free(back);
 				b = 1;
 			}
@@ -76,7 +80,9 @@ char	*ft_traduction(shell *st, char *tmp)
 				st->new = ft_strdup(st->tmpq);
 				if (st->ret == 0)
 				{
+					fri = tmp;
 					tmp = ft_strjoin(st->new, &tmp[st->pass + 1]);
+					free(fri);
 				}
 				else
 				{

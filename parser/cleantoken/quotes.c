@@ -81,20 +81,17 @@ int		ft_lastcmd(shell *st, char *fri)
 
 int		ft_cleantokens(shell *st)
 {
-	char	*tmp;
-	char	*fri;
+	char	*newtok;
 
 	st->quotes = 0;
-	tmp = 0;
-	fri = NULL;
+	newtok = NULL;
 	st->firstd = 1;
 	st->ddone = 0;
 	while (st->tokens)
 	{
-		tmp = ft_strdup((char *)st->tokens->content);
-		fri = ft_traduction(st, tmp);
+		newtok = ft_traduction(st, ft_strdup((char *)st->tokens->content));
 		free((char *)st->tokens->content);
-		st->tokens->content = fri;
+		st->tokens->content = newtok;
 		st->ddone += 1;
 		while (st->tokens && st->ddone != 0)
 		{
@@ -105,7 +102,7 @@ int		ft_cleantokens(shell *st)
 	if (ft_errorquote(st) == -1)
 		return (-1);
 	st->tokens = st->firsttok;
-	ft_lastcmd(st, fri);
+	ft_lastcmd(st, newtok);
 	st->tokens = st->firsttok;
 	ft_checkcommand(st);
 	return (0);
