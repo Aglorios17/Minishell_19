@@ -103,6 +103,8 @@ char *ft_shlvl(char *line, int i);
 int ft_cutline(shell *st);
 int ft_cutpipe(shell *st);
 char **ft_splitms(char const *str, char c, shell *st);
+int	ft_malloc_tab(char const *str, char c);
+int	ft_malloc_tab2(char const *str, char c, int a);
 
 ////////// exec ////////////////
 
