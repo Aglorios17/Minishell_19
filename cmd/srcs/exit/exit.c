@@ -23,7 +23,6 @@ int	ft_charerror(shell *st, int i, char *tmp)
 		write(1, tmp, ft_strlen(tmp));
 		write(1, ": numeric argument required\n", 28);
 		st->status = 255;
-		free(tmp);
 		return (1);
 	}
 	return (0);
@@ -32,7 +31,7 @@ int	ft_charerror(shell *st, int i, char *tmp)
 int	ft_charinexit(shell *st, int i, int a, char *tmp)
 {
 	i = 0;
-	tmp = ft_strdup((char *)st->tokens->next->content);
+	tmp = (char *)st->tokens->next->content;
 	a = 0;
 	while (tmp[i])
 	{
@@ -47,14 +46,10 @@ int	ft_charinexit(shell *st, int i, int a, char *tmp)
 		if (tmp[i] && !ft_isdigit(tmp[i]))
 		{
 			if (ft_charerror(st, i, tmp) == 1)
-			{
-				free(tmp);
 				return (1);
-			}
 		}
 		i++;
 	}
-	free(tmp);
 	return (0);
 }
 

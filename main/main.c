@@ -138,6 +138,7 @@ int		main(int argc, char **argv, char **envp)
 		signal(SIGQUIT, signalhandler2);
 		while (1)
 		{
+			free(st.line);
 			if (prompt == 0)
 				write(2, ">>", 2);
 			prompt = 0;

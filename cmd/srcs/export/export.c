@@ -14,13 +14,18 @@
 
 int		ft_addexit(shell *st, char *tmp, char *tmp2, int i)
 {
-	int a;
-
+	int		a;
+	char	*fri;
 	a = 0;
+
+	fri = NULL;
 	if (!ft_strncmp(tmp, "SHLVL=", i))
 	{
 		a = ft_atoi(&tmp2[i]);
-		st->envv->content = ft_shlvl(&tmp[i], a);
+		fri = ft_strdup(ft_shlvl(&tmp[i], a));
+		free((char *)st->envv->content);
+		st->envv->content = ft_strdup(fri);
+		free(fri);
 		a = 1;
 	}
 	else
@@ -29,6 +34,7 @@ int		ft_addexit(shell *st, char *tmp, char *tmp2, int i)
 			st->pwd = ft_strdup(&tmp[i]);
 		if (!ft_strncmp(tmp, "OLDPWD=", i))
 			st->oldpwd = ft_strdup(&tmp[i]);
+		free((char *)st->envv->content);
 		st->envv->content = ft_strdup(tmp);
 		a = 1;
 	}

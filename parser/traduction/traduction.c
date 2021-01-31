@@ -78,7 +78,10 @@ char	*ft_traduction(shell *st, char *tmp)
 				if (st->ret == 0)
 					tmp = ft_strjoin(st->new, &tmp[st->pass + 1]);
 				else
+				{
+					free(tmp);
 					tmp = ft_strdup(st->new);
+				}
 				i = ft_strlen(st->new) - 1;
 			}
 			else if (st->rd == 0 && (tmp[i] == '$' && b == 0 && tmp[i + 1] != '\\' &&

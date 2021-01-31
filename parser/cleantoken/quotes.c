@@ -103,6 +103,7 @@ int		ft_cleantokens(shell *st)
 			}
 			else
 			{
+				free((char *)st->envv->content);
 				st->envv->content = ft_strjoin("_=", tmp2);
 			}
 			break ;
