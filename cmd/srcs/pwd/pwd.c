@@ -14,6 +14,7 @@
 
 char	*ft_pwd(shell *st)
 {
+	free(st->pwd);
 	st->pwd = getcwd(NULL, 0);
 	return (st->pwd);
 }

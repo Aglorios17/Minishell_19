@@ -54,7 +54,7 @@ OBJS			= ${SRCS:.c=.o}
 INCLUDE 		= include/minishell.h
 #FOLDER			= srcs
 LIBFT 			= libft
-CC				= gcc -Wall -Wextra -Werror -g # -fsanitize=address
+CC				= gcc -Wall -Wextra -Werror -g  #-fsanitize=address
 RM				= rm -f
 LIBFLAGS 		= -I ./libft -L ./libft -L . ./libft/*.c 
 # -I Add the directory dir to the list of directories to be searched for header files

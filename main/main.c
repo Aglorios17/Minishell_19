@@ -110,6 +110,7 @@ int		mainprocess(int argc, char **argv, shell *st)
 		st->fdone = dup(st->fdout);
 		while (st->pipe)
 		{
+
 			if (ft_pipe(argc, argv, st) == 1)
 			{
 				ft_free_list(st->pipe, st->firstpipe);
@@ -139,6 +140,7 @@ int		main(int argc, char **argv, char **envp)
 	{
 		st.line = ft_strdup(argv[2]);
 		mainprocess(argc, argv, &st);
+//		ft_free_list(st.envv, st.firstenv);
 	}
 	else
 	{

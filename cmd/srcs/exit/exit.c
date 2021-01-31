@@ -45,10 +45,16 @@ int	ft_charinexit(shell *st, int i, int a, char *tmp)
 		if (tmp[i] && ft_isdigit(tmp[i]))
 			a = 1;
 		if (tmp[i] && !ft_isdigit(tmp[i]))
+		{
 			if (ft_charerror(st, i, tmp) == 1)
+			{
+				free(tmp);
 				return (1);
+			}
+		}
 		i++;
 	}
+	free(tmp);
 	return (0);
 }
 

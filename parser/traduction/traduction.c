@@ -92,7 +92,9 @@ char	*ft_traduction(shell *st, char *tmp)
 				free(st->new);
 				st->new = ft_strdup(st->tmpq);
 				if (st->ret == 0)
+				{
 					tmp = ft_strjoin(st->new, &tmp[st->pass + 1]);
+				}
 				else
 				{
 					free(tmp);

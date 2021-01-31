@@ -29,6 +29,7 @@ int	ft_commandcd(shell *st, char *tmp, int i)
 						i++;
 					if (tmp[i] == '=')
 						i++;
+			//		free(st->envv->content);
 					st->envv->content = ft_strjoin("PWD=", st->pwd);
 					break ;
 				}

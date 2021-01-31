@@ -46,7 +46,7 @@ char	*ft_recupvalenv(shell *st, char *tmp, char *tmp2, char *fri)
 
 	i = 0;
 	a = 0;
-	tmp = ft_strdup((char *)st->envv->content);
+	tmp = (char *)st->envv->content;
 	tmp2 = ft_strdup("");
 	while (tmp[i])
 	{

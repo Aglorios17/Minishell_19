@@ -25,6 +25,7 @@ int		ft_checklevel(shell *st, char *tmp, int num)
 		i++;
 	num = ft_atoi2(&tmp[i]) + 1;
 	fri = ft_itoa(num);
+	free((char *)st->envv->content);
 	st->envv->content = ft_strjoin("SHLVL=", fri);
 	free(fri);
 	return (1);
@@ -47,7 +48,9 @@ int		ft_checkenv(shell *st, char *tmp, int num, int s)
 	}
 	st->envv = st->firstenv;
 	if (p == 0)
+	{
 		ft_lstadd_back(&st->envv, ft_lstnew(ft_strjoin("PWD=", ft_pwd(st))));
+	}
 	return (s);
 }
 
