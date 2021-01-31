@@ -77,14 +77,14 @@ int		ft_errornoval(shell *st, char *tmp)
 	a = 0;
 	while (tmp[a] != '=')
 	{
-		if (tmp[a] == ' ')
+		if (tmp[a] && tmp[a] == ' ')
 		{
 			ft_write_error(st, tmp);
 			return (1);
 		}
 		a++;
 	}
-	if (tmp[a] == '=' && tmp[a - 1] == ' ')
+	if (tmp[a] && tmp[a - 1 ] && tmp[a] == '=' && tmp[a - 1] == ' ')
 	{
 		ft_write_error(st, tmp);
 		return (1);

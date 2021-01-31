@@ -23,9 +23,9 @@ int	cdhome(shell *st, char *line, char *tmp, char *env)
 		if (!ft_strncmp(env, "HOME=", 5))
 		{
 			i = 0;
-			while (env[i] != '=')
+			while (env[i] && env[i] != '=')
 				i++;
-			if (env[i] == '=')
+			if (env[i] && env[i] == '=')
 				i++;
 			line = ft_strdup(&env[i]);
 			break ;
@@ -56,9 +56,9 @@ int	cdwave(shell *st, char *env)
 		if (!ft_strncmp(env, "HOME=", 5))
 		{
 			i = 0;
-			while (env[i] != '=')
+			while (env[i] && env[i] != '=')
 				i++;
-			if (env[i] == '=')
+			if (env[i] && env[i] == '=')
 				i++;
 			st->pwd = ft_strdup(&env[i]);
 			break ;

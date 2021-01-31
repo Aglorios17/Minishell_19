@@ -42,10 +42,7 @@ int	ft_retokens(shell *st, char *env, char *first, char *after)
 	c = 0;
 	trad = NULL;
 	if (st->tmpq)
-	{
 		free(st->tmpq);
-		st->tmpq = NULL;
-	}
 	st->tmpq = ft_strdup("");
 	backs = ft_strdup("");
 	nex = NULL;
@@ -80,11 +77,10 @@ int	ft_retokens(shell *st, char *env, char *first, char *after)
 	else if (st->flagdq == 1)
 	{
 		free((char *)st->tokens->content);
-		st->tokens->content = NULL;
 		st->tokens->content = ft_strdup(&env[a + 1]);
 		free(st->tmpq);
-		st->tmpq = NULL;
 		st->tmpq = ft_strdup((char *)st->tokens->content);
+		free(backs);
 		return (1);
 	}
 	if (trad[0] == NULL)
@@ -94,14 +90,21 @@ int	ft_retokens(shell *st, char *env, char *first, char *after)
 			free((char *)st->tokens->content);
 			st->tokens->content = NULL;
 			if (env[a + 1] == ' ' && after[0] != '\0')
+			{
+				free((char *)st->tokens->content);
 				st->tokens->content = ft_strjoin(first, " ");
+			}
 			else
+			{
+				free((char *)st->tokens->content);
 				st->tokens->content = ft_strdup(first);
+			}
 			free(st->tmpq);
 			st->tmpq = NULL;
 			st->tmpq = ft_strdup((char *)st->tokens->content);
 		}
 		ft_freetab(trad);
+		free(backs);
 		return (1);
 	}
 	if (st->tokens->next)
@@ -113,7 +116,6 @@ int	ft_retokens(shell *st, char *env, char *first, char *after)
 		env[a + 1] != ' ' && env[ft_strlen(env) - 1] != ' ')
 	{
 		free((char *)st->tokens->content);
-		st->tokens->content = NULL;
 		st->tokens->content = ft_strdup(trad[0]);
 		a = 1;
 	}
@@ -122,7 +124,6 @@ int	ft_retokens(shell *st, char *env, char *first, char *after)
 		if (first[0] != '\0')
 		{
 			free((char *)st->tokens->content);
-			st->tokens->content = NULL;
 			st->tokens->content = ft_strjoin(first, trad[0]);
 			a = 1;
 		}
@@ -131,7 +132,6 @@ int	ft_retokens(shell *st, char *env, char *first, char *after)
 			if (trad[1] == NULL)
 			{
 				free((char *)st->tokens->content);
-				st->tokens->content = NULL;
 				if (first[0] != '\0')
 					st->tokens->content = ft_strjoin(first, trad[0]);
 				else
@@ -140,7 +140,6 @@ int	ft_retokens(shell *st, char *env, char *first, char *after)
 			else
 			{
 				free((char *)st->tokens->content);
-				st->tokens->content = NULL;
 				if (first[0] == '\0')
 					st->tokens->content = ft_strdup(trad[0]);
 				else if (first[0] != '\0')
@@ -151,7 +150,6 @@ int	ft_retokens(shell *st, char *env, char *first, char *after)
 					b = 0;
 					while (trad[b])
 						b++;
-					(void)c;
 					if (after[0] == '\\')
 					{
 						if (c == 1)
@@ -182,7 +180,6 @@ int	ft_retokens(shell *st, char *env, char *first, char *after)
 		env[a + 1] == ' ' && env[ft_strlen(env) - 1] == ' ')
 	{
 		free((char *)st->tokens->content);
-		st->tokens->content = NULL;
 		st->tokens->content = ft_strdup(trad[0]);
 		a = 1;
 	}
@@ -191,7 +188,6 @@ int	ft_retokens(shell *st, char *env, char *first, char *after)
 		if (first[0] != '\0')
 		{
 			free((char *)st->tokens->content);
-			st->tokens->content = NULL;
 			st->tokens->content = ft_strdup(first);
 			a = 0;
 			if (after[0] != '\0' && env[ft_strlen(env) - 1] != ' ')
@@ -207,7 +203,6 @@ int	ft_retokens(shell *st, char *env, char *first, char *after)
 		else
 		{
 			free((char *)st->tokens->content);
-			st->tokens->content = NULL;
 			st->tokens->content = ft_strdup(trad[0]);
 			a = 1;
 		}
@@ -218,7 +213,6 @@ int	ft_retokens(shell *st, char *env, char *first, char *after)
 		if (first[0] != '\0')
 		{
 			free((char *)st->tokens->content);
-			st->tokens->content = NULL;
 			st->tokens->content = ft_strjoin(first, trad[0]);
 			a = 1;
 		}
@@ -227,7 +221,6 @@ int	ft_retokens(shell *st, char *env, char *first, char *after)
 			if (first[0] == '\0')
 			{
 				free((char *)st->tokens->content);
-				st->tokens->content = NULL;
 				st->tokens->content = ft_strdup(trad[0]);
 			}
 			a = 1;
@@ -241,7 +234,6 @@ int	ft_retokens(shell *st, char *env, char *first, char *after)
 		}
 	}
 	free(st->tmpq);
-	st->tmpq = NULL;
 	st->tmpq = ft_strdup((char *)st->tokens->content);
 	b = 0;
 	while (trad[b])
@@ -256,13 +248,13 @@ int	ft_retokens(shell *st, char *env, char *first, char *after)
 		ft_lstadd_back(&st->tokens, ft_lstnew(ft_strdup(after)));
 	ft_lstadd_back(&st->tokens, nex);
 	ft_freetab(trad);
+	free(backs);
 	return (1);
 }
 
 int	ft_dollars(shell *st, char *tmp, int i)
 {
 	char	*new;
-	char	*space;
 	char	*tmp2;
 	char	*env;
 	char	*first;
@@ -274,12 +266,9 @@ int	ft_dollars(shell *st, char *tmp, int i)
 	first = ft_strdup("");
 	after = NULL;
 	st->pass = 0;
-	space = NULL;
 	env = NULL;
 	fri = NULL;
 	a = 0;
-	(void)tmp2;
-	(void)space;
 	tmp2 = tmp;
 	a = 0;
 	while (a < i)
@@ -292,7 +281,10 @@ int	ft_dollars(shell *st, char *tmp, int i)
 	if (tmp[i + 1] == '\0' || tmp[i + 1] == '\\')
 	{
 		if (first[0] != '\0')
+		{
+			free(st->tmpq);
 			st->tmpq = ft_strjoin(first, "$");
+		}
 		else
 		{
 			fri = st->tmpq;
@@ -308,11 +300,7 @@ int	ft_dollars(shell *st, char *tmp, int i)
 		if (!ft_isalnum(tmp[i]) && tmp[i] != '_' && tmp[i] != '?')
 			break ;
 		if (tmp[i] == '$' || tmp[i] == '\\')
-		{
-			if (tmp[i] == '\\' && !tmp[i + 1])
-				space = ft_strdup(" ");
 			break ;
-		}
 		fri = new;
 		new = ft_charjoin(new, tmp[i]);
 		free(fri);
@@ -336,12 +324,16 @@ int	ft_dollars(shell *st, char *tmp, int i)
 	if (!ft_strncmp(new, "SHLVL=", ft_strlen(new)))
 	{
 		a = ft_atoi(&tmp[i]);
+		free(st->tmpq);
 		st->tmpq = ft_strdup(&ft_shlvl(&env[i], a)[6]);
 	}
 	else if (!ft_strncmp(new, "?=", ft_strlen(new)))
+	{
+		free(st->tmpq);
 		st->tmpq = ft_itoa(st->status);
+	}
 	else if (env == NULL && !ft_strncmp("$OLDPWD", tmp2, 7))
-		ft_lstadd_back(&st->envv, ft_lstnew(ft_strjoin("OLDPWD=", "")));
+		ft_lstadd_back(&st->envv, ft_lstnew(ft_strdup("OLDPWD=")));
 	else
 	{
 		if (env == NULL)
@@ -352,7 +344,5 @@ int	ft_dollars(shell *st, char *tmp, int i)
 	free(first);
 	free(after);
 	free(env);
-	if (space)
-		free(space);
 	return (1);
 }

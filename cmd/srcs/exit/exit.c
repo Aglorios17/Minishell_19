@@ -14,7 +14,8 @@
 
 int	ft_charerror(shell *st, int i, char *tmp)
 {
-	if ((tmp[i] == '-' || tmp[i] == '+') && ft_isdigit(tmp[i + 1]))
+	if ((tmp[i] && (tmp[i] == '-' || tmp[i] == '+')) &&
+		tmp[i + 1] && ft_isdigit(tmp[i + 1]))
 		(void)i;
 	else
 	{
@@ -55,7 +56,7 @@ int	ft_charinexit(shell *st, int i, int a, char *tmp)
 
 int	exitspec(shell *st, int a, char *tmp)
 {
-	if (tmp[0] == '-' && tmp[a] == '1' && tmp[a + 1] == '\0')
+	if (tmp[0] == '-' && (tmp[a] && tmp[a] == '1') && tmp[a + 1] == '\0')
 	{
 		st->status = -1;
 		free(tmp);
@@ -70,7 +71,7 @@ int	exitspec(shell *st, int a, char *tmp)
 	if (tmp[0] == '0')
 	{
 		a = 0;
-		while (tmp[a] == '0')
+		while (tmp[a] && tmp[a] == '0')
 			a++;
 		if (tmp[a] == '\0')
 		{
@@ -90,7 +91,7 @@ int	doexit(shell *st, int a, char *tmp, long long result)
 	a = 0;
 	while (tmp[a] && tmp[a] == '-')
 		a++;
-	while (tmp[a] == '0')
+	while (tmp[a] && tmp[a] == '0')
 		a++;
 	if (exitspec(st, a, tmp) == 1)
 		return (1);

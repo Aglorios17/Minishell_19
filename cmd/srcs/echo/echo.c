@@ -21,7 +21,7 @@ int	ft_echo_n(shell *st, char *tm, t_list *tmp, int i)
 		{
 			i = 1;
 			tm = (char *)tmp->content;
-			while (tm[i] == 'n')
+			while (tm[i] && tm[i] == 'n')
 			{
 				i++;
 			}

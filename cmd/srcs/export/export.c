@@ -50,9 +50,9 @@ int		ft_addinenv(shell *st, char *tmp, char *tmp2, int i)
 	{
 		tmp2 = (char *)st->envv->content;
 		i = 0;
-		while (tmp2[i] != '=')
+		while (tmp2[i] && tmp2[i] != '=')
 			i++;
-		if (tmp2[i] == '=')
+		if (tmp2[i] && tmp2[i] == '=')
 			i++;
 		if (!ft_strncmp(tmp, tmp2, i))
 			a = ft_addexit(st, tmp, tmp2, i);

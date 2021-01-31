@@ -51,7 +51,7 @@ char	*ft_recupvalenv(shell *st, char *tmp, char *tmp2, char *fri)
 	while (tmp[i])
 	{
 		tmp2 = ft_backenv(tmp, tmp2, i);
-		if (tmp[i] == '=' && !a)
+		if ((tmp[i] && tmp[i] == '=') && !a)
 		{
 			fri = tmp2;
 			tmp2 = ft_charjoin(tmp2, '"');

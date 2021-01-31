@@ -77,7 +77,7 @@ int		ft_double_quote(shell *st, char *tmp, int a)
 	int		b;
 	int		c;
 
-	tmp2 = ft_strdup("");
+	tmp2 = NULL;
 	if (st->tmpq)
 		free(st->tmpq);
 	st->tmpq = ft_strdup("");
@@ -98,7 +98,7 @@ int		ft_double_quote(shell *st, char *tmp, int a)
 		c++;
 		a++;
 	}
-	tmp2 = ft_strdup(ft_recheckstr(st, tmp2, 0));
+	tmp2 = ft_recheckstr(st, tmp2, 0);
 	free(st->tmpq);
 	st->tmpq = ft_strdup(tmp2);
 	free(tmp2);

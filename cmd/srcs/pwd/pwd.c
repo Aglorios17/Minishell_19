@@ -32,10 +32,11 @@ int		oldpwd(shell *st)
 		if (!ft_strncmp(tmp, "OLDPWD=", 7))
 		{
 			i = 0;
-			while (tmp[i] != '=')
+			while (tmp[i] && tmp[i] != '=')
 				i++;
-			if (tmp[i] == '=')
+			if (tmp[i] && tmp[i] == '=')
 				i++;
+			free((char *)st->envv->content);
 			st->envv->content = ft_strjoin("OLDPWD=", st->oldpwd);
 			break ;
 		}

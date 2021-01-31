@@ -50,6 +50,7 @@ int	ft_retokensrd(shell *st, char *env, char *first, char *after, char *tmp)
 			write(2, "minishell: ", 11);
 			write(2, tmp, ft_strlen(tmp));
 			write(2, ": ambiguous redirect\n", 21);
+			free(backs);
 			return (1);
 		}
 	}
@@ -57,6 +58,7 @@ int	ft_retokensrd(shell *st, char *env, char *first, char *after, char *tmp)
 	{
 		tmp = ft_strdup(&env[a + 1]);
 		st->tmpq = ft_strdup(tmp);
+		free(backs);
 		return (1);
 	}
 	if (trad[0] == NULL)
@@ -69,6 +71,7 @@ int	ft_retokensrd(shell *st, char *env, char *first, char *after, char *tmp)
 				tmp = ft_strdup(first);
 			st->tmpq = ft_strdup((char *)st->tokens->content);
 		}
+		free(backs);
 		return (1);
 	}
 	if (first[0] == '\0' && after[0] == '\0' &&
@@ -146,6 +149,7 @@ int	ft_retokensrd(shell *st, char *env, char *first, char *after, char *tmp)
 		}
 	}
 	st->tmpq = ft_strdup(tmp);
+	free(backs);
 	return (1);
 }
 
