@@ -68,11 +68,17 @@ int			ft_check_redir(shell *st)
 int			ft_redirections_norme(shell *st)
 {
 	if (ft_check_redir(st) == 1)
+	{
+		ft_freetab(st->redir);
 		return (1);
+	}
 	if (st->redir[0] != NULL)
 	{
 		if (ft_parse_redir(st) == 1)
+		{
+			ft_freetab(st->redir);
 			return (1);
+		}
 	}
 	return (0);
 }
@@ -92,7 +98,10 @@ int			ft_redirections(shell *st)
 		if (ft_isinstring("<>", tokens[0]) == 1)
 		{
 			if (ft_check_errorredir(st) == 1)
+			{
+				ft_freetab(st->redir);
 				return (1);
+			}
 		}
 		st->tokens = st->tokens->next;
 	}
