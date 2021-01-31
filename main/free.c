@@ -30,50 +30,34 @@ void	ft_free_list(t_list *list, t_list *first)
 	list = NULL;
 }
 
-int		ft_exfree2(shell *st)
+int		ft_free_end(shell *st)
 {
-	if (st->pat)
-	{
-		free(st->pat);
-		st->pat = NULL;
-	}
-	if (st->tmpq)
-	{
-		free(st->tmpq);
-		st->tmpq = NULL;
-	}
-	if (st->line)
-	{
-		free(st->line);
-		st->line = NULL;
-	}
-	ft_free_list(st->tokens, st->firsttok);
-	ft_free_list(st->envv, st->firstenv);
-	if (st->status != 0)
-		return (st->status);
-	return (0);
+	free(st->line);
+	free(st->pwd);
+	free(st->pwdcp);
+	free(st->oldpwd);
+	free(st->tmpq);
+	free(st->pat);
+	if (st->pipe)
+		ft_free_list(st->pipe, st->firstpipe);
+	if (st->cutline)
+		ft_free_list(st->cutline, st->firstcut);
+	if (st->tokens)
+		ft_free_list(st->tokens, st->firsttok);
+	if (st->envv)
+		ft_free_list(st->envv, st->firstenv);
+	return (st->status);
 }
 
-int		ft_exfree(shell *st)
+int		ft_free_command(shell *st)
 {
-	if (st->pat)
-	{
-		free(st->pat);
-		st->pat = NULL;
-	}
-	if (st->tmpq)
-	{
-		free(st->tmpq);
-		st->tmpq = NULL;
-	}
-	if (st->line)
-	{
-		free(st->line);
-		st->line = NULL;
-	}
+	free(st->line);
+	st->line = NULL;
+	free(st->tmpq);
+	st->tmpq = NULL;
+	free(st->pat);
+	st->pat = NULL;
 	ft_free_list(st->tokens, st->firsttok);
 	st->tokens = NULL;
-	if (st->status != 0)
-		return (st->status);
-	return (0);
+	return (st->status);
 }

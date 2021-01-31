@@ -151,8 +151,9 @@ int	ft_verif_syntax(shell *st);
 void signalhandler(int signum);
 void signalhandler2(int signum);
 void ft_init_struct(shell *st);
-int	ft_exfree(shell *st);
 int	ft_exfree2(shell *st);
 void ft_free_list(t_list *list, t_list *first);
+int	ft_free_end(shell *st);
+int	ft_free_command(shell *st);
 
 #endif

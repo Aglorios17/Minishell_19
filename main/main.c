@@ -39,10 +39,8 @@ void	ft_init_struct(shell *st)
 	st->rd = 0;
 }
 
-int		commandline(int argc, char **argv, shell *st)
+int		commandline(shell *st)
 {
-	(void)argc;
-	(void)argv;
 	if (ft_tokens(st) == 1)
 		st->status = 1;
 	else
@@ -50,28 +48,24 @@ int		commandline(int argc, char **argv, shell *st)
 		if (st->tokens)
 			ft_cleantokens(st);
 		if (ft_command(st) == 1)
-		{
-			ft_exfree2(st);
 			return (1);
-		}
 	}
 	close(st->fdout);
 	if (st->fdout == 0)
 		st->fdout = dup2(st->fdone, 0);
 	else
 		st->fdout = dup2(st->fdone, 1);
-	ft_exfree(st);
 	return (0);
 }
 
-int		ft_pipe(int argc, char **argv, shell *st)
+int		ft_pipe(shell *st)
 {
 	int		pop[2];
 	pid_t	cpid;
 
 	if (!st->pipe->next)
 	{
-		if (commandline(argc, argv, st) == 1)
+		if (commandline(st) == 1)
 			return (1);
 		return (0);
 	}
@@ -86,7 +80,7 @@ int		ft_pipe(int argc, char **argv, shell *st)
 			pid = cpid;
 			close(pop[0]);
 			st->fdout = dup2(pop[1], 1);
-			if (commandline(argc, argv, st) == 1)
+			if (commandline(st) == 1)
 				return (1);
 			exit(0);
 		}
@@ -100,7 +94,7 @@ int		ft_pipe(int argc, char **argv, shell *st)
 	return (0);
 }
 
-int		mainprocess(int argc, char **argv, shell *st)
+int		mainprocess(shell *st)
 {
 	lstcmd(st, st->line);
 	ft_cutline(st);
@@ -111,12 +105,9 @@ int		mainprocess(int argc, char **argv, shell *st)
 		while (st->pipe)
 		{
 
-			if (ft_pipe(argc, argv, st) == 1)
-			{
-				ft_free_list(st->pipe, st->firstpipe);
-				ft_free_list(st->cutline, st->firstcut);
+			if (ft_pipe(st) == 1)
 				return (1);
-			}
+			ft_free_command(st);
 			st->pipe = st->pipe->next;
 		}
 		ft_free_list(st->pipe, st->firstpipe);
@@ -139,8 +130,7 @@ int		main(int argc, char **argv, char **envp)
 	if (argc > 1 && !ft_strncmp(argv[1], "-c", 2))
 	{
 		st.line = ft_strdup(argv[2]);
-		mainprocess(argc, argv, &st);
-//		ft_free_list(st.envv, st.firstenv);
+		mainprocess(&st);
 	}
 	else
 	{
@@ -153,15 +143,14 @@ int		main(int argc, char **argv, char **envp)
 			prompt = 0;
 			if (get_next_line3d(0, &st.line) != 1)
 			{
-				ft_exfree2(&st);
+				ft_free_end(&st);
+//				ft_free_list(st.envv, st.firstenv);
 				write(1, "exit\n", 5);
 				return (0);
 			}
-			if (mainprocess(argc, argv, &st) == 1)
+			if (mainprocess(&st) == 1)
 				break ;
 		}
 	}
-	if (st.status != 0)
-		return (st.status);
-	return (0);
+	return (ft_free_end(&st));
 }

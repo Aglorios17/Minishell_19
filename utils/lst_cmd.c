@@ -28,7 +28,6 @@ int	inenv(shell *st, char *tmp)
 		{
 
 			free((char *)st->envv->content);
-			st->envv->content = NULL;
 			st->envv->content = ft_strdup(tmp2);
 			a = 1;
 		}
@@ -36,7 +35,7 @@ int	inenv(shell *st, char *tmp)
 	}
 	st->envv = st->firstenv;
 	if (a == 0)
-		ft_lstadd_back(&st->envv, ft_lstnew("_=/bin/bash"));
+		ft_lstadd_back(&st->envv, ft_lstnew(ft_strdup("_=/bin/bash")));
 	st->envv = st->firstenv;
 	free(tmp2);
 	return (0);

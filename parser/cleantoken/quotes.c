@@ -39,7 +39,7 @@ int		ft_cleantokens(shell *st)
 			tmp = (char *)st->envv->content;
 			if (!ft_strncmp("_=", tmp, 2))
 			{
-			//	free((char *)st->envv->content);
+				free((char *)st->envv->content);
 				st->envv->content = ft_strjoin("_=", (char *)st->tokens->content);
 				break ;
 			}
