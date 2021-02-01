@@ -26,7 +26,6 @@ int	inenv(shell *st, char *tmp)
 			a = 1;
 		else if (!ft_strncmp((char *)st->envv->content, "_=", 2))
 		{
-
 			free((char *)st->envv->content);
 			st->envv->content = ft_strdup(tmp2);
 			a = 1;

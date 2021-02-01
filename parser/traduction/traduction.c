@@ -12,6 +12,21 @@
 
 #include "../../include/minishell.h"
 
+int		ft_quotes(shell *st, char *tmp, int i)
+{
+	char	*fri;
+
+	fri = NULL;
+	if (tmp[i] == '"')
+		i = ft_double_quote(st, tmp, i);
+	else if (tmp[i] == '\'')
+		i = ft_simple_quote(st, tmp, i);
+	fri = st->new;
+	st->new = ft_strjoin(st->new, st->tmpq);
+	free(fri);
+	return (i);
+}
+
 char	*ft_traduction(shell *st, char *tmp)
 {
 	int		i;
@@ -33,13 +48,7 @@ char	*ft_traduction(shell *st, char *tmp)
 	{
 		if (tmp[i] == '"' || tmp[i] == '\'')
 		{
-			if (tmp[i] == '"')
-				i = ft_double_quote(st, tmp, i);
-			else if (tmp[i] == '\'')
-				i = ft_simple_quote(st, tmp, i);
-			fri = st->new;
-			st->new = ft_strjoin(st->new, st->tmpq);
-			free(fri);
+			i = ft_quotes(st, tmp, i);
 			fri = tmp;
 			tmp = ft_strjoin(st->new, &tmp[i + 1]);
 			free(fri);
@@ -65,8 +74,10 @@ char	*ft_traduction(shell *st, char *tmp)
 				free(back);
 				b = 1;
 			}
-			else if ((tmp[i] == '$' && b == 0 && tmp[i + 1] != '\\' &&
-				(ft_isalnum(tmp[i + 1]) || tmp[i + 1] == '_' || tmp[i + 1] == '?')))
+			else if ((tmp[i] == '$' && b == 0 &&
+				tmp[i + 1] != '\\' &&
+				(ft_isalnum(tmp[i + 1]) || tmp[i + 1] == '_' ||
+					tmp[i + 1] == '?')))
 			{
 				st->ret = 0;
 				free(st->tmpq);

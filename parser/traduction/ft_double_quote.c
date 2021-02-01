@@ -88,13 +88,8 @@ int		ft_double_quote(shell *st, char *tmp, int a)
 	while (tmp[a])
 	{
 		if (tmp[a] == '"')
-		{
-			if ((tmp2 = newstr(tmp, c, b, a)) != NULL)
-			{
-				st->quotes++;
+			if ((tmp2 = newstr(tmp, c, b, a)) != NULL && st->quotes++)
 				break ;
-			}
-		}
 		c++;
 		a++;
 	}

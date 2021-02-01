@@ -19,7 +19,8 @@ int		ft_errorquote(shell *st)
 	fri = NULL;
 	if (st->quotes % 2 == 1)
 	{
-		fri = ft_strdup("minishell: unexpected EOF while looking for matching `\"\'\n");
+		fri = ft_strdup(
+		"minishell: unexpected EOF while looking for matching `\"\'\n");
 		write(1, fri, ft_strlen(fri));
 		free(fri);
 		st->status = 2;
@@ -27,7 +28,8 @@ int		ft_errorquote(shell *st)
 	}
 	if (st->quotes2 % 2 == 1)
 	{
-		fri = ft_strdup("minishell: unexpected EOF while looking for matching `\'\'\n");
+		fri = ft_strdup(
+		"minishell: unexpected EOF while looking for matching `\'\'\n");
 		write(1, fri, ft_strlen(fri));
 		free(fri);
 		st->status = 2;
@@ -36,15 +38,43 @@ int		ft_errorquote(shell *st)
 	return (1);
 }
 
+int		ft_lastcmdenv(shell *st, char *tmp2, char *fri)
+{
+	int	i;
+
+	i = 0;
+	if (!ft_strcmp((char *)st->firsttok->content, "export"))
+	{
+		free((char *)st->envv->content);
+		st->envv->content = ft_strdup("");
+		i = 0;
+		while (tmp2[i] && tmp2[i] != '=')
+		{
+			fri = (char *)st->envv->content;
+			st->envv->content = ft_charjoin((char *)st->envv->content, tmp2[i]);
+			free(fri);
+			i++;
+		}
+		fri = (char *)st->envv->content;
+		st->envv->content = ft_strjoin("_=", (char *)st->envv->content);
+		free(fri);
+	}
+	else
+	{
+		free((char *)st->envv->content);
+		st->envv->content = ft_strjoin("_=", tmp2);
+	}
+	return (0);
+}
+
 int		ft_lastcmd(shell *st, char *fri)
 {
 	char	*tmp;
 	char	*tmp2;
-	int		i;
 
 	tmp = NULL;
 	tmp2 = NULL;
-	i = 0;
+	st->tokens = st->firsttok;
 	while (st->tokens->next)
 		st->tokens = st->tokens->next;
 	tmp2 = (char *)st->tokens->content;
@@ -53,27 +83,7 @@ int		ft_lastcmd(shell *st, char *fri)
 		tmp = (char *)st->envv->content;
 		if (!ft_strncmp("_=", tmp, 2))
 		{
-			if (!ft_strcmp((char *)st->firsttok->content, "export"))
-			{
-				free((char *)st->envv->content);
-				st->envv->content = ft_strdup("");
-				i = 0;
-				while (tmp2[i] && tmp2[i] != '=')
-				{
-					fri = (char *)st->envv->content;
-					st->envv->content = ft_charjoin((char *)st->envv->content, tmp2[i]);
-					free(fri);
-					i++;
-				}
-				fri = (char *)st->envv->content;
-				st->envv->content = ft_strjoin("_=", (char *)st->envv->content);
-				free(fri);
-			}
-			else
-			{
-				free((char *)st->envv->content);
-				st->envv->content = ft_strjoin("_=", tmp2);
-			}
+			ft_lastcmdenv(st, tmp2, fri);
 			break ;
 		}
 		st->envv = st->envv->next;
@@ -104,7 +114,6 @@ int		ft_cleantokens(shell *st)
 	}
 	if (ft_errorquote(st) == -1)
 		return (-1);
-	st->tokens = st->firsttok;
 	newtok = NULL;
 	ft_lastcmd(st, newtok);
 	st->tokens = st->firsttok;
@@ -112,16 +121,17 @@ int		ft_cleantokens(shell *st)
 	return (0);
 }
 
-int	ft_checkcommand(shell *st)
+int		ft_checkcommand(shell *st)
 {
 	char *tmp;
 
 	tmp = (char *)st->tokens->content;
 	if (check_path(st, tmp) == 1)
 		return (1);
-	if (!ft_strcmp(tmp, "echo") || !ft_strcmp(tmp, "cd") || !ft_strcmp(tmp, "pwd") ||
-		!ft_strcmp(tmp, "env") || !ft_strcmp(tmp, "export") ||
-		!ft_strcmp(tmp, "unset") || !ft_strcmp(tmp, "exit") || !ft_strcmp(tmp, "exec"))
+	if (!ft_strcmp(tmp, "echo") || !ft_strcmp(tmp, "cd") ||
+		!ft_strcmp(tmp, "pwd") || !ft_strcmp(tmp, "env") ||
+		!ft_strcmp(tmp, "export") || !ft_strcmp(tmp, "unset") ||
+		!ft_strcmp(tmp, "exit") || !ft_strcmp(tmp, "exec"))
 	{
 		return (1);
 	}

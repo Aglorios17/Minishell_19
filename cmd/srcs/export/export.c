@@ -12,12 +12,29 @@
 
 #include "../../../include/minishell.h"
 
+int		ft_pwd_oldpwd(shell *st, char *tmp, int i)
+{
+	if (!ft_strncmp(tmp, "PWD=", i))
+	{
+		free(st->pwd);
+		st->pwd = ft_strdup(&tmp[i]);
+	}
+	if (!ft_strncmp(tmp, "OLDPWD=", i))
+	{
+		free(st->oldpwd);
+		st->oldpwd = ft_strdup(&tmp[i]);
+	}
+	free((char *)st->envv->content);
+	st->envv->content = ft_strdup(tmp);
+	return (0);
+}
+
 int		ft_addexit(shell *st, char *tmp, char *tmp2, int i)
 {
 	int		a;
 	char	*fri;
-	a = 0;
 
+	a = 0;
 	fri = NULL;
 	if (!ft_strncmp(tmp, "SHLVL=", i))
 	{
@@ -30,18 +47,7 @@ int		ft_addexit(shell *st, char *tmp, char *tmp2, int i)
 	}
 	else
 	{
-		if (!ft_strncmp(tmp, "PWD=", i))
-		{
-			free(st->pwd);
-			st->pwd = ft_strdup(&tmp[i]);
-		}
-		if (!ft_strncmp(tmp, "OLDPWD=", i))
-		{
-			free(st->oldpwd);
-			st->oldpwd = ft_strdup(&tmp[i]);
-		}
-		free((char *)st->envv->content);
-		st->envv->content = ft_strdup(tmp);
+		ft_pwd_oldpwd(st, tmp, i);
 		a = 1;
 	}
 	return (a);

@@ -84,7 +84,7 @@ int		ft_errornoval(shell *st, char *tmp)
 		}
 		a++;
 	}
-	if (tmp[a] && tmp[a - 1 ] && tmp[a] == '=' && tmp[a - 1] == ' ')
+	if (tmp[a] && tmp[a - 1] && tmp[a] == '=' && tmp[a - 1] == ' ')
 	{
 		ft_write_error(st, tmp);
 		return (1);

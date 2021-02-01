@@ -12,7 +12,7 @@
 
 #include "../../../include/minishell.h"
 
-int	ft_error_unset(shell *st, char *un)
+int	ft_error_pwd_oldpwd(shell *st, char *un)
 {
 	if (!ft_strncmp(un, "PWD\0", ft_strlen(un)))
 	{
@@ -24,6 +24,12 @@ int	ft_error_unset(shell *st, char *un)
 		free(st->pat);
 		st->pat = ft_strdup("");
 	}
+	return (0);
+}
+
+int	ft_error_unset(shell *st, char *un)
+{
+	ft_error_pwd_oldpwd(st, un);
 	if (un[0] == '\0')
 	{
 		write(1, "minishell: unset: `", 19);

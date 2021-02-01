@@ -12,6 +12,16 @@
 
 #include "../../include/minishell.h"
 
+int	ft_errorcmd(char *cmd)
+{
+	if (!ft_strcmp(cmd, "echo") || !ft_strcmp(cmd, "cd") ||
+		!ft_strcmp(cmd, "pwd") || !ft_strcmp(cmd, "env") ||
+		!ft_strcmp(cmd, "export") ||
+		!ft_strcmp(cmd, "unset") || !ft_strcmp(cmd, "exit"))
+		return (1);
+	return (0);
+}
+
 int	ft_cmdexec(shell *st, char *cmd, struct stat b, char *tab)
 {
 	char	*tmp;
@@ -21,10 +31,7 @@ int	ft_cmdexec(shell *st, char *cmd, struct stat b, char *tab)
 	fri = NULL;
 	if (!ft_strchr(cmd, '/'))
 	{
-		if (!ft_strcmp(cmd, "echo") || !ft_strcmp(cmd, "cd") ||
-			!ft_strcmp(cmd, "pwd") || !ft_strcmp(cmd, "env") ||
-			!ft_strcmp(cmd, "export") ||
-			!ft_strcmp(cmd, "unset") || !ft_strcmp(cmd, "exit"))
+		if (ft_errorcmd(cmd) == 1)
 			return (0);
 		tmp = ft_strjoin(tab, "/");
 		fri = tmp;
@@ -44,7 +51,6 @@ int	ft_cmdexec(shell *st, char *cmd, struct stat b, char *tab)
 
 int	check_path(shell *st, char *dollars)
 {
-	char		*cmd;
 	int			i;
 	struct stat	b;
 	char		**tab;
@@ -53,14 +59,13 @@ int	check_path(shell *st, char *dollars)
 	i = 0;
 	if (dollars)
 		dollars = NULL;
-	cmd = (char *)st->tokens->content;
 	if ((tab = recuppath(st, tab)) == NULL)
 		return (0);
 	free(st->cmdexec);
-	st->cmdexec = ft_strdup(cmd);
+	st->cmdexec = ft_strdup((char *)st->tokens->content);
 	while (tab[i])
 	{
-		if (ft_cmdexec(st, cmd, b, tab[i++]) == 1)
+		if (ft_cmdexec(st, (char *)st->tokens->content, b, tab[i++]) == 1)
 		{
 			ft_freetab(tab);
 			return (1);

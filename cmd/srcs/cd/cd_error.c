@@ -39,8 +39,7 @@ int	open_pathcd(shell *st, char *path)
 
 int	cdhomereturn(shell *st, char *line, char *tmp)
 {
-	st->pwd = ft_strdup(line);
-	if (chdir(st->pwd) < 0)
+	if (chdir(line) < 0)
 	{
 		st->oldpwd = tmp;
 		write(1, "minishell: ", 11);
@@ -50,6 +49,7 @@ int	cdhomereturn(shell *st, char *line, char *tmp)
 			free(line);
 		return (0);
 	}
+	st->pwd = ft_strdup(line);
 	oldpwd(st);
 	if (line)
 		free(line);
