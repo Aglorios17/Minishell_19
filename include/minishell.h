@@ -160,6 +160,16 @@ int		lstcmd(shell *st, char *line);
 char	**ft_tabreturn(t_list *list);
 void	ft_freetab(char **tab);
 int		ft_verif_syntax(shell *st);
+int		ft_verif_syntax2(shell *st);
+int		ft_skip_quotes(shell *st, int a);
+int 	ft_syntax_redir(shell *st, int a);
+int		ft_syntax_redir2(shell *st, int a);
+int		ft_syntax_redir3(shell *st, int a);
+int		ft_syntax_semicolon(shell *st, int a);
+int		ft_syntax_semicolon2(shell *st, int a);
+int		ft_syntax_pipe(shell *st, int a);
+int		ft_syntax_pipe2(shell *st, int a, int flagspace);
+int		ft_syntax_pipe3(shell *st, int a, int flagspace);
 
 /////////// main fonction /////////////
 void	signalhandler(int signum);

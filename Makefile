@@ -18,7 +18,9 @@ SRCS 			= main/main.c \
 					parser/token/tokens.c \
 					parser/token/checkspace.c \
 					parser/token/ft_cutline.c \
-					parser/token/ft_syntax_error.c \
+					parser/token/syntax_error/ft_syntax_error.c \
+					parser/token/syntax_error/ft_syntax_redir.c \
+					parser/token/syntax_error/ft_syntax_semicolon_pipe.c \
 					parser/cleantoken/quotes.c \
 					parser/traduction/traduction.c \
 					parser/traduction/ft_double_quote.c \
