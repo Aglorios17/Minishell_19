@@ -46,8 +46,11 @@ SRCS 			= main/main.c \
 					cmd/srcs/cd/cd_error.c \
 					cmd/srcs/echo/echo.c \
 					cmd/srcs/pwd/pwd.c \
+					utils/dollars/cmdcommand.c \
 					utils/dollars/dollars.c \
+					utils/dollars/retokens.c \
 					utils/dollars/dolredic.c \
+					utils/dollars/retokensrd.c \
 					utils/splitms/ft_splitms.c \
 					utils/splitms/ft_splitms_norme.c \
 					utils/lst_cmd.c \

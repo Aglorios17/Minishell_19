@@ -112,7 +112,9 @@ int ft_unset(shell *st);
 
 int ft_envv(shell *st, char **envp);
 int	ft_dollars(shell *st, char *tmp, int i);
+int		ft_retokens(shell *st, char *env, char *first, char *after);
 int	ft_dolredic(shell *st, char *tmp, int i);
+int	ft_retokensrd(shell *st, char *env, char *first, char *after, char *tmp);
 char *ft_shlvl(char *line, int i);
 
 ////////// cut ////////////////
