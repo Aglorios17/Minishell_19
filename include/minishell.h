@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aglorios <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/03/04 12:52:08 by aglorios          #+#    #+#             */
+/*   Updated: 2020/03/04 12:53:38 by aglorios         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 # include <errno.h>
@@ -144,7 +156,6 @@ int		ft_isinstring(char *str, char c);
 
 /////////// utils /////////////
 
-int		statusenv(shell *st, int status);
 int		lstcmd(shell *st, char *line);
 char	**ft_tabreturn(t_list *list);
 void	ft_freetab(char **tab);

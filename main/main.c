@@ -129,9 +129,12 @@ int		main(int argc, char **argv, char **envp)
 	ft_envv(&st, envp);
 	if (argc > 1 && !ft_strncmp(argv[1], "-c", 2))
 	{
-		st.line = ft_strdup(argv[2]);
-		lstcmd(&st, st.line);
-		mainprocess(&st);
+		if (argv[2] && !argv[3])
+		{
+			st.line = ft_strdup(argv[2]);
+			lstcmd(&st, st.line);
+			mainprocess(&st);
+		}
 	}
 	else
 	{
@@ -145,9 +148,8 @@ int		main(int argc, char **argv, char **envp)
 			prompt = 0;
 			if (get_next_line3d(0, &st.line) != 1)
 			{
-				ft_free_end(&st);
-				write(1, "exit\n", 5);
-				return (0);
+				write(2, "exit\n", 5);
+				return (ft_free_end(&st));
 			}
 			if (mainprocess(&st) == 1)
 				break ;

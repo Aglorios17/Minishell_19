@@ -47,7 +47,6 @@ SRCS 			= main/main.c \
 					utils/dollars/dolredic.c \
 					utils/splitms/ft_splitms.c \
 					utils/splitms/ft_splitms_norme.c \
-					utils/status.c \
 					utils/lst_cmd.c \
 					utils/list_to_tab.c \
 
