@@ -55,6 +55,7 @@ int		ft_lastcmd(shell *st, char *fri)
 		{
 			if (!ft_strcmp((char *)st->firsttok->content, "export"))
 			{
+				free((char *)st->envv->content);
 				st->envv->content = ft_strdup("");
 				i = 0;
 				while (tmp2[i] && tmp2[i] != '=')
@@ -64,7 +65,7 @@ int		ft_lastcmd(shell *st, char *fri)
 					free(fri);
 					i++;
 				}
-				fri = st->envv->content;
+				fri = (char *)st->envv->content;
 				st->envv->content = ft_strjoin("_=", (char *)st->envv->content);
 				free(fri);
 			}

@@ -41,14 +41,14 @@ char	**ft_tabjoin(char **tab, char **tab2)
 	len = 0;
 	while (tab[a])
 	{
-		total[len] = tab[a];
+		total[len] = ft_strdup(tab[a]);
 		a++;
 		len++;
 	}
 	a = 0;
 	while (tab2[a])
 	{
-		total[len] = tab2[a];
+		total[len] = ft_strdup(tab2[a]);
 		a++;
 		len++;
 	}

@@ -32,7 +32,11 @@ char	*ft_backenv(char *tmp, char *tmp2, int i)
 
 	fri = NULL;
 	if (ft_strchr("\\\"$", tmp[i]))
+	{
+		fri = tmp2;
 		tmp2 = ft_charjoin(tmp2, '\\');
+		free(fri);
+	}
 	fri = tmp2;
 	tmp2 = ft_charjoin(tmp2, tmp[i]);
 	free(fri);

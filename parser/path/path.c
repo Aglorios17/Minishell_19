@@ -32,6 +32,7 @@ int	ft_cmdexec(shell *st, char *cmd, struct stat b, char *tab)
 		free(fri);
 		if (stat(tmp, &b) != -1)
 		{
+			free(st->cmdexec);
 			st->cmdexec = ft_strdup(tmp);
 			free(tmp);
 			return (1);

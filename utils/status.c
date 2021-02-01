@@ -29,6 +29,7 @@ int	statusenv(shell *st, int status)
 				i++;
 			if (env[i] && env[i] == '=')
 				i++;
+			free((char *)st->envv->content);
 			st->envv->content = ft_strjoin("?=", ft_itoa(status));
 			st->envv = st->firstenv;
 			return (status);

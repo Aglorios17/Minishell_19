@@ -31,9 +31,15 @@ int		ft_addexit(shell *st, char *tmp, char *tmp2, int i)
 	else
 	{
 		if (!ft_strncmp(tmp, "PWD=", i))
+		{
+			free(st->pwd);
 			st->pwd = ft_strdup(&tmp[i]);
+		}
 		if (!ft_strncmp(tmp, "OLDPWD=", i))
+		{
+			free(st->oldpwd);
 			st->oldpwd = ft_strdup(&tmp[i]);
+		}
 		free((char *)st->envv->content);
 		st->envv->content = ft_strdup(tmp);
 		a = 1;
