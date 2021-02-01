@@ -12,56 +12,39 @@
 
 #include "../../include/minishell.h"
 
-int	ft_tokens(shell *st)
+int	ft_checkifsimplequote3(char *line, int i, t_sekot *sekot)
 {
-	t_sekot	sekot;
-	int		i;
-	int		a;
-	int		len;
-	char	*fri;
-	char	*tmp;
-
-	i = 0;
-	a = 0;
-	len = 0;
-	fri = NULL;
-	tmp = NULL;
-	tmp = (char *)st->pipe->content;
-	if (tmp[0] == '\0')
-		return (1);
-	while (tmp[i])
+	while (line[i] == '\'')
 	{
-		while (tmp[i] == ' ' || tmp[i] == '\t')
+		if (line[i + 1] && line[i + 1] != '\'')
+			i++;
+		while (line[i] && line[i] != '\'')
 		{
-			if (tmp[i + 1] == '\0')
+			if (line[i] == ' ')
 			{
-				if (ft_redirections(st) == 1)
-					return (1);
-				return (0);
+				sekot->flagcs = 1;
+				return (i);
 			}
 			i++;
 		}
-		if (tmp[i] == '>' || tmp[i] == '<')
-		{
-			a = i;
-			len = 0;
-			while (tmp[i] && (tmp[i] == '>' || tmp[i] == '<'))
-			{
-				i++;
-				len++;
-			}
-			fri = ft_substr(tmp, a, len);
-		}
-		else
-		{
-			a = ft_checkspace(&tmp[i], &sekot);
-			fri = ft_substr(tmp, i, a);
-			i += a;
-		}
-		ft_lstadd_back(&st->tokens, ft_lstnew(fri));
+		i++;
 	}
-	st->firsttok = st->tokens;
-	if (ft_redirections(st) == 1)
-		return (1);
-	return (0);
+	while (line[i] && line[i] != '\'')
+		i++;
+	if (line[i] && line[i + 1] && (line[i + 1] &&
+		(line[i + 1] == ' ' || line[i + 1] == '\0')))
+	{
+		sekot->flagcs = 1;
+		return (i + 1);
+	}
+	return (i);
+}
+
+int	ft_checkifsimplequote2(char *line, int i, int a)
+{
+	a = i + 1;
+	while (line[a] && line[a] != ' ' && line[a] != '\t' &&
+		line[a] != '\'' && line[a] != '\'')
+		a++;
+	return (a);
 }

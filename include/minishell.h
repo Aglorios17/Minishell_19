@@ -65,13 +65,19 @@ typedef struct	mini
 	t_list		*redirection;
 }				shell;
 
+typedef struct	s_sekot
+{
+	int			flagcs;
+}				t_sekot;
+
 //////////// tokens /////////////
 
 int ft_tokens(shell *st);
-int ft_checkspace(char *tmp);
-int	ft_checkspace(char *line);
+int	ft_checkspace(char *line, t_sekot *sekot);
 int ft_cleantokens(shell *st);
 char *ft_traduction(shell *st, char *tmp);
+int	ft_checkifsimplequote2(char *line, int i, int a);
+int	ft_checkifsimplequote3(char *line, int i, t_sekot *sekot);
 char	*ft_traduction4(shell *st, char *tmp, int b);
 char	*ft_traduction5(shell *st, char *tmp);
 char	*ft_traduction6(shell *st, char *tmp);

@@ -12,33 +12,18 @@
 
 #include "../../include/minishell.h"
 
-int	ft_checkifsimplequote2(char *line, int i, int a)
-{
-	a = i + 1;
-	while (line[a] && line[a] != ' ' && line[a] != '\t' &&
-		line[a] != '\'' && line[a] != '\'')
-		a++;
-	return (a);
-}
-
-int	ft_checkifsimplequote(char *line, int i)
+int	ft_checkifsimplequote(char *line, int i, t_sekot *sekot)
 {
 	int a;
 
 	a = 0;
+	sekot->flagcs = 0;
 	i++;
-	while (line[i] == '\'')
-	{
-		if (line[i + 1] && line[i + 1] != '\'')
-			i++;
-		while (line[i] && line[i] != '\'')
-		{
-			if (line[i] == ' ')
-				return (i);
-			i++;
-		}
-		i++;
-	}
+	a = ft_checkifsimplequote3(line, i, sekot);
+	if (sekot->flagcs == 1)
+		return (a);
+	else
+		i = a;
 	while (line[i] && line[i] != '\'')
 		i++;
 	if (line[i] && line[i + 1] && (line[i + 1] &&
@@ -53,6 +38,25 @@ int	ft_checkifsimplequote(char *line, int i)
 	return (i);
 }
 
+int	ft_checkifdoublequote3(char *line, int i, t_sekot *sekot)
+{
+	while (line[i] == '"')
+	{
+		if (line[i + 1] && line[i + 1] != '"')
+			i++;
+		while (line[i] && line[i] != '"')
+		{
+			if (line[i] == ' ')
+			{
+				sekot->flagcs = 1;
+				return (i);
+			}
+			i++;
+		}
+		i++;
+	}
+	return (i);
+}
 
 int	ft_checkifdoublequote2(char *line, int i)
 {
@@ -63,24 +67,18 @@ int	ft_checkifdoublequote2(char *line, int i)
 	return (i);
 }
 
-int	ft_checkifdoublequote(char *line, int i)
+int	ft_checkifdoublequote(char *line, int i, t_sekot *sekot)
 {
 	int a;
 
 	a = 0;
+	sekot->flagcs = 0;
 	i++;
-	while (line[i] == '"')
-	{
-		if (line[i + 1] && line[i + 1] != '"')
-			i++;
-		while (line[i] && line[i] != '"')
-		{
-			if (line[i] == ' ')
-				return (i);
-			i++;
-		}
-		i++;
-	}
+	a = ft_checkifdoublequote3(line, i, sekot);
+	if (sekot->flagcs == 1)
+		return (a);
+	else
+		i = a;
 	i = ft_checkifdoublequote2(line, i);
 	if (line[i] && line[i + 1])
 	{
@@ -96,7 +94,7 @@ int	ft_checkifdoublequote(char *line, int i)
 	return (i);
 }
 
-int	ft_checkspace(char *line)
+int	ft_checkspace(char *line, t_sekot *sekot)
 {
 	int i;
 
@@ -107,9 +105,9 @@ int	ft_checkspace(char *line)
 			line[i] != '"' && line[i] != '>' && line[i] != '<')
 			i++;
 		else if (line[i] && line[i] == '\'')
-			i = ft_checkifsimplequote(line, i);
+			i = ft_checkifsimplequote(line, i, sekot);
 		else if (line[i] && line[i] == '"')
-			i = ft_checkifdoublequote(line, i);
+			i = ft_checkifdoublequote(line, i, sekot);
 		else if (line[i] && (line[i] == '>' || line[i] == '<'))
 			return (i);
 		else if (line[i] && (line[i] == ' ' || line[i] == '\t'))

@@ -17,6 +17,7 @@ SRCS 			= main/main.c \
 					main/signal.c \
 					parser/token/tokens.c \
 					parser/token/checkspace.c \
+					parser/token/checkspace2.c \
 					parser/token/ft_cutline.c \
 					parser/token/syntax_error/ft_syntax_error.c \
 					parser/token/syntax_error/ft_syntax_redir.c \
