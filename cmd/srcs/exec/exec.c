@@ -69,7 +69,11 @@ int		ft_error(shell *st, struct stat b)
 			i++;
 	}
 	if (tmp == NULL)
+	{
+		if (!ft_strncmp((char *)st->tokens->content, "whoami\0", 7))
+			ft_free_list(st->envv, st->firstenv);
 		return (ft_directory_error(st, 127));
+	}
 	if (ft_error2(st, tmp, i, b) == 1)
 		return (1);
 	else
