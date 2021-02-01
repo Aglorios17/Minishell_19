@@ -324,7 +324,9 @@ int	ft_dollars(shell *st, char *tmp, int i)
 	{
 		a = ft_atoi(&tmp[i]);
 		free(st->tmpq);
-		st->tmpq = ft_strdup(&ft_shlvl(&env[i], a)[6]);
+		fri = ft_shlvl(&env[i], a);
+		st->tmpq = ft_strdup(&fri[6]);
+		free(fri);
 	}
 	else if (!ft_strncmp(new, "?=", ft_strlen(new)))
 	{

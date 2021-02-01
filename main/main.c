@@ -38,6 +38,7 @@ void	ft_init_struct(shell *st)
 	st->fdredir = 0;
 	st->rd = 0;
 	st->new = NULL;
+	st->cmdexec = NULL;
 }
 
 int		commandline(shell *st)

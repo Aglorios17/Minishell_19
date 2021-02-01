@@ -87,21 +87,27 @@ int		ft_envv(shell *st, char **envp)
 
 char	*ft_shlvl(char *line, int i)
 {
-	int a;
+	int		a;
+	char	*tmp;
 
 	a = 0;
 	a = ft_atoi(line);
+	tmp = NULL;
 	(void)i;
 	if (a < 0)
 		a = 0;
 	if (a >= 1000)
 	{
+		tmp = ft_itoa(a);
 		write(1, "minishell: warning: shell level (", 33);
-		write(1, ft_itoa(a), ft_strlen(ft_itoa(a)));
+		write(1, tmp, ft_strlen(tmp));
 		write(1, ") too high, resetting to 1\n", 27);
+		free(tmp);
 		a = 1;
 	}
 	line = ft_itoa(a);
+	tmp = line;
 	line = ft_strjoin("SHLVL=", line);
+	free(tmp);
 	return (line);
 }

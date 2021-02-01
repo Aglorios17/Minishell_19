@@ -22,7 +22,7 @@ int		ft_addexit(shell *st, char *tmp, char *tmp2, int i)
 	if (!ft_strncmp(tmp, "SHLVL=", i))
 	{
 		a = ft_atoi(&tmp2[i]);
-		fri = ft_strdup(ft_shlvl(&tmp[i], a));
+		fri = ft_shlvl(&tmp[i], a);
 		free((char *)st->envv->content);
 		st->envv->content = ft_strdup(fri);
 		free(fri);

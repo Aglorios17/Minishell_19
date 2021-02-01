@@ -64,7 +64,9 @@ int		ft_lastcmd(shell *st, char *fri)
 					free(fri);
 					i++;
 				}
+				fri = st->envv->content;
 				st->envv->content = ft_strjoin("_=", (char *)st->envv->content);
+				free(fri);
 			}
 			else
 			{
@@ -102,6 +104,7 @@ int		ft_cleantokens(shell *st)
 	if (ft_errorquote(st) == -1)
 		return (-1);
 	st->tokens = st->firsttok;
+	newtok = NULL;
 	ft_lastcmd(st, newtok);
 	st->tokens = st->firsttok;
 	ft_checkcommand(st);

@@ -55,7 +55,8 @@ int	check_path(shell *st, char *dollars)
 	cmd = (char *)st->tokens->content;
 	if ((tab = recuppath(st, tab)) == NULL)
 		return (0);
-	st->cmdexec = cmd;
+	free(st->cmdexec);
+	st->cmdexec = ft_strdup(cmd);
 	while (tab[i])
 	{
 		if (ft_cmdexec(st, cmd, b, tab[i++]) == 1)
