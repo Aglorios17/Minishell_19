@@ -12,53 +12,58 @@
 
 #include "../../include/minishell.h"
 
-int	ft_tokens(shell *st)
+void	ft_init_struct_sekot(t_sekot *sekot, shell *st)
+{
+	sekot->flagcs = 0;
+	sekot->i = 0;
+	sekot->a = 0;
+	sekot->len = 0;
+	sekot->tmp = (char *)st->pipe->content;
+	sekot->tmp2 = NULL;
+}
+
+void	ft_tokens2(t_sekot *sekot, char *tmp)
+{
+	if (tmp[sekot->i] == '>' || tmp[sekot->i] == '<')
+	{
+		sekot->a = sekot->i;
+		sekot->len = 0;
+		while (tmp[sekot->i] && (tmp[sekot->i] == '>' || tmp[sekot->i] == '<'))
+		{
+			sekot->i++;
+			sekot->len++;
+		}
+		sekot->tmp2 = ft_substr(tmp, sekot->a, sekot->len);
+	}
+	else
+	{
+		sekot->a = ft_checkspace(&tmp[sekot->i], sekot);
+		sekot->tmp2 = ft_substr(tmp, sekot->i, sekot->a);
+		sekot->i += sekot->a;
+	}
+}
+
+int		ft_tokens(shell *st)
 {
 	t_sekot	sekot;
-	int		i;
-	int		a;
-	int		len;
-	char	*fri;
-	char	*tmp;
 
-	i = 0;
-	a = 0;
-	len = 0;
-	fri = NULL;
-	tmp = NULL;
-	tmp = (char *)st->pipe->content;
-	if (tmp[0] == '\0')
+	ft_init_struct_sekot(&sekot, st);
+	if (sekot.tmp[0] == '\0')
 		return (1);
-	while (tmp[i])
+	while (sekot.tmp[sekot.i])
 	{
-		while (tmp[i] == ' ' || tmp[i] == '\t')
+		while (sekot.tmp[sekot.i] == ' ' || sekot.tmp[sekot.i] == '\t')
 		{
-			if (tmp[i + 1] == '\0')
+			if (sekot.tmp[sekot.i + 1] == '\0')
 			{
 				if (ft_redirections(st) == 1)
 					return (1);
 				return (0);
 			}
-			i++;
+			sekot.i++;
 		}
-		if (tmp[i] == '>' || tmp[i] == '<')
-		{
-			a = i;
-			len = 0;
-			while (tmp[i] && (tmp[i] == '>' || tmp[i] == '<'))
-			{
-				i++;
-				len++;
-			}
-			fri = ft_substr(tmp, a, len);
-		}
-		else
-		{
-			a = ft_checkspace(&tmp[i], &sekot);
-			fri = ft_substr(tmp, i, a);
-			i += a;
-		}
-		ft_lstadd_back(&st->tokens, ft_lstnew(fri));
+		ft_tokens2(&sekot, sekot.tmp);
+		ft_lstadd_back(&st->tokens, ft_lstnew(sekot.tmp2));
 	}
 	st->firsttok = st->tokens;
 	if (ft_redirections(st) == 1)

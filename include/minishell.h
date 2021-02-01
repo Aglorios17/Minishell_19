@@ -68,6 +68,11 @@ typedef struct	mini
 typedef struct	s_sekot
 {
 	int			flagcs;
+	int			i;
+	int			len;
+	int			a;
+	char		*tmp;
+	char		*tmp2;
 }				t_sekot;
 
 //////////// tokens /////////////
