@@ -63,6 +63,7 @@ int	do_unset(shell *st, char *un, t_list *tmp, t_list *previous)
 		if (!ft_strncmp(un, (char *)tmp->content, ft_strlen(un)))
 		{
 			previous->next = tmp->next;
+			free(tmp->content);
 			free(tmp);
 			st->envv = st->firstenv;
 			free(un);

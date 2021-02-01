@@ -66,7 +66,7 @@ int	ft_retokensrd(shell *st, char *env, char *first, char *after, char *tmp)
 	}
 	else if (st->flagdq == 1)
 	{
-		tmp = ft_strdup(&env[a + 1]);
+		tmp = &env[a + 1];
 		free(st->tmpq);
 		st->tmpq = ft_strdup(tmp);
 		free(backs);
@@ -79,7 +79,7 @@ int	ft_retokensrd(shell *st, char *env, char *first, char *after, char *tmp)
 			if (env[a + 1] == ' ' && after[0] != '\0')
 				tmp = ft_strjoin(first, " ");
 			else
-				tmp = ft_strdup(first);
+				tmp = first;
 			free(st->tmpq);
 			st->tmpq = ft_strdup(tmp);
 		}
@@ -90,7 +90,7 @@ int	ft_retokensrd(shell *st, char *env, char *first, char *after, char *tmp)
 	if (first[0] == '\0' && after[0] == '\0' &&
 		env[a + 1] != ' ' && env[ft_strlen(env) - 1] != ' ')
 	{
-		tmp = ft_strdup(trad[0]);
+		tmp = trad[0];
 		a = 1;
 	}
 	else if (env[a + 1] != ' ' && env[ft_strlen(env) - 1] != ' ')
@@ -111,12 +111,12 @@ int	ft_retokensrd(shell *st, char *env, char *first, char *after, char *tmp)
 					tmp = ft_strjoin(first, trad[0]);
 				}
 				else
-					tmp = ft_strdup(trad[0]);
+					tmp = trad[0];
 			}
 			else
 			{
 				if (first[0] == '\0')
-					tmp = ft_strdup(trad[0]);
+					tmp = trad[0];
 				else if (first[0] != '\0')
 				{
 					free(tmp);
@@ -135,7 +135,7 @@ int	ft_retokensrd(shell *st, char *env, char *first, char *after, char *tmp)
 	else if (first[0] == '\0' && after[0] == '\0' &&
 		env[a + 1] == ' ' && env[ft_strlen(env) - 1] == ' ')
 	{
-		tmp = ft_strdup(trad[0]);
+		tmp = trad[0];
 		a = 1;
 	}
 	else if (env[a + 1] == ' ')
@@ -153,7 +153,7 @@ int	ft_retokensrd(shell *st, char *env, char *first, char *after, char *tmp)
 		}
 		else
 		{
-			tmp = ft_strdup(trad[0]);
+			tmp = trad[0];
 			a = 1;
 		}
 		st->ret = 1;
@@ -169,7 +169,7 @@ int	ft_retokensrd(shell *st, char *env, char *first, char *after, char *tmp)
 		if (after[0] != '\0' && trad[1] == NULL)
 		{
 			if (first[0] == '\0')
-				tmp = ft_strdup(trad[0]);
+				tmp = trad[0];
 			a = 1;
 			fri = trad[0];
 			trad[0] = ft_strjoin(trad[0], after);
