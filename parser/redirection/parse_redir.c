@@ -75,7 +75,7 @@ void		ft_parse_redir2(shell *st, int a)
 		while (tmp[i - 1] == ' ')
 			i--;
 		tmp = ft_substr(tmp, 0, i);
-		new = ft_strdup(ft_traduction(st, tmp));
+		new = ft_traduction(st, tmp);
 		free(st->redir[a + 1]);
 		st->redir[a + 1] = new;
 	}
