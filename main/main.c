@@ -39,6 +39,7 @@ void	ft_init_struct(shell *st)
 	st->rd = 0;
 	st->new = NULL;
 	st->cmdexec = NULL;
+	st->itrad = 0;
 }
 
 int		commandline(shell *st)

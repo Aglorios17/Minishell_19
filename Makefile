@@ -23,6 +23,7 @@ SRCS 			= main/main.c \
 					parser/token/syntax_error/ft_syntax_semicolon_pipe.c \
 					parser/cleantoken/quotes.c \
 					parser/traduction/traduction.c \
+					parser/traduction/traduction2.c \
 					parser/traduction/ft_double_quote.c \
 					parser/traduction/ft_single_quote.c \
 					parser/traduction/ft_back.c \

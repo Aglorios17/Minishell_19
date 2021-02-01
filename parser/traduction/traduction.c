@@ -27,89 +27,68 @@ int		ft_quotes(shell *st, char *tmp, int i)
 	return (i);
 }
 
-char	*ft_traduction(shell *st, char *tmp)
+char	*ft_traduction3(shell *st, char *tmp)
 {
-	int		i;
 	int		b;
-	char	*back;
 	char	*fri;
 
-	i = 0;
+	fri = NULL;
 	b = 0;
-	back = NULL;
+	if (tmp[st->itrad] == '\\')
+	{
+		tmp = ft_traduction4(st, tmp, b);
+		b = 1;
+	}
+	else if ((tmp[st->itrad] == '$' && b == 0 &&
+		tmp[st->itrad + 1] != '\\' &&
+		(ft_isalnum(tmp[st->itrad + 1]) || tmp[st->itrad + 1] == '_' ||
+			tmp[st->itrad + 1] == '?')))
+		tmp = ft_traduction5(st, tmp);
+	else
+	{
+		fri = st->new;
+		st->new = ft_charjoin(st->new, tmp[st->itrad]);
+		free(fri);
+	}
+	return (tmp);
+}
+
+char	*ft_traduction2(shell *st, char *tmp)
+{
+	char	*fri;
+
+	fri = NULL;
+	st->itrad = ft_quotes(st, tmp, st->itrad);
+	fri = tmp;
+	tmp = ft_strjoin(st->new, &tmp[st->itrad + 1]);
+	free(fri);
+	st->itrad = ft_strlen(st->new) - 1;
+	return (tmp);
+}
+
+void	ft_ifbackslash(shell *st)
+{
 	if (st->tmpq)
 		free(st->tmpq);
 	st->tmpq = ft_strdup("");
-	fri = NULL;
 	if (st->new != NULL)
 		free(st->new);
 	st->new = ft_strdup("");
-	while (tmp[i] && tmp[i] != '\0')
+}
+
+char	*ft_traduction(shell *st, char *tmp)
+{
+	st->itrad = 0;
+	ft_ifbackslash(st);
+	while (tmp[st->itrad] && tmp[st->itrad] != '\0')
 	{
-		if (tmp[i] == '"' || tmp[i] == '\'')
+		if (tmp[st->itrad] == '"' || tmp[st->itrad] == '\'')
+			tmp = ft_traduction2(st, tmp);
+		else if (tmp[st->itrad] != '\0')
 		{
-			i = ft_quotes(st, tmp, i);
-			fri = tmp;
-			tmp = ft_strjoin(st->new, &tmp[i + 1]);
-			free(fri);
-			i = ft_strlen(st->new) - 1;
+			tmp = ft_traduction3(st, tmp);
 		}
-		else if (tmp[i] != '\0')
-		{
-			b = 0;
-			if (tmp[i] == '\\')
-			{
-				b = 0;
-				back = ft_strdup("");
-				while (b < i)
-				{
-					fri = back;
-					back = ft_charjoin(back, tmp[b]);
-					free(fri);
-					b++;
-				}
-				fri = tmp;
-				tmp = ft_strjoin(back, &tmp[i + 1]);
-				free(fri);
-				free(back);
-				b = 1;
-			}
-			else if ((tmp[i] == '$' && b == 0 &&
-				tmp[i + 1] != '\\' &&
-				(ft_isalnum(tmp[i + 1]) || tmp[i + 1] == '_' ||
-					tmp[i + 1] == '?')))
-			{
-				st->ret = 0;
-				free(st->tmpq);
-				st->tmpq = ft_strdup("");
-				st->firstd++;
-				if (st->rd == 0)
-					ft_dollars(st, tmp, i);
-				if (st->rd == 1)
-					ft_dolredic(st, tmp, i);
-				free(st->new);
-				st->new = ft_strdup(st->tmpq);
-				if (st->ret == 0)
-				{
-					fri = tmp;
-					tmp = ft_strjoin(st->new, &tmp[st->pass + 1]);
-					free(fri);
-				}
-				else
-				{
-					free(tmp);
-					tmp = ft_strdup(st->new);
-				}
-				i = ft_strlen(st->new) - 1;
-			}
-			else
-			{
-				fri = st->new;
-				st->new = ft_charjoin(st->new, tmp[i]);
-				free(fri);
-			}
-		}
-		i++;
+		st->itrad++;
 	}
 	free(st->new);
 	st->new = NULL;

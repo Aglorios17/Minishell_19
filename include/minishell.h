@@ -49,6 +49,7 @@ typedef struct	mini
 	int			pipefd;
 	int			fdout;
 	int			fdone;
+	int			itrad;                   //// norme trad
 	int			fdredir;
 	int			rd;
 	char		**redir;
@@ -71,6 +72,9 @@ int ft_checkspace(char *tmp);
 int	ft_checkspace(char *line);
 int ft_cleantokens(shell *st);
 char *ft_traduction(shell *st, char *tmp);
+char	*ft_traduction4(shell *st, char *tmp, int b);
+char	*ft_traduction5(shell *st, char *tmp);
+char	*ft_traduction6(shell *st, char *tmp);
 int ft_simple_quote(shell *st, char *tmp, int a);
 int ft_double_quote(shell *st, char *tmp, int a);
 int	ft_back(char *tmp, int a);
