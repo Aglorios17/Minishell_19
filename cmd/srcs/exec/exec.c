@@ -73,11 +73,14 @@ int		ft_error(t_shell *st, struct stat b)
 
 void	ft_exec2(t_shell *st, int a, char **ar, char **en)
 {
+	t_sign	*sg;
+
+	sg = initglobal();
 	if (st->cutline->next)
-		nc = 1;
+		sg->nc = 1;
 	if (!st->pipe->next)
 	{
-		pid2 = a;
+		sg->pid2 = a;
 		wait(&a);
 		st->status = a / 256;
 	}

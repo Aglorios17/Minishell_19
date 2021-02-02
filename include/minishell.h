@@ -23,11 +23,6 @@
 # include <dirent.h>
 # include "../libft/libft.h"
 
-int prompt;
-int pid;
-int pid2;
-int nc;
-
 typedef struct	s_mini
 {
 	char		*line;
@@ -102,6 +97,16 @@ typedef struct	s_dol
 	char		*backs;
 	t_list		*nex;
 }				t_dol;
+
+typedef struct	s_signal
+{
+	int			prompt;
+	int			pid;
+	int			pid2;
+	int			nc;
+}				t_sign;
+
+t_sign			*initglobal();
 
 int				ft_tokens(t_shell *st);
 int				ft_checkspace(char *line, t_sekot *sekot);

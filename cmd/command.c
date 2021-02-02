@@ -46,10 +46,7 @@ int	ft_commandenv(t_shell *st, char *tmp)
 	while (st->envv)
 	{
 		tmp = (char *)st->envv->content;
-		if (!ft_strcmp(tmp, "_=env"))
-			write(1, "_=/home/user42/Bureau/minishell_test/bin/env", 44);
-		else
-			write(1, tmp, ft_strlen(tmp));
+		write(1, tmp, ft_strlen(tmp));
 		write(1, "\n", 1);
 		st->envv = st->envv->next;
 	}

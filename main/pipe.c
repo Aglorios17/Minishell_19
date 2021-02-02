@@ -16,14 +16,16 @@ int		dopipe(t_shell *st)
 {
 	int		pop[2];
 	pid_t	cpid;
+	t_sign	*sg;
 
+	sg = initglobal();
 	if (pipe(pop) > 0)
 		exit(1);
 	if ((cpid = fork()) == -1)
 		exit(1);
 	if (cpid == 0)
 	{
-		pid = cpid;
+		sg->pid = cpid;
 		close(pop[0]);
 		st->fdout = dup2(pop[1], 1);
 		if (commandline(st) == 1)

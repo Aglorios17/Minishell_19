@@ -25,14 +25,17 @@ int		test(t_shell *st, char **argv)
 
 int		codeexec(t_shell *st)
 {
+	t_sign	*sg;
+
+	sg = initglobal();
 	signal(SIGINT, signalhandler);
 	signal(SIGQUIT, signalhandler2);
 	while (1)
 	{
 		free(st->line);
-		if (prompt == 0)
+		if (sg->prompt == 0)
 			write(2, ">>", 2);
-		prompt = 0;
+		sg->prompt = 0;
 		if (get_next_line3d(0, &st->line) != 1)
 		{
 			write(2, "exit\n", 5);
@@ -44,15 +47,24 @@ int		codeexec(t_shell *st)
 	return (0);
 }
 
+t_sign	*initglobal(void)
+{
+	static t_sign	sg;
+
+	return (&sg);
+}
+
 int		main(int argc, char **argv, char **envp)
 {
 	t_shell	st;
+	t_sign	*sg;
 
 	ft_init_struct(&st);
-	pid = 1;
-	pid2 = 0;
-	prompt = 0;
-	nc = 0;
+	sg = initglobal();
+	sg->pid = 1;
+	sg->pid2 = 0;
+	sg->prompt = 0;
+	sg->nc = 0;
 	ft_envv(&st, envp);
 	if (argc > 1 && !ft_strncmp(argv[1], "-c", 2))
 		test(&st, argv);
