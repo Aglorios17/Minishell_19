@@ -75,6 +75,16 @@ typedef struct	s_sekot
 	char		*tmp2;
 }				t_sekot;
 
+typedef struct	s_dol
+{
+	int			cafter;
+	char		*nw;
+	char		*first;
+	char		*after;
+	char		*env;
+	char		*backs;
+	t_list		*nex;
+}				t_dol;
 //////////// tokens /////////////
 
 int ft_tokens(shell *st);
@@ -123,7 +133,29 @@ int ft_unset(shell *st);
 
 int ft_envv(shell *st, char **envp);
 int	ft_dollars(shell *st, char *tmp, int i);
-int		ft_retokens(shell *st, char *env, char *first, char *after);
+void	freedol(t_dol *dol);
+int	getvaluedol(shell *st, t_dol *dol);
+int	ft_statusdol(shell *st, t_dol *dol);
+int	ft_shlvldol(shell *st, t_dol *dol, char *tmp, int i);
+int	goretokens(shell *st, t_dol *dol);
+int	getafterdol(t_dol *dol, char *tmp, int i);
+//////////// retokens ///////////
+int	ft_retokens(shell *st, t_dol *dol);
+int	ft_flagdq(shell *st, t_dol *dol, int a);
+int	tradnull(shell *st, t_dol *dol, char **trad, int a);
+int	readdtok(shell *st, t_dol *dol, char **trad, int a);
+int	retok2first(shell *st, t_dol *dol, char **trad, int a);
+int	retok2tradunnull(shell *st, t_dol *dol, char **trad);
+int	retok2tok(shell *st, t_dol *dol, char **trad);
+char	*retok2cafter(t_dol *dol, char **trad, int a);
+char	*retokjoin(t_dol *dol, char **trad, int a);
+int	retok2(shell *st, t_dol *dol, char **trad, int a);
+int	spaceafter(shell *st, t_dol *dol, char **trad, int a);
+int		retokspaceafter(shell *st, t_dol *dol, char **trad, int a);
+int	switchretok(shell *st, t_dol *dol, char **trad, int a);
+
+
+//////////// retokens ///////////
 int	ft_dolredic(shell *st, char *tmp, int i);
 int	ft_retokensrd(shell *st, char *env, char *first, char *after, char *tmp);
 char *ft_shlvl(char *line, int i);

@@ -49,7 +49,11 @@ SRCS 			= main/main.c \
 					cmd/srcs/pwd/pwd.c \
 					utils/dollars/cmdcommand.c \
 					utils/dollars/dollars.c \
-					utils/dollars/retokens.c \
+					utils/dollars/dollars_utils.c \
+					utils/dollars/retokens/retokens.c \
+					utils/dollars/retokens/retokens2.c \
+					utils/dollars/retokens/retokens3.c \
+					utils/dollars/retokens/retokens4.c \
 					utils/dollars/dolredic.c \
 					utils/dollars/retokensrd.c \
 					utils/splitms/ft_splitms.c \

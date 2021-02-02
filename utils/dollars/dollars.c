@@ -12,48 +12,10 @@
 
 #include "../../include/minishell.h"
 
-int	ft_dollars(shell *st, char *tmp, int i)
+int		getafterdol(t_dol *dol, char *tmp, int i)
 {
-	char	*new;
-	char	*tmp2;
-	char	*env;
-	char	*first;
-	char	*after;
 	char	*fri;
-	int		a;
 
-	new = ft_strdup("");
-	first = ft_strdup("");
-	after = NULL;
-	st->pass = 0;
-	env = NULL;
-	fri = NULL;
-	a = 0;
-	tmp2 = tmp;
-	a = 0;
-	while (a < i)
-	{
-		fri = first;
-		first = ft_charjoin(first, tmp[a]);
-		free(fri);
-		a++;
-	}
-	if (tmp[i + 1] == '\0' || tmp[i + 1] == '\\')
-	{
-		if (first[0] != '\0')
-		{
-			free(st->tmpq);
-			st->tmpq = ft_strjoin(first, "$");
-		}
-		else
-		{
-			fri = st->tmpq;
-			st->tmpq = ft_charjoin(st->tmpq, '$');
-			free(fri);
-		}
-		st->pass = i;
-		return (0);
-	}
 	i++;
 	while (tmp[i] && !ft_strchr("\'\"", tmp[i]) && tmp[i] != '\0')
 	{
@@ -61,50 +23,83 @@ int	ft_dollars(shell *st, char *tmp, int i)
 			break ;
 		if (tmp[i] == '$' || tmp[i] == '\\')
 			break ;
-		fri = new;
-		new = ft_charjoin(new, tmp[i]);
+		fri = dol->nw;
+		dol->nw = ft_charjoin(dol->nw, tmp[i]);
 		free(fri);
 		i++;
 	}
-	after = ft_strdup(&tmp[i]);
-	st->pass = i - 1;
-	fri = new;
-	new = ft_charjoin(new, '=');
-	free(fri);
-	while (st->envv)
-	{
-		env = ft_strdup((char *)st->envv->content);
-		if (!ft_strncmp(new, env, ft_strlen(new)))
-			break ;
-		st->envv = st->envv->next;
-		free(env);
-		env = NULL;
-	}
-	st->envv = st->firstenv;
-	if (!ft_strncmp(new, "SHLVL=", ft_strlen(new)))
-	{
-		a = ft_atoi(&tmp[i]);
-		free(st->tmpq);
-		fri = ft_shlvl(&env[i], a);
-		st->tmpq = ft_strdup(&fri[6]);
-		free(fri);
-	}
-	else if (!ft_strncmp(new, "?=", ft_strlen(new)))
+	return (i);
+}
+
+int		ft_errordol(shell *st, t_dol *dol, int i)
+{
+	char	*fri;
+
+	fri = NULL;
+	if (dol->first[0] != '\0')
 	{
 		free(st->tmpq);
-		st->tmpq = ft_itoa(st->status);
+		st->tmpq = ft_strjoin(dol->first, "$");
 	}
-	else if (env == NULL && !ft_strncmp("$OLDPWD", tmp2, 7))
-		ft_lstadd_back(&st->envv, ft_lstnew(ft_strdup("OLDPWD=")));
 	else
 	{
-		if (env == NULL)
-			env = ft_strdup("=");
-		ft_retokens(st, env, first, after);
+		fri = st->tmpq;
+		st->tmpq = ft_charjoin(st->tmpq, '$');
+		free(fri);
 	}
-	free(new);
-	free(first);
-	free(after);
-	free(env);
+	st->pass = i;
+	return (0);
+}
+
+void	ft_initdol(shell *st, t_dol *dol)
+{
+	dol->cafter = 0;
+	dol->nw = ft_strdup("");
+	dol->first = ft_strdup("");
+	dol->after = NULL;
+	dol->backs = NULL;
+	dol->nex = NULL;
+	st->pass = 0;
+	dol->env = NULL;
+}
+
+int		getfirstdol(t_dol *dol, char *tmp, int a, int i)
+{
+	char	*fri;
+
+	fri = NULL;
+	while (a < i)
+	{
+		fri = dol->first;
+		dol->first = ft_charjoin(dol->first, tmp[a]);
+		free(fri);
+		a++;
+	}
+	return (0);
+}
+
+int		ft_dollars(shell *st, char *tmp, int i)
+{
+	char	*tmp2;
+	t_dol	dol;
+
+	ft_initdol(st, &dol);
+	tmp2 = tmp;
+	getfirstdol(&dol, tmp, 0, i);
+	if (tmp[i + 1] == '\0' || tmp[i + 1] == '\\')
+		return (ft_errordol(st, &dol, i));
+	i = getafterdol(&dol, tmp, i);
+	dol.after = ft_strdup(&tmp[i]);
+	st->pass = i - 1;
+	getvaluedol(st, &dol);
+	if (!ft_strncmp(dol.nw, "SHLVL=", ft_strlen(dol.nw)))
+		return (ft_shlvldol(st, &dol, tmp, i));
+	else if (!ft_strncmp(dol.nw, "?=", ft_strlen(dol.nw)))
+		return (ft_statusdol(st, &dol));
+	else if (dol.env == NULL && !ft_strncmp("$OLDPWD", tmp2, 7))
+		ft_lstadd_back(&st->envv, ft_lstnew(ft_strdup("OLDPWD=")));
+	else
+		return (goretokens(st, &dol));
+	freedol(&dol);
 	return (1);
 }
