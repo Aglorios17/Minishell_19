@@ -49,7 +49,7 @@ char	*ft_backs(t_dol *dol, int c, char *backs, char *after)
 	return (backs);
 }
 
-void	ft_retokinit(shell *st, t_dol *dol)
+void	ft_retokinit(t_shell *st, t_dol *dol)
 {
 	dol->cafter = 0;
 	if (st->tmpq)
@@ -60,7 +60,7 @@ void	ft_retokinit(shell *st, t_dol *dol)
 	st->ddone = 0;
 }
 
-int		ft_retokens(shell *st, t_dol *dol)
+int		ft_retokens(t_shell *st, t_dol *dol)
 {
 	int		a;
 	char	**trad;

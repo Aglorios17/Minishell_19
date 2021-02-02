@@ -22,7 +22,7 @@ int	ft_errorcmd(char *cmd)
 	return (0);
 }
 
-int	ft_cmdexec(shell *st, char *cmd, struct stat b, char *tab)
+int	ft_cmdexec(t_shell *st, char *cmd, struct stat b, char *tab)
 {
 	char	*tmp;
 	char	*fri;
@@ -49,7 +49,7 @@ int	ft_cmdexec(shell *st, char *cmd, struct stat b, char *tab)
 	return (0);
 }
 
-int	check_path(shell *st, char *dollars)
+int	check_path(t_shell *st, char *dollars)
 {
 	int			i;
 	struct stat	b;

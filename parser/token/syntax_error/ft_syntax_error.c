@@ -12,7 +12,7 @@
 
 #include "../../../include/minishell.h"
 
-int	ft_skip_quotes(shell *st, int a)
+int	ft_skip_quotes(t_shell *st, int a)
 {
 	if (st->line[a] == '"' || st->line[a] == '\'')
 	{
@@ -28,7 +28,7 @@ int	ft_skip_quotes(shell *st, int a)
 	return (a);
 }
 
-int	ft_verif_syntax2(shell *st)
+int	ft_verif_syntax2(t_shell *st)
 {
 	int a;
 
@@ -54,7 +54,7 @@ int	ft_verif_syntax2(shell *st)
 	return (0);
 }
 
-int	ft_verif_syntax(shell *st)
+int	ft_verif_syntax(t_shell *st)
 {
 	int		a;
 

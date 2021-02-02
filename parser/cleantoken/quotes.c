@@ -12,7 +12,7 @@
 
 #include "../../include/minishell.h"
 
-int		ft_errorquote(shell *st)
+int		ft_errorquote(t_shell *st)
 {
 	char	*fri;
 
@@ -38,7 +38,7 @@ int		ft_errorquote(shell *st)
 	return (1);
 }
 
-int		ft_lastcmdenv(shell *st, char *tmp2, char *fri)
+int		ft_lastcmdenv(t_shell *st, char *tmp2, char *fri)
 {
 	int	i;
 
@@ -67,7 +67,7 @@ int		ft_lastcmdenv(shell *st, char *tmp2, char *fri)
 	return (0);
 }
 
-int		ft_lastcmd(shell *st, char *fri)
+int		ft_lastcmd(t_shell *st, char *fri)
 {
 	char	*tmp;
 	char	*tmp2;
@@ -92,7 +92,7 @@ int		ft_lastcmd(shell *st, char *fri)
 	return (0);
 }
 
-int		ft_cleantokens(shell *st)
+int		ft_cleantokens(t_shell *st)
 {
 	char	*newtok;
 
@@ -121,7 +121,7 @@ int		ft_cleantokens(shell *st)
 	return (0);
 }
 
-int		ft_checkcommand(shell *st)
+int		ft_checkcommand(t_shell *st)
 {
 	char *tmp;
 

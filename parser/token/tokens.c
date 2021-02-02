@@ -12,7 +12,7 @@
 
 #include "../../include/minishell.h"
 
-void	ft_init_struct_sekot(t_sekot *sekot, shell *st)
+void	ft_init_struct_sekot(t_sekot *sekot, t_shell *st)
 {
 	sekot->flagcs = 0;
 	sekot->i = 0;
@@ -43,7 +43,7 @@ void	ft_tokens2(t_sekot *sekot, char *tmp)
 	}
 }
 
-int		ft_tokens(shell *st)
+int		ft_tokens(t_shell *st)
 {
 	t_sekot	sekot;
 

@@ -12,7 +12,7 @@
 
 #include "../../../include/minishell.h"
 
-char	*recupexp(shell *st)
+char	*recupexp(t_shell *st)
 {
 	char	*tmp;
 

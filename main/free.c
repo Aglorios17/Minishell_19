@@ -30,7 +30,7 @@ void	ft_free_list(t_list *list, t_list *first)
 	list = NULL;
 }
 
-int		ft_free_end(shell *st)
+int		ft_free_end(t_shell *st)
 {
 	free(st->line);
 	free(st->pwd);
@@ -51,7 +51,7 @@ int		ft_free_end(shell *st)
 	return (st->status);
 }
 
-int		ft_free_command(shell *st)
+int		ft_free_command(t_shell *st)
 {
 	free(st->line);
 	st->line = NULL;

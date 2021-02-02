@@ -12,7 +12,7 @@
 
 #include "../../../include/minishell.h"
 
-int		readdtok(shell *st, t_dol *dol, char **trad, int a)
+int		readdtok(t_shell *st, t_dol *dol, char **trad, int a)
 {
 	int c;
 
@@ -33,7 +33,7 @@ int		readdtok(shell *st, t_dol *dol, char **trad, int a)
 	return (1);
 }
 
-int		retok2first(shell *st, t_dol *dol, char **trad, int a)
+int		retok2first(t_shell *st, t_dol *dol, char **trad, int a)
 {
 	if (dol->first[0] != '\0')
 	{
@@ -44,7 +44,7 @@ int		retok2first(shell *st, t_dol *dol, char **trad, int a)
 	return (a);
 }
 
-int		retok2tradunnull(shell *st, t_dol *dol, char **trad)
+int		retok2tradunnull(t_shell *st, t_dol *dol, char **trad)
 {
 	free((char *)st->tokens->content);
 	if (dol->first[0] != '\0')
@@ -54,7 +54,7 @@ int		retok2tradunnull(shell *st, t_dol *dol, char **trad)
 	return (0);
 }
 
-int		retok2tok(shell *st, t_dol *dol, char **trad)
+int		retok2tok(t_shell *st, t_dol *dol, char **trad)
 {
 	free((char *)st->tokens->content);
 	if (dol->first[0] == '\0')

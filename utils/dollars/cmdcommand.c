@@ -12,7 +12,7 @@
 
 #include "../../include/minishell.h"
 
-int		ft_cmddollars(shell *st, char *tmp)
+int		ft_cmddollars(t_shell *st, char *tmp)
 {
 	if (check_path(st, tmp) == 1)
 		return (1);

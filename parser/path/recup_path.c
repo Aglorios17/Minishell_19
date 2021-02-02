@@ -27,7 +27,7 @@ void	ft_freetab(char **tab)
 	tab = NULL;
 }
 
-char	*ft_path(shell *st, char *tmp)
+char	*ft_path(t_shell *st, char *tmp)
 {
 	int		i;
 	char	*path;
@@ -43,7 +43,7 @@ char	*ft_path(shell *st, char *tmp)
 	return (path);
 }
 
-char	*pathenv(shell *st)
+char	*pathenv(t_shell *st)
 {
 	char	*tmp;
 	char	*path;
@@ -67,7 +67,7 @@ char	*pathenv(shell *st)
 	return (path);
 }
 
-char	**recuppath(shell *st, char **tab)
+char	**recuppath(t_shell *st, char **tab)
 {
 	char	*path;
 

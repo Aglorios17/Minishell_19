@@ -12,7 +12,7 @@
 
 #include "../../include/minishell.h"
 
-t_list		*ft_redirfirsttok(shell *st, t_list *previous)
+t_list		*ft_redirfirsttok(t_shell *st, t_list *previous)
 {
 	char	**redir;
 	char	**fri;
@@ -34,7 +34,7 @@ t_list		*ft_redirfirsttok(shell *st, t_list *previous)
 	return (st->tokens);
 }
 
-t_list		*ft_redirtokens(shell *st, t_list *previous, t_list *tmp)
+t_list		*ft_redirtokens(t_shell *st, t_list *previous, t_list *tmp)
 {
 	char	**redir;
 	char	**fri;
@@ -55,7 +55,7 @@ t_list		*ft_redirtokens(shell *st, t_list *previous, t_list *tmp)
 	return (st->tokens);
 }
 
-t_list		*ft_redirections2(shell *st, char *supp, char *supp2, char *supp3)
+t_list		*ft_redirections2(t_shell *st, char *supp, char *supp2, char *supp3)
 {
 	t_list	*tmp;
 	t_list	*previous;

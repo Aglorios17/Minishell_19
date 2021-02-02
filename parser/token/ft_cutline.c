@@ -12,7 +12,7 @@
 
 #include "../../include/minishell.h"
 
-int	ft_cutpipe(shell *st)
+int	ft_cutpipe(t_shell *st)
 {
 	int		a;
 	char	**line;
@@ -29,7 +29,7 @@ int	ft_cutpipe(shell *st)
 	return (0);
 }
 
-int	ft_cutline(shell *st)
+int	ft_cutline(t_shell *st)
 {
 	int		a;
 	char	**line;

@@ -28,7 +28,7 @@ char	*retokjoin(t_dol *dol, char **trad, int a)
 	return (trad[a - 1]);
 }
 
-int		retok2(shell *st, t_dol *dol, char **trad, int a)
+int		retok2(t_shell *st, t_dol *dol, char **trad, int a)
 {
 	a = retok2first(st, dol, trad, a);
 	if (dol->after[0] != '\0')
@@ -52,7 +52,7 @@ int		retok2(shell *st, t_dol *dol, char **trad, int a)
 	return (a);
 }
 
-int		spaceafter(shell *st, t_dol *dol, char **trad, int a)
+int		spaceafter(t_shell *st, t_dol *dol, char **trad, int a)
 {
 	char	*fri;
 
@@ -81,7 +81,7 @@ int		spaceafter(shell *st, t_dol *dol, char **trad, int a)
 	return (a);
 }
 
-int		retokspaceafter(shell *st, t_dol *dol, char **trad, int a)
+int		retokspaceafter(t_shell *st, t_dol *dol, char **trad, int a)
 {
 	char	*fri;
 
@@ -110,7 +110,7 @@ int		retokspaceafter(shell *st, t_dol *dol, char **trad, int a)
 	return (a);
 }
 
-int		switchretok(shell *st, t_dol *dol, char **trad, int a)
+int		switchretok(t_shell *st, t_dol *dol, char **trad, int a)
 {
 	if (dol->first[0] == '\0' && dol->after[0] == '\0' &&
 		dol->env[a + 1] != ' ' && dol->env[ft_strlen(dol->env) - 1] != ' ')

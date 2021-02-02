@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-int		dopipe(shell *st)
+int		dopipe(t_shell *st)
 {
 	int		pop[2];
 	pid_t	cpid;
@@ -39,7 +39,7 @@ int		dopipe(shell *st)
 	return (0);
 }
 
-int		ft_pipe(shell *st)
+int		ft_pipe(t_shell *st)
 {
 	if (!st->pipe->next)
 	{

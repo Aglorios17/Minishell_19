@@ -12,7 +12,7 @@
 
 #include "../../../include/minishell.h"
 
-int	cdhome(shell *st, char *line, char *tmp, char *env)
+int	cdhome(t_shell *st, char *line, char *tmp, char *env)
 {
 	int i;
 
@@ -36,7 +36,7 @@ int	cdhome(shell *st, char *line, char *tmp, char *env)
 	return (cdhomereturn(st, line, tmp));
 }
 
-int	cderror(shell *st, char *tmp)
+int	cderror(t_shell *st, char *tmp)
 {
 	st->oldpwd = tmp;
 	write(1, "minishell: ", 11);
@@ -45,7 +45,7 @@ int	cderror(shell *st, char *tmp)
 	return (0);
 }
 
-int	cdwave(shell *st, char *env)
+int	cdwave(t_shell *st, char *env)
 {
 	int i;
 
@@ -69,7 +69,7 @@ int	cdwave(shell *st, char *env)
 	return (0);
 }
 
-int	docd(shell *st, char *line, char *tmp)
+int	docd(t_shell *st, char *line, char *tmp)
 {
 	if (chdir(st->pwd) < 0)
 	{
@@ -85,7 +85,7 @@ int	docd(shell *st, char *line, char *tmp)
 	return (1);
 }
 
-int	ft_cd(shell *st)
+int	ft_cd(t_shell *st)
 {
 	char	*line;
 	char	*tmp;

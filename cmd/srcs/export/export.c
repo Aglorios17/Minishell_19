@@ -12,7 +12,7 @@
 
 #include "../../../include/minishell.h"
 
-int		ft_pwd_oldpwd(shell *st, char *tmp, int i)
+int		ft_pwd_oldpwd(t_shell *st, char *tmp, int i)
 {
 	if (!ft_strncmp(tmp, "PWD=", i))
 	{
@@ -29,7 +29,7 @@ int		ft_pwd_oldpwd(shell *st, char *tmp, int i)
 	return (0);
 }
 
-int		ft_addexit(shell *st, char *tmp, char *tmp2, int i)
+int		ft_addexit(t_shell *st, char *tmp, char *tmp2, int i)
 {
 	int		a;
 	char	*fri;
@@ -53,7 +53,7 @@ int		ft_addexit(shell *st, char *tmp, char *tmp2, int i)
 	return (a);
 }
 
-int		ft_addinenv(shell *st, char *tmp, char *tmp2, int i)
+int		ft_addinenv(t_shell *st, char *tmp, char *tmp2, int i)
 {
 	int a;
 
@@ -77,7 +77,7 @@ int		ft_addinenv(shell *st, char *tmp, char *tmp2, int i)
 	return (0);
 }
 
-int		exportswitch(shell *st, char *tmp, int err)
+int		exportswitch(t_shell *st, char *tmp, int err)
 {
 	char	*tmp2;
 	int		i;
@@ -97,7 +97,7 @@ int		exportswitch(shell *st, char *tmp, int err)
 	return (err);
 }
 
-int		ft_export(shell *st)
+int		ft_export(t_shell *st)
 {
 	char	*tmp;
 	int		err;

@@ -12,7 +12,7 @@
 
 #include "../../../include/minishell.h"
 
-int	ft_syntax_redir3(shell *st, int a)
+int	ft_syntax_redir3(t_shell *st, int a)
 {
 	if (st->line[a] && (st->line[a] == ';' || st->line[a] == '|'))
 	{
@@ -31,7 +31,7 @@ int	ft_syntax_redir3(shell *st, int a)
 	return (0);
 }
 
-int	ft_syntax_redir2(shell *st, int a)
+int	ft_syntax_redir2(t_shell *st, int a)
 {
 	if (st->line[a] == ';' || st->line[a] == '|')
 	{
@@ -46,7 +46,7 @@ int	ft_syntax_redir2(shell *st, int a)
 	return (0);
 }
 
-int	ft_syntax_redir(shell *st, int a)
+int	ft_syntax_redir(t_shell *st, int a)
 {
 	if (st->line[a] == '>')
 	{

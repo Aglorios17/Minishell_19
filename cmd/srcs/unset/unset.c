@@ -12,7 +12,7 @@
 
 #include "../../../include/minishell.h"
 
-int	ft_error_pwd_oldpwd(shell *st, char *un)
+int	ft_error_pwd_oldpwd(t_shell *st, char *un)
 {
 	if (!ft_strncmp(un, "PWD\0", ft_strlen(un)))
 	{
@@ -27,7 +27,7 @@ int	ft_error_pwd_oldpwd(shell *st, char *un)
 	return (0);
 }
 
-int	ft_error_unset(shell *st, char *un)
+int	ft_error_unset(t_shell *st, char *un)
 {
 	ft_error_pwd_oldpwd(st, un);
 	if (un[0] == '\0')
@@ -52,7 +52,7 @@ int	ft_error_unset(shell *st, char *un)
 	return (1);
 }
 
-int	do_unset(shell *st, char *un, t_list *tmp, t_list *previous)
+int	do_unset(t_shell *st, char *un, t_list *tmp, t_list *previous)
 {
 	if (!ft_strncmp(un, (char *)previous->content, ft_strlen(un)))
 	{
@@ -81,7 +81,7 @@ int	do_unset(shell *st, char *un, t_list *tmp, t_list *previous)
 	return (1);
 }
 
-int	ft_unset(shell *st)
+int	ft_unset(t_shell *st)
 {
 	t_list	*tmp;
 	t_list	*previous;

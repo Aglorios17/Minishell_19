@@ -12,7 +12,7 @@
 
 #include "../../../include/minishell.h"
 
-int	ft_flagdq(shell *st, t_dol *dol, int a)
+int	ft_flagdq(t_shell *st, t_dol *dol, int a)
 {
 	free((char *)st->tokens->content);
 	st->tokens->content = ft_strdup(&dol->env[a + 1]);
@@ -22,7 +22,7 @@ int	ft_flagdq(shell *st, t_dol *dol, int a)
 	return (1);
 }
 
-int	tradnull(shell *st, t_dol *dol, char **trad, int a)
+int	tradnull(t_shell *st, t_dol *dol, char **trad, int a)
 {
 	if (dol->first[0] != '\0')
 	{

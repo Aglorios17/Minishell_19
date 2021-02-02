@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-int		commandline(shell *st)
+int		commandline(t_shell *st)
 {
 	if (ft_tokens(st) == 1)
 		st->status = 1;
@@ -31,7 +31,7 @@ int		commandline(shell *st)
 	return (0);
 }
 
-int		mainprocess(shell *st)
+int		mainprocess(t_shell *st)
 {
 	ft_cutline(st);
 	while (st->cutline)

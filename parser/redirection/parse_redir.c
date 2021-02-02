@@ -12,7 +12,7 @@
 
 #include "../../include/minishell.h"
 
-int			ft_parse_redir4(shell *st, int a)
+int			ft_parse_redir4(t_shell *st, int a)
 {
 	if (!ft_strcmp(st->redir[a], "<"))
 	{
@@ -36,7 +36,7 @@ int			ft_parse_redir4(shell *st, int a)
 	return (0);
 }
 
-int			ft_parse_redir3(shell *st, int a)
+int			ft_parse_redir3(t_shell *st, int a)
 {
 	if (st->redir[1] == NULL)
 	{
@@ -60,7 +60,7 @@ int			ft_parse_redir3(shell *st, int a)
 	return (0);
 }
 
-void		ft_parse_redir2(shell *st, int a)
+void		ft_parse_redir2(t_shell *st, int a)
 {
 	int		i;
 	char	*new;
@@ -81,7 +81,7 @@ void		ft_parse_redir2(shell *st, int a)
 	}
 }
 
-int			ft_parse_redir0(shell *st, int a)
+int			ft_parse_redir0(t_shell *st, int a)
 {
 	while (st->redir[a])
 	{
@@ -94,7 +94,7 @@ int			ft_parse_redir0(shell *st, int a)
 	return (0);
 }
 
-int			ft_parse_redir(shell *st)
+int			ft_parse_redir(t_shell *st)
 {
 	int		a;
 	char	*tmp2;

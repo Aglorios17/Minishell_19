@@ -26,7 +26,7 @@ int			ft_isinstring(char *str, char c)
 	return (0);
 }
 
-int			ft_check_errorredir(shell *st)
+int			ft_check_errorredir(t_shell *st)
 {
 	char *tokens;
 	char *tokensnext;
@@ -50,7 +50,7 @@ int			ft_check_errorredir(shell *st)
 	return (0);
 }
 
-int			ft_check_redir(shell *st)
+int			ft_check_redir(t_shell *st)
 {
 	st->redirnext = NULL;
 	st->firsttok = st->tokens;
@@ -65,7 +65,7 @@ int			ft_check_redir(shell *st)
 	return (0);
 }
 
-int			ft_redirections_norme(shell *st)
+int			ft_redirections_norme(t_shell *st)
 {
 	if (ft_check_redir(st) == 1)
 	{
@@ -83,7 +83,7 @@ int			ft_redirections_norme(shell *st)
 	return (0);
 }
 
-int			ft_redirections(shell *st)
+int			ft_redirections(t_shell *st)
 {
 	char	*tokens;
 

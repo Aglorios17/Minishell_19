@@ -43,7 +43,7 @@ char	*ft_backenv(char *tmp, char *tmp2, int i)
 	return (tmp2);
 }
 
-char	*ft_recupvalenv(shell *st, char *tmp, char *tmp2, char *fri)
+char	*ft_recupvalenv(t_shell *st, char *tmp, char *tmp2, char *fri)
 {
 	int i;
 	int a;
@@ -68,7 +68,7 @@ char	*ft_recupvalenv(shell *st, char *tmp, char *tmp2, char *fri)
 	return (tmp2);
 }
 
-int		ft_writenoparam(shell *st, char *tmp, char *tmp2, char *fri)
+int		ft_writenoparam(t_shell *st, char *tmp, char *tmp2, char *fri)
 {
 	tmp2 = ft_recupvalenv(st, tmp, tmp2, fri);
 	write(1, "declare -x ", 11);
@@ -79,7 +79,7 @@ int		ft_writenoparam(shell *st, char *tmp, char *tmp2, char *fri)
 	return (0);
 }
 
-int		ft_export_noparam(shell *st)
+int		ft_export_noparam(t_shell *st)
 {
 	char	*tmp;
 	char	*fri;

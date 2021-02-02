@@ -12,7 +12,7 @@
 
 #include "../../../include/minishell.h"
 
-int	open_pathcd(shell *st, char *path)
+int	open_pathcd(t_shell *st, char *path)
 {
 	if (errno == 13)
 	{
@@ -37,7 +37,7 @@ int	open_pathcd(shell *st, char *path)
 	return (1);
 }
 
-int	cdhomereturn(shell *st, char *line, char *tmp)
+int	cdhomereturn(t_shell *st, char *line, char *tmp)
 {
 	if (chdir(line) < 0)
 	{

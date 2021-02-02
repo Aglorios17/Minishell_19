@@ -12,7 +12,7 @@
 
 #include "../../../include/minishell.h"
 
-int	ft_error4(shell *st, char *cmd, struct stat b)
+int	ft_error4(t_shell *st, char *cmd, struct stat b)
 {
 	DIR		*dir;
 
@@ -33,7 +33,7 @@ int	ft_error4(shell *st, char *cmd, struct stat b)
 	return (1);
 }
 
-int	ft_directory_error(shell *st, int nb)
+int	ft_directory_error(t_shell *st, int nb)
 {
 	write(2, "minishell: ", 11);
 	write(2, (char *)st->tokens->content,
@@ -43,7 +43,7 @@ int	ft_directory_error(shell *st, int nb)
 	return (0);
 }
 
-int	ft_directory_error2(shell *st, int nb)
+int	ft_directory_error2(t_shell *st, int nb)
 {
 	write(2, "minishell: ", 11);
 	write(2, (char *)st->tokens->content,
@@ -53,7 +53,7 @@ int	ft_directory_error2(shell *st, int nb)
 	return (0);
 }
 
-int	ft_notfound_error(shell *st, int nb)
+int	ft_notfound_error(t_shell *st, int nb)
 {
 	write(2, "minishell: ", 11);
 	write(2, (char *)st->tokens->content,
@@ -63,7 +63,7 @@ int	ft_notfound_error(shell *st, int nb)
 	return (0);
 }
 
-int	ft_permission_error(shell *st, int nb, char *str)
+int	ft_permission_error(t_shell *st, int nb, char *str)
 {
 	write(2, "minishell: ", 11);
 	write(2, str, ft_strlen(str));

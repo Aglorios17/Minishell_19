@@ -12,7 +12,7 @@
 
 #include "../../include/minishell.h"
 
-char	*ft_traduction6(shell *st, char *tmp)
+char	*ft_traduction6(t_shell *st, char *tmp)
 {
 	char *fri;
 
@@ -23,7 +23,7 @@ char	*ft_traduction6(shell *st, char *tmp)
 	return (tmp);
 }
 
-char	*ft_traduction5(shell *st, char *tmp)
+char	*ft_traduction5(t_shell *st, char *tmp)
 {
 	st->ret = 0;
 	free(st->tmpq);
@@ -46,7 +46,7 @@ char	*ft_traduction5(shell *st, char *tmp)
 	return (tmp);
 }
 
-char	*ft_traduction4(shell *st, char *tmp, int b)
+char	*ft_traduction4(t_shell *st, char *tmp, int b)
 {
 	char *back;
 	char *fri;

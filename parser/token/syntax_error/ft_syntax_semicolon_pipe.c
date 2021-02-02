@@ -12,7 +12,7 @@
 
 #include "../../../include/minishell.h"
 
-int	ft_syntax_pipe3(shell *st, int a, int flagspace)
+int	ft_syntax_pipe3(t_shell *st, int a, int flagspace)
 {
 	if (st->line[a] == '|' && flagspace == 0)
 	{
@@ -34,7 +34,7 @@ int	ft_syntax_pipe3(shell *st, int a, int flagspace)
 	return (0);
 }
 
-int	ft_syntax_pipe2(shell *st, int a, int flagspace)
+int	ft_syntax_pipe2(t_shell *st, int a, int flagspace)
 {
 	if (!st->line[a])
 	{
@@ -60,7 +60,7 @@ int	ft_syntax_pipe2(shell *st, int a, int flagspace)
 	return (0);
 }
 
-int	ft_syntax_pipe(shell *st, int a)
+int	ft_syntax_pipe(t_shell *st, int a)
 {
 	int	flagspace;
 
@@ -81,7 +81,7 @@ int	ft_syntax_pipe(shell *st, int a)
 	return (a);
 }
 
-int	ft_syntax_semicolon2(shell *st, int a)
+int	ft_syntax_semicolon2(t_shell *st, int a)
 {
 	if (st->line[a] == '|')
 	{
@@ -100,7 +100,7 @@ int	ft_syntax_semicolon2(shell *st, int a)
 	return (0);
 }
 
-int	ft_syntax_semicolon(shell *st, int a)
+int	ft_syntax_semicolon(t_shell *st, int a)
 {
 	if (st->line[a] == ';')
 	{

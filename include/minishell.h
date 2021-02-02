@@ -22,12 +22,13 @@
 # include <sys/wait.h>
 # include <dirent.h>
 # include "../libft/libft.h"
+
 int prompt;
 int pid;
 int pid2;
 int nc;
 
-typedef struct	mini
+typedef struct	s_mini
 {
 	char		*line;
 	char		*pwd;
@@ -49,7 +50,7 @@ typedef struct	mini
 	int			pipefd;
 	int			fdout;
 	int			fdone;
-	int			itrad;                   //// norme trad
+	int			itrad;
 	int			fdredir;
 	int			rd;
 	char		**redir;
@@ -63,7 +64,7 @@ typedef struct	mini
 	t_list		*pipe;
 	t_list		*firstpipe;
 	t_list		*redirection;
-}				shell;
+}				t_shell;
 
 typedef struct	s_sekot
 {
@@ -75,6 +76,22 @@ typedef struct	s_sekot
 	char		*tmp2;
 }				t_sekot;
 
+typedef struct	s_retok
+{
+	int			a;
+	int			b;
+	char		**trad;
+	char		*backs;
+	char		*first;
+	char		*after;
+	char		*tmp2;
+	char		*env;
+	int			adol;
+	char		*new;
+	int			count;
+	char		*tmp;
+}				t_retok;
+
 typedef struct	s_dol
 {
 	int			cafter;
@@ -85,152 +102,145 @@ typedef struct	s_dol
 	char		*backs;
 	t_list		*nex;
 }				t_dol;
-//////////// tokens /////////////
 
-int ft_tokens(shell *st);
-int	ft_checkspace(char *line, t_sekot *sekot);
-int ft_cleantokens(shell *st);
-char *ft_traduction(shell *st, char *tmp);
-int	ft_checkifsimplequote2(char *line, int i, int a);
-int	ft_checkifsimplequote3(char *line, int i, t_sekot *sekot);
-char	*ft_traduction4(shell *st, char *tmp, int b);
-char	*ft_traduction5(shell *st, char *tmp);
-char	*ft_traduction6(shell *st, char *tmp);
-int ft_simple_quote(shell *st, char *tmp, int a);
-int ft_double_quote(shell *st, char *tmp, int a);
-int	ft_back(char *tmp, int a);
+int				ft_tokens(t_shell *st);
+int				ft_checkspace(char *line, t_sekot *sekot);
+int				ft_cleantokens(t_shell *st);
+char			*ft_traduction(t_shell *st, char *tmp);
+int				ft_checkifsimplequote2(char *line, int i, int a);
+int				ft_checkifsimplequote3(char *line, int i, t_sekot *sekot);
+char			*ft_traduction4(t_shell *st, char *tmp, int b);
+char			*ft_traduction5(t_shell *st, char *tmp);
+char			*ft_traduction6(t_shell *st, char *tmp);
+int				ft_simple_quote(t_shell *st, char *tmp, int a);
+int				ft_double_quote(t_shell *st, char *tmp, int a);
+int				ft_back(char *tmp, int a);
 
-/////////// command /////////////
+int				ft_command(t_shell *st);
+int				ft_checkcommand(t_shell *st);
+int				ft_echo(t_shell *st);
+int				ft_exit(t_shell *st);
+char			*ft_pwd(t_shell *st);
+int				oldpwd(t_shell *st);
 
-int ft_command(shell *st);
-int	ft_checkcommand(shell *st);
-int ft_echo(shell *st);
-int ft_exit(shell *st);
-char *ft_pwd(shell *st);
-int oldpwd(shell *st);
+int				ft_cd(t_shell *st);
+int				cdhomereturn(t_shell *st, char *line, char *tmp);
+int				open_pathcd(t_shell *st, char *path);
 
-/////////// cd //////////////////
+int				ft_export(t_shell *st);
+int				ft_export_noparam(t_shell *st);
+int				ft_errornoval(t_shell *st, char *tmp);
+int				ft_errorbefegal(t_shell *st, char *tmp);
+int				ft_write_error(t_shell *st, char *tmp);
+int				ft_exporterror(t_shell *st, char *tmp);
 
-int ft_cd(shell *st);
-int	cdhomereturn(shell *st, char *line, char *tmp);
-int	open_pathcd(shell *st, char *path);
+int				ft_unset(t_shell *st);
 
-////////// export //////////////
+int				ft_envv(t_shell *st, char **envp);
+int				ft_dollars(t_shell *st, char *tmp, int i);
+void			freedol(t_dol *dol);
+int				getvaluedol(t_shell *st, t_dol *dol);
+int				ft_statusdol(t_shell *st, t_dol *dol);
+int				ft_shlvldol(t_shell *st, t_dol *dol, char *tmp, int i);
+int				goretokens(t_shell *st, t_dol *dol);
+int				getafterdol(t_dol *dol, char *tmp, int i);
 
-int ft_export(shell *st);
-int ft_export_noparam(shell *st);
-int	ft_errornoval(shell *st, char *tmp);
-int	ft_errorbefegal(shell *st, char *tmp);
-int	ft_write_error(shell *st, char *tmp);
-int	ft_exporterror(shell *st, char *tmp);
+int				ft_retokens(t_shell *st, t_dol *dol);
+int				ft_flagdq(t_shell *st, t_dol *dol, int a);
+int				tradnull(t_shell *st, t_dol *dol, char **trad, int a);
+int				readdtok(t_shell *st, t_dol *dol, char **trad, int a);
+int				retok2first(t_shell *st, t_dol *dol, char **trad, int a);
+int				retok2tradunnull(t_shell *st, t_dol *dol, char **trad);
+int				retok2tok(t_shell *st, t_dol *dol, char **trad);
+char			*retok2cafter(t_dol *dol, char **trad, int a);
+char			*retokjoin(t_dol *dol, char **trad, int a);
+int				retok2(t_shell *st, t_dol *dol, char **trad, int a);
+int				spaceafter(t_shell *st, t_dol *dol, char **trad, int a);
+int				retokspaceafter(t_shell *st, t_dol *dol, char **trad, int a);
+int				switchretok(t_shell *st, t_dol *dol, char **trad, int a);
 
+void			ft_init_retok(t_retok *retok, char *tmp, int i);
+int				ft_dolredic(t_shell *st, char *tmp, int i);
+void			ft_dolredir2(t_retok *retok, char *tmp);
+int				ft_dolredir3(t_retok *retok, t_shell *st, char *tmp);
+void			ft_dolredir4(t_retok *retok, t_shell *st, char *tmp);
+void			ft_dolredir5(t_retok *retok, t_shell *st);
+void			ft_dolredir6(t_retok *retok, t_shell *st, char *tmp);
+void			ft_init_retok2(t_retok *retok, char *tmp);
+int				ft_retokensrd(t_shell *st, char *lol, t_retok *retok);
+int				ft_retokensrdpart2(t_retok *retok, t_shell *st);
+void			ft_retokensrd2(t_retok *retok);
+int				ft_retokensrd3(t_retok *retok, t_shell *st);
+int				ft_retokensrd4(t_retok *retok, t_shell *st);
+void			ft_retokensrd5(t_retok *retok, t_shell *st);
+void			ft_retokensrd5_5(t_retok *retok, t_shell *st);
+void			ft_retokensrd6(t_retok *retok, t_shell *st);
+void			ft_retokensrd7(t_retok *retok, t_shell *st);
+char			*ft_shlvl(char *line, int i);
 
-////////// unset //////////////
+int				ft_cutline(t_shell *st);
+int				ft_cutpipe(t_shell *st);
+char			**ft_splitms(char const *str, char c, t_shell *st);
+int				ft_malloc_tab(char const *str, char c);
+int				ft_malloc_tab2(char const *str, char c, int a);
 
-int ft_unset(shell *st);
+int				ft_exec(t_shell *st);
+char			*recupexp(t_shell *st);
+void			ft_exec2(t_shell *st, int a, char **ar, char **en);
+int				ft_error(t_shell *st, struct stat b);
+int				ft_error2(t_shell *st, char *tmp, int i, struct stat b);
+int				ft_error3(t_shell *st, char *tmp, int i, struct stat b);
+int				ft_error4(t_shell *st, char *cmd, struct stat b);
+int				check_path(t_shell *st, char *dollars);
+char			**recuppath(t_shell *st, char **tab);
+int				open_pathcd(t_shell *st, char *path);
+int				ft_directory_error(t_shell *st, int nb);
+int				ft_directory_error2(t_shell *st, int nb);
+int				ft_notfound_error(t_shell *st, int nb);
+int				ft_permission_error(t_shell *st, int nb, char *str);
 
-////////// envv //////////////
+int				ft_redirections(t_shell *st);
+int				ft_redirections_norme(t_shell *st);
+t_list			*ft_redirections2(t_shell *st, char *supp, char *supp2,
+				char *supp3);
+int				ft_parse_redir(t_shell *st);
+int				ft_parse_redir0(t_shell *st, int a);
+void			ft_parse_redir2(t_shell *st, int a);
+int				ft_parse_redir3(t_shell *st, int a);
+int				ft_parse_redir4(t_shell *st, int a);
+int				ft_check_redir(t_shell *st);
+int				ft_check_errorredir(t_shell *st);
+int				ft_check_errorredir2(char *tokens);
+int				ft_check_errorredir3(char *tokens);
+int				ft_check_errorredir4(char *tokens, char *tokensnext);
+int				ft_check_errorredir5(char *tokensnext);
+int				ft_check_errorredir6(char *tokens, char *tokensnext);
+int				ft_isinstring(char *str, char c);
 
-int ft_envv(shell *st, char **envp);
-int	ft_dollars(shell *st, char *tmp, int i);
-void	freedol(t_dol *dol);
-int	getvaluedol(shell *st, t_dol *dol);
-int	ft_statusdol(shell *st, t_dol *dol);
-int	ft_shlvldol(shell *st, t_dol *dol, char *tmp, int i);
-int	goretokens(shell *st, t_dol *dol);
-int	getafterdol(t_dol *dol, char *tmp, int i);
-//////////// retokens ///////////
-int	ft_retokens(shell *st, t_dol *dol);
-int	ft_flagdq(shell *st, t_dol *dol, int a);
-int	tradnull(shell *st, t_dol *dol, char **trad, int a);
-int	readdtok(shell *st, t_dol *dol, char **trad, int a);
-int	retok2first(shell *st, t_dol *dol, char **trad, int a);
-int	retok2tradunnull(shell *st, t_dol *dol, char **trad);
-int	retok2tok(shell *st, t_dol *dol, char **trad);
-char	*retok2cafter(t_dol *dol, char **trad, int a);
-char	*retokjoin(t_dol *dol, char **trad, int a);
-int	retok2(shell *st, t_dol *dol, char **trad, int a);
-int	spaceafter(shell *st, t_dol *dol, char **trad, int a);
-int		retokspaceafter(shell *st, t_dol *dol, char **trad, int a);
-int	switchretok(shell *st, t_dol *dol, char **trad, int a);
+int				lstcmd(t_shell *st, char *line);
+char			**ft_tabreturn(t_list *list);
+void			ft_freetab(char **tab);
+int				ft_verif_syntax(t_shell *st);
+int				ft_verif_syntax2(t_shell *st);
+int				ft_skip_quotes(t_shell *st, int a);
+int				ft_syntax_redir(t_shell *st, int a);
+int				ft_syntax_redir2(t_shell *st, int a);
+int				ft_syntax_redir3(t_shell *st, int a);
+int				ft_syntax_semicolon(t_shell *st, int a);
+int				ft_syntax_semicolon2(t_shell *st, int a);
+int				ft_syntax_pipe(t_shell *st, int a);
+int				ft_syntax_pipe2(t_shell *st, int a, int flagspace);
+int				ft_syntax_pipe3(t_shell *st, int a, int flagspace);
 
+void			signalhandler(int signum);
+void			signalhandler2(int signum);
+void			ft_init_struct(t_shell *st);
+int				ft_pipe(t_shell *st);
+int				mainprocess(t_shell *st);
+int				commandline(t_shell *st);
 
-//////////// retokens ///////////
-int	ft_dolredic(shell *st, char *tmp, int i);
-int	ft_retokensrd(shell *st, char *env, char *first, char *after, char *tmp);
-char *ft_shlvl(char *line, int i);
-
-////////// cut ////////////////
-
-int ft_cutline(shell *st);
-int ft_cutpipe(shell *st);
-char **ft_splitms(char const *str, char c, shell *st);
-int	ft_malloc_tab(char const *str, char c);
-int	ft_malloc_tab2(char const *str, char c, int a);
-
-////////// exec ////////////////
-
-int 	ft_exec(shell *st);
-char	*recupexp(shell *st);
-void	ft_exec2(shell *st, int a, char **ar, char **en);
-int		ft_error(shell *st, struct stat b);
-int		ft_error2(shell *st, char *tmp, int i, struct stat b);
-int		ft_error3(shell *st, char *tmp, int i, struct stat b);
-int		ft_error4(shell *st, char *cmd, struct stat b);
-int 	check_path(shell *st, char *dollars);
-char	**recuppath(shell *st, char **tab);
-int 	open_pathcd(shell *st, char *path);
-int		ft_directory_error(shell *st, int nb);
-int		ft_directory_error2(shell *st, int nb);
-int		ft_notfound_error(shell *st, int nb);
-int		ft_permission_error(shell *st, int nb, char *str);
-
-/////////// redirections ///////
-
-int		ft_redirections(shell *st);
-int		ft_redirections_norme(shell *st);
-t_list	*ft_redirections2(shell *st, char *supp, char *supp2, char *supp3);
-int		ft_parse_redir(shell *st);
-int		ft_parse_redir0(shell *st, int a);
-void	ft_parse_redir2(shell *st, int a);
-int		ft_parse_redir3(shell *st, int a);
-int		ft_parse_redir4(shell *st, int a);
-int		ft_check_redir(shell *st);
-int		ft_check_errorredir(shell *st);
-int		ft_check_errorredir2(char *tokens);
-int		ft_check_errorredir3(char *tokens);
-int		ft_check_errorredir4(char *tokens, char *tokensnext);
-int		ft_check_errorredir5(char *tokensnext);
-int		ft_check_errorredir6(char *tokens, char *tokensnext);
-int		ft_isinstring(char *str, char c);
-
-/////////// utils /////////////
-
-int		lstcmd(shell *st, char *line);
-char	**ft_tabreturn(t_list *list);
-void	ft_freetab(char **tab);
-int		ft_verif_syntax(shell *st);
-int		ft_verif_syntax2(shell *st);
-int		ft_skip_quotes(shell *st, int a);
-int 	ft_syntax_redir(shell *st, int a);
-int		ft_syntax_redir2(shell *st, int a);
-int		ft_syntax_redir3(shell *st, int a);
-int		ft_syntax_semicolon(shell *st, int a);
-int		ft_syntax_semicolon2(shell *st, int a);
-int		ft_syntax_pipe(shell *st, int a);
-int		ft_syntax_pipe2(shell *st, int a, int flagspace);
-int		ft_syntax_pipe3(shell *st, int a, int flagspace);
-
-/////////// main fonction /////////////
-void	signalhandler(int signum);
-void	signalhandler2(int signum);
-void	ft_init_struct(shell *st);
-int		ft_pipe(shell *st);
-int		mainprocess(shell *st);
-int		commandline(shell *st);
-////////////// free ////////////////
-int		ft_free_end(shell *st);
-int		ft_free_command(shell *st);
-void	ft_free_list(t_list *list, t_list *first);
+int				ft_free_end(t_shell *st);
+int				ft_free_command(t_shell *st);
+void			ft_free_list(t_list *list, t_list *first);
 
 #endif

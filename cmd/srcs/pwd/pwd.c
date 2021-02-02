@@ -12,14 +12,14 @@
 
 #include "../../../include/minishell.h"
 
-char	*ft_pwd(shell *st)
+char	*ft_pwd(t_shell *st)
 {
 	free(st->pwd);
 	st->pwd = getcwd(NULL, 0);
 	return (st->pwd);
 }
 
-int		oldpwd(shell *st)
+int		oldpwd(t_shell *st)
 {
 	char	*tmp;
 	int		i;

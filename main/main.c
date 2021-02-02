@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-int		test(shell *st, char **argv)
+int		test(t_shell *st, char **argv)
 {
 	if (argv[2] && !argv[3])
 	{
@@ -23,7 +23,7 @@ int		test(shell *st, char **argv)
 	return (0);
 }
 
-int		codeexec(shell *st)
+int		codeexec(t_shell *st)
 {
 	signal(SIGINT, signalhandler);
 	signal(SIGQUIT, signalhandler2);
@@ -46,7 +46,7 @@ int		codeexec(shell *st)
 
 int		main(int argc, char **argv, char **envp)
 {
-	shell	st;
+	t_shell	st;
 
 	ft_init_struct(&st);
 	pid = 1;

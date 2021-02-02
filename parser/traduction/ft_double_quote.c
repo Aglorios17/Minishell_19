@@ -12,7 +12,7 @@
 
 #include "../../include/minishell.h"
 
-char	*ft_traddollstr(shell *st, char *tmp2, char *re, int b)
+char	*ft_traddollstr(t_shell *st, char *tmp2, char *re, int b)
 {
 	char *fri;
 
@@ -29,7 +29,7 @@ char	*ft_traddollstr(shell *st, char *tmp2, char *re, int b)
 	return (re);
 }
 
-char	*ft_recheckstr(shell *st, char *tmp2, int b)
+char	*ft_recheckstr(t_shell *st, char *tmp2, int b)
 {
 	char	*re;
 	char	*fri;
@@ -71,7 +71,7 @@ char	*newstr(char *tmp, int c, int b, int a)
 	return (NULL);
 }
 
-int		ft_double_quote(shell *st, char *tmp, int a)
+int		ft_double_quote(t_shell *st, char *tmp, int a)
 {
 	char	*tmp2;
 	int		b;

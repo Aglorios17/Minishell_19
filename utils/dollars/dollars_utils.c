@@ -20,7 +20,7 @@ void	freedol(t_dol *dol)
 	free(dol->env);
 }
 
-int		getvaluedol(shell *st, t_dol *dol)
+int		getvaluedol(t_shell *st, t_dol *dol)
 {
 	char *fri;
 
@@ -40,7 +40,7 @@ int		getvaluedol(shell *st, t_dol *dol)
 	return (0);
 }
 
-int		ft_statusdol(shell *st, t_dol *dol)
+int		ft_statusdol(t_shell *st, t_dol *dol)
 {
 	free(st->tmpq);
 	st->tmpq = ft_itoa(st->status);
@@ -48,7 +48,7 @@ int		ft_statusdol(shell *st, t_dol *dol)
 	return (1);
 }
 
-int		ft_shlvldol(shell *st, t_dol *dol, char *tmp, int i)
+int		ft_shlvldol(t_shell *st, t_dol *dol, char *tmp, int i)
 {
 	int		a;
 	char	*fri;
@@ -63,7 +63,7 @@ int		ft_shlvldol(shell *st, t_dol *dol, char *tmp, int i)
 	return (1);
 }
 
-int		goretokens(shell *st, t_dol *dol)
+int		goretokens(t_shell *st, t_dol *dol)
 {
 	if (dol->env == NULL)
 		dol->env = ft_strdup("=");

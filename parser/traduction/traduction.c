@@ -12,7 +12,7 @@
 
 #include "../../include/minishell.h"
 
-int		ft_quotes(shell *st, char *tmp, int i)
+int		ft_quotes(t_shell *st, char *tmp, int i)
 {
 	char	*fri;
 
@@ -27,7 +27,7 @@ int		ft_quotes(shell *st, char *tmp, int i)
 	return (i);
 }
 
-char	*ft_traduction3(shell *st, char *tmp)
+char	*ft_traduction3(t_shell *st, char *tmp)
 {
 	int		b;
 	char	*fri;
@@ -53,7 +53,7 @@ char	*ft_traduction3(shell *st, char *tmp)
 	return (tmp);
 }
 
-char	*ft_traduction2(shell *st, char *tmp)
+char	*ft_traduction2(t_shell *st, char *tmp)
 {
 	char	*fri;
 
@@ -66,7 +66,7 @@ char	*ft_traduction2(shell *st, char *tmp)
 	return (tmp);
 }
 
-void	ft_ifbackslash(shell *st)
+void	ft_ifbackslash(t_shell *st)
 {
 	if (st->tmpq)
 		free(st->tmpq);
@@ -76,7 +76,7 @@ void	ft_ifbackslash(shell *st)
 	st->new = ft_strdup("");
 }
 
-char	*ft_traduction(shell *st, char *tmp)
+char	*ft_traduction(t_shell *st, char *tmp)
 {
 	st->itrad = 0;
 	ft_ifbackslash(st);

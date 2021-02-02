@@ -12,7 +12,7 @@
 
 #include "../../include/minishell.h"
 
-int		ft_simple_quote(shell *st, char *tmp, int a)
+int		ft_simple_quote(t_shell *st, char *tmp, int a)
 {
 	int b;
 	int c;

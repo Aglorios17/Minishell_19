@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-int	ft_commandcd(shell *st, char *tmp, int i)
+int	ft_commandcd(t_shell *st, char *tmp, int i)
 {
 	if (ft_cd(st) == 1)
 	{
@@ -41,7 +41,7 @@ int	ft_commandcd(shell *st, char *tmp, int i)
 	return (0);
 }
 
-int	ft_commandenv(shell *st, char *tmp)
+int	ft_commandenv(t_shell *st, char *tmp)
 {
 	while (st->envv)
 	{
@@ -57,7 +57,7 @@ int	ft_commandenv(shell *st, char *tmp)
 	return (0);
 }
 
-int	ft_commandunset(shell *st)
+int	ft_commandunset(t_shell *st)
 {
 	st->tokens = st->tokens->next;
 	while (st->tokens)
@@ -69,14 +69,14 @@ int	ft_commandunset(shell *st)
 	return (0);
 }
 
-int	ft_commandpwd(shell *st)
+int	ft_commandpwd(t_shell *st)
 {
 	write(1, ft_pwd(st), ft_strlen(ft_pwd(st)));
 	write(1, "\n", 1);
 	return (0);
 }
 
-int	ft_command(shell *st)
+int	ft_command(t_shell *st)
 {
 	char	*tmp;
 	int		i;

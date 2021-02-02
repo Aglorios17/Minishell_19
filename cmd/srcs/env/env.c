@@ -12,7 +12,7 @@
 
 #include "../../../include/minishell.h"
 
-int		ft_checklevel(shell *st, char *tmp, int num)
+int		ft_checklevel(t_shell *st, char *tmp, int num)
 {
 	int		i;
 	char	*fri;
@@ -31,7 +31,7 @@ int		ft_checklevel(shell *st, char *tmp, int num)
 	return (1);
 }
 
-int		ft_checkenv(shell *st, char *tmp, int num, int s)
+int		ft_checkenv(t_shell *st, char *tmp, int num, int s)
 {
 	int		p;
 
@@ -54,7 +54,7 @@ int		ft_checkenv(shell *st, char *tmp, int num, int s)
 	return (s);
 }
 
-int		ft_getenv(shell *st, char **envp)
+int		ft_getenv(t_shell *st, char **envp)
 {
 	int a;
 
@@ -68,7 +68,7 @@ int		ft_getenv(shell *st, char **envp)
 	return (0);
 }
 
-int		ft_envv(shell *st, char **envp)
+int		ft_envv(t_shell *st, char **envp)
 {
 	int		s;
 	char	*tmp;

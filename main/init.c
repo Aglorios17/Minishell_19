@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-void	ft_init_struct2(shell *st)
+void	ft_init_struct2(t_shell *st)
 {
 	st->status = 0;
 	st->cutline = 0;
@@ -30,7 +30,7 @@ void	ft_init_struct2(shell *st)
 	st->line = NULL;
 }
 
-void	ft_init_struct(shell *st)
+void	ft_init_struct(t_shell *st)
 {
 	st->ret = 0;
 	st->quotes = 0;

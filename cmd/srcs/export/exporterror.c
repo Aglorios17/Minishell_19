@@ -12,7 +12,7 @@
 
 #include "../../../include/minishell.h"
 
-int		ft_exporterror(shell *st, char *tmp)
+int		ft_exporterror(t_shell *st, char *tmp)
 {
 	if (tmp[0] == '\0')
 	{
@@ -32,7 +32,7 @@ int		ft_exporterror(shell *st, char *tmp)
 	return (0);
 }
 
-int		ft_write_error(shell *st, char *tmp)
+int		ft_write_error(t_shell *st, char *tmp)
 {
 	write(1, "minishell: export: `", 20);
 	write(1, tmp, ft_strlen(tmp));
@@ -41,7 +41,7 @@ int		ft_write_error(shell *st, char *tmp)
 	return (0);
 }
 
-int		ft_errorbefegal(shell *st, char *tmp)
+int		ft_errorbefegal(t_shell *st, char *tmp)
 {
 	int		b;
 	char	*bef;
@@ -70,7 +70,7 @@ int		ft_errorbefegal(shell *st, char *tmp)
 	return (0);
 }
 
-int		ft_errornoval(shell *st, char *tmp)
+int		ft_errornoval(t_shell *st, char *tmp)
 {
 	int a;
 

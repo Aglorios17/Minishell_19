@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-int	inenv(shell *st, char *tmp)
+int	inenv(t_shell *st, char *tmp)
 {
 	int		a;
 	char	*tmp2;
@@ -40,7 +40,7 @@ int	inenv(shell *st, char *tmp)
 	return (0);
 }
 
-int	error(shell *st, char *tmp)
+int	error(t_shell *st, char *tmp)
 {
 	while (st->envv)
 	{
@@ -53,7 +53,7 @@ int	error(shell *st, char *tmp)
 	return (0);
 }
 
-int	lstcmd(shell *st, char *line)
+int	lstcmd(t_shell *st, char *line)
 {
 	int		i;
 	char	*tmp;

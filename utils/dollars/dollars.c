@@ -31,7 +31,7 @@ int		getafterdol(t_dol *dol, char *tmp, int i)
 	return (i);
 }
 
-int		ft_errordol(shell *st, t_dol *dol, int i)
+int		ft_errordol(t_shell *st, t_dol *dol, int i)
 {
 	char	*fri;
 
@@ -51,7 +51,7 @@ int		ft_errordol(shell *st, t_dol *dol, int i)
 	return (0);
 }
 
-void	ft_initdol(shell *st, t_dol *dol)
+void	ft_initdol(t_shell *st, t_dol *dol)
 {
 	dol->cafter = 0;
 	dol->nw = ft_strdup("");
@@ -78,7 +78,7 @@ int		getfirstdol(t_dol *dol, char *tmp, int a, int i)
 	return (0);
 }
 
-int		ft_dollars(shell *st, char *tmp, int i)
+int		ft_dollars(t_shell *st, char *tmp, int i)
 {
 	char	*tmp2;
 	t_dol	dol;

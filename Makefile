@@ -58,8 +58,10 @@ SRCS 			= main/main.c \
 					utils/dollars/retokens/retokens2.c \
 					utils/dollars/retokens/retokens3.c \
 					utils/dollars/retokens/retokens4.c \
-					utils/dollars/dolredic.c \
-					utils/dollars/retokensrd.c \
+					utils/dollars/dolredir/dolredic.c \
+					utils/dollars/dolredir/dolredic2.c \
+					utils/dollars/retokensrd/retokensrd.c \
+					utils/dollars/retokensrd/retokensrd2.c \
 					utils/splitms/ft_splitms.c \
 					utils/splitms/ft_splitms_norme.c \
 					utils/lst_cmd.c \

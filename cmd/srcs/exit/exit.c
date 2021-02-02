@@ -12,7 +12,7 @@
 
 #include "../../../include/minishell.h"
 
-int	ft_charerror(shell *st, int i, char *tmp)
+int	ft_charerror(t_shell *st, int i, char *tmp)
 {
 	if ((tmp[i] && (tmp[i] == '-' || tmp[i] == '+')) &&
 		tmp[i + 1] && ft_isdigit(tmp[i + 1]))
@@ -29,7 +29,7 @@ int	ft_charerror(shell *st, int i, char *tmp)
 	return (0);
 }
 
-int	ft_charinexit(shell *st, int i, int a, char *tmp)
+int	ft_charinexit(t_shell *st, int i, int a, char *tmp)
 {
 	i = 0;
 	tmp = (char *)st->tokens->next->content;
@@ -54,7 +54,7 @@ int	ft_charinexit(shell *st, int i, int a, char *tmp)
 	return (0);
 }
 
-int	exitspec(shell *st, int a, char *tmp)
+int	exitspec(t_shell *st, int a, char *tmp)
 {
 	if (tmp[0] == '-' && (tmp[a] && tmp[a] == '1') && tmp[a + 1] == '\0')
 	{
@@ -83,7 +83,7 @@ int	exitspec(shell *st, int a, char *tmp)
 	return (0);
 }
 
-int	doexit(shell *st, int a, char *tmp, long long result)
+int	doexit(t_shell *st, int a, char *tmp, long long result)
 {
 	if (tmp)
 		free(tmp);
@@ -111,7 +111,7 @@ int	doexit(shell *st, int a, char *tmp, long long result)
 	return (0);
 }
 
-int	ft_exit(shell *st)
+int	ft_exit(t_shell *st)
 {
 	int			i;
 	int			a;

@@ -66,7 +66,7 @@ void	ft_write_norme(const char *str, int d, int a, char **tab)
 	ft_freetab(tab);
 }
 
-char	**ft_write(const char *str, char c, char **tab, shell *st)
+char	**ft_write(const char *str, char c, char **tab, t_shell *st)
 {
 	int		a;
 	int		d;
@@ -94,7 +94,7 @@ char	**ft_write(const char *str, char c, char **tab, shell *st)
 	return (tab);
 }
 
-char	**ft_splitms(char const *s, char c, shell *st)
+char	**ft_splitms(char const *s, char c, t_shell *st)
 {
 	char	**tab;
 

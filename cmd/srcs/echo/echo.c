@@ -12,7 +12,7 @@
 
 #include "../../../include/minishell.h"
 
-int	ft_echo_n(shell *st, char *tm, t_list *tmp, int i)
+int	ft_echo_n(t_shell *st, char *tm, t_list *tmp, int i)
 {
 	while (st->tokens->next != NULL)
 	{
@@ -40,7 +40,7 @@ int	ft_echo_n(shell *st, char *tm, t_list *tmp, int i)
 	return (i);
 }
 
-int	ft_echo(shell *st)
+int	ft_echo(t_shell *st)
 {
 	t_list	*tmp;
 	char	*tm;

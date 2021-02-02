@@ -12,7 +12,7 @@
 
 #include "../../../include/minishell.h"
 
-int		ft_error3(shell *st, char *tmp, int i, struct stat b)
+int		ft_error3(t_shell *st, char *tmp, int i, struct stat b)
 {
 	if (tmp[i + 1] != '\0'
 		&& !ft_strncmp((char *)st->tokens->content, "whoami\0", 7))
@@ -22,7 +22,7 @@ int		ft_error3(shell *st, char *tmp, int i, struct stat b)
 	return (1);
 }
 
-int		ft_error2(shell *st, char *tmp, int i, struct stat b)
+int		ft_error2(t_shell *st, char *tmp, int i, struct stat b)
 {
 	char *cmd;
 
@@ -47,7 +47,7 @@ int		ft_error2(shell *st, char *tmp, int i, struct stat b)
 		return (0);
 }
 
-int		ft_error(shell *st, struct stat b)
+int		ft_error(t_shell *st, struct stat b)
 {
 	char	*tmp;
 	int		i;
@@ -71,7 +71,7 @@ int		ft_error(shell *st, struct stat b)
 		return (0);
 }
 
-void	ft_exec2(shell *st, int a, char **ar, char **en)
+void	ft_exec2(t_shell *st, int a, char **ar, char **en)
 {
 	if (st->cutline->next)
 		nc = 1;
@@ -85,7 +85,7 @@ void	ft_exec2(shell *st, int a, char **ar, char **en)
 	ft_freetab(en);
 }
 
-int		ft_exec(shell *st)
+int		ft_exec(t_shell *st)
 {
 	char		**ar;
 	char		**en;
