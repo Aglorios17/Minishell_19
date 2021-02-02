@@ -39,7 +39,7 @@ char	*ft_traduction3(t_shell *st, char *tmp)
 		tmp = ft_traduction4(st, tmp, b);
 		b = 1;
 	}
-	else if ((tmp[st->itrad] == '$' && b == 0 &&
+	else if (tmp[st->itrad + 1] && (tmp[st->itrad] == '$' && b == 0 &&
 		tmp[st->itrad + 1] != '\\' &&
 		(ft_isalnum(tmp[st->itrad + 1]) || tmp[st->itrad + 1] == '_' ||
 			tmp[st->itrad + 1] == '?')))
@@ -60,7 +60,10 @@ char	*ft_traduction2(t_shell *st, char *tmp)
 	fri = NULL;
 	st->itrad = ft_quotes(st, tmp, st->itrad);
 	fri = tmp;
-	tmp = ft_strjoin(st->new, &tmp[st->itrad + 1]);
+	if (tmp[st->itrad] && tmp[st->itrad + 1])
+		tmp = ft_strjoin(st->new, &tmp[st->itrad + 1]);
+	else
+		tmp = ft_strdup(st->new);
 	free(fri);
 	st->itrad = ft_strlen(st->new) - 1;
 	return (tmp);
@@ -85,9 +88,7 @@ char	*ft_traduction(t_shell *st, char *tmp)
 		if (tmp[st->itrad] == '"' || tmp[st->itrad] == '\'')
 			tmp = ft_traduction2(st, tmp);
 		else if (tmp[st->itrad] != '\0')
-		{
 			tmp = ft_traduction3(st, tmp);
-		}
 		st->itrad++;
 	}
 	free(st->new);

@@ -38,14 +38,15 @@ char	*ft_recheckstr(t_shell *st, char *tmp2, int b)
 	fri = NULL;
 	while (tmp2 && tmp2[b])
 	{
-		if (tmp2[b] == '$')
+		if (tmp2[b] && tmp2[b] == '$')
 		{
 			re = ft_traddollstr(st, tmp2, re, b);
 			b = st->pass;
 		}
 		else
 		{
-			if (tmp2[b] == '\\' && ft_strchr("\\$\"", tmp2[b + 1]))
+			if (tmp2[b] && tmp2[b + 1] &&
+				tmp2[b] == '\\' && ft_strchr("\\$\"", tmp2[b + 1]))
 				b++;
 			fri = re;
 			re = ft_charjoin(re, tmp2[b]);
@@ -87,7 +88,7 @@ int		ft_double_quote(t_shell *st, char *tmp, int a)
 	st->quotes++;
 	while (tmp[a])
 	{
-		if (tmp[a] == '"')
+		if (tmp[a] && tmp[a] == '"')
 			if ((tmp2 = newstr(tmp, c, b, a)) != NULL && st->quotes++)
 				break ;
 		c++;

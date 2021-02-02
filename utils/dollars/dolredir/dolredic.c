@@ -20,6 +20,7 @@ void	ft_init_retok(t_retok *retok, char *tmp, int i)
 	retok->first = ft_strdup("");
 	retok->after = NULL;
 	retok->adol = 0;
+	retok->a = 0;
 	retok->count = i;
 }
 
@@ -78,7 +79,7 @@ void	ft_dolredir2(t_retok *retok, char *tmp)
 	char *fri;
 
 	fri = NULL;
-	while (retok->a < retok->count)
+	while (tmp[retok->a] && retok->a < retok->count)
 	{
 		fri = retok->first;
 		retok->first = ft_charjoin(retok->first, tmp[retok->a]);

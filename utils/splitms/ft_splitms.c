@@ -26,9 +26,12 @@ char	*ft_write2(const char *str, char c, char **tab)
 			while (str[a] && str[a] != '"' && str[a] != '\'')
 				a++;
 		}
-		a++;
-		if (str[a] && str[a] == c && str[a - 1] == '\\')
+		if (str[a])
+		{
 			a++;
+			if (str[a] && str[a] == c && str[a - 1] == '\\')
+				a++;
+		}
 	}
 	dest = ft_substr(str, 0, a);
 	if (dest == NULL)
@@ -46,9 +49,12 @@ int		ft_write_norme2(const char *str, char c, int a)
 			while (str[a] && str[a] != '"' && str[a] != '\'')
 				a++;
 		}
-		a++;
-		if (str[a] && str[a] == c && str[a - 1] == '\\')
+		if (str[a])
+		{
 			a++;
+			if (str[a] && str[a] == c && str[a - 1] == '\\')
+				a++;
+		}
 	}
 	return (a);
 }

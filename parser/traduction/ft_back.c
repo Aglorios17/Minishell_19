@@ -19,12 +19,12 @@ int		ft_back(char *tmp, int a)
 	i = 0;
 	while (tmp && tmp[a])
 	{
-		while (tmp[a] == '\\')
+		while (tmp[a] && tmp[a] == '\\')
 		{
 			i++;
 			a++;
 		}
-		if (tmp[a] == '"')
+		if (tmp[a] && tmp[a] == '"')
 			return (i);
 		a++;
 	}

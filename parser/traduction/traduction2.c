@@ -18,7 +18,10 @@ char	*ft_traduction6(t_shell *st, char *tmp)
 
 	fri = NULL;
 	fri = tmp;
-	tmp = ft_strjoin(st->new, &tmp[st->pass + 1]);
+	if (tmp[st->pass + 1])
+		tmp = ft_strjoin(st->new, &tmp[st->pass + 1]);
+	else
+		tmp = ft_strdup(st->new);
 	free(fri);
 	return (tmp);
 }
@@ -62,7 +65,10 @@ char	*ft_traduction4(t_shell *st, char *tmp, int b)
 		b++;
 	}
 	fri = tmp;
-	tmp = ft_strjoin(back, &tmp[st->itrad + 1]);
+	if (tmp[st->itrad + 1])
+		tmp = ft_strjoin(back, &tmp[st->itrad + 1]);
+	else
+		tmp = ft_strdup(back);
 	free(fri);
 	free(back);
 	return (tmp);

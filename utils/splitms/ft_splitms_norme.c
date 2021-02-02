@@ -20,9 +20,12 @@ int	ft_malloc_tab2(char const *str, char c, int a)
 		while (str[a] && str[a] != '"' && str[a] != '\'')
 			a++;
 	}
-	a++;
-	if (str[a] && str[a] == c && str[a - 1] == '\\')
+	if (str[a])
+	{
 		a++;
+		if (str[a] && str[a] == c && str[a - 1] == '\\')
+			a++;
+	}
 	return (a);
 }
 

@@ -35,6 +35,8 @@ int		ft_errorquote(t_shell *st)
 		st->status = 2;
 		return (-1);
 	}
+	st->quotes = 0;
+	st->quotes2 = 0;
 	return (1);
 }
 
@@ -92,14 +94,20 @@ int		ft_lastcmd(t_shell *st, char *fri)
 	return (0);
 }
 
+void	ft_initquotes(t_shell *st)
+{
+	st->firstd = 1;
+	st->quotes = 0;
+	st->quotes2 = 0;
+	st->ddone = 0;
+}
+
 int		ft_cleantokens(t_shell *st)
 {
 	char	*newtok;
 
-	st->quotes = 0;
 	newtok = NULL;
-	st->firstd = 1;
-	st->ddone = 0;
+	ft_initquotes(st);
 	while (st->tokens)
 	{
 		newtok = ft_traduction(st, ft_strdup((char *)st->tokens->content));
@@ -119,22 +127,4 @@ int		ft_cleantokens(t_shell *st)
 	st->tokens = st->firsttok;
 	ft_checkcommand(st);
 	return (0);
-}
-
-int		ft_checkcommand(t_shell *st)
-{
-	char *tmp;
-
-	tmp = (char *)st->tokens->content;
-	if (check_path(st, tmp) == 1)
-		return (1);
-	if (!ft_strcmp(tmp, "echo") || !ft_strcmp(tmp, "cd") ||
-		!ft_strcmp(tmp, "pwd") || !ft_strcmp(tmp, "env") ||
-		!ft_strcmp(tmp, "export") || !ft_strcmp(tmp, "unset") ||
-		!ft_strcmp(tmp, "exit") || !ft_strcmp(tmp, "exec"))
-	{
-		return (1);
-	}
-	else
-		return (0);
 }
