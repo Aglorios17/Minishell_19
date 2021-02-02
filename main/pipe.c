@@ -12,51 +12,42 @@
 
 #include "../include/minishell.h"
 
-int		test(shell *st, char **argv)
+int		dopipe(shell *st)
 {
-	if (argv[2] && !argv[3])
+	int		pop[2];
+	pid_t	cpid;
+
+	if (pipe(pop) > 0)
+		exit(1);
+	if ((cpid = fork()) == -1)
+		exit(1);
+	if (cpid == 0)
 	{
-		st->line = ft_strdup(argv[2]);
-		lstcmd(st, st->line);
-		mainprocess(st);
+		pid = cpid;
+		close(pop[0]);
+		st->fdout = dup2(pop[1], 1);
+		if (commandline(st) == 1)
+			return (1);
+		exit(0);
+	}
+	else if (cpid > 0)
+	{
+		close(pop[1]);
+		st->fdout = dup2(pop[0], 0);
+		wait(NULL);
 	}
 	return (0);
 }
 
-int		codeexec(shell *st)
+int		ft_pipe(shell *st)
 {
-	signal(SIGINT, signalhandler);
-	signal(SIGQUIT, signalhandler2);
-	while (1)
+	if (!st->pipe->next)
 	{
-		free(st->line);
-		if (prompt == 0)
-			write(2, ">>", 2);
-		prompt = 0;
-		if (get_next_line3d(0, &st->line) != 1)
-		{
-			write(2, "exit\n", 5);
-			return (0);
-		}
-		if (mainprocess(st) == 1)
-			break ;
+		if (commandline(st) == 1)
+			return (1);
+		return (0);
 	}
+	if (st->pipe->next)
+		dopipe(st);
 	return (0);
-}
-
-int		main(int argc, char **argv, char **envp)
-{
-	shell	st;
-
-	ft_init_struct(&st);
-	pid = 1;
-	pid2 = 0;
-	prompt = 0;
-	nc = 0;
-	ft_envv(&st, envp);
-	if (argc > 1 && !ft_strncmp(argv[1], "-c", 2))
-		test(&st, argv);
-	else
-		codeexec(&st);
-	return (ft_free_end(&st));
 }

@@ -12,51 +12,42 @@
 
 #include "../include/minishell.h"
 
-int		test(shell *st, char **argv)
+int		commandline(shell *st)
 {
-	if (argv[2] && !argv[3])
-	{
-		st->line = ft_strdup(argv[2]);
-		lstcmd(st, st->line);
-		mainprocess(st);
-	}
-	return (0);
-}
-
-int		codeexec(shell *st)
-{
-	signal(SIGINT, signalhandler);
-	signal(SIGQUIT, signalhandler2);
-	while (1)
-	{
-		free(st->line);
-		if (prompt == 0)
-			write(2, ">>", 2);
-		prompt = 0;
-		if (get_next_line3d(0, &st->line) != 1)
-		{
-			write(2, "exit\n", 5);
-			return (0);
-		}
-		if (mainprocess(st) == 1)
-			break ;
-	}
-	return (0);
-}
-
-int		main(int argc, char **argv, char **envp)
-{
-	shell	st;
-
-	ft_init_struct(&st);
-	pid = 1;
-	pid2 = 0;
-	prompt = 0;
-	nc = 0;
-	ft_envv(&st, envp);
-	if (argc > 1 && !ft_strncmp(argv[1], "-c", 2))
-		test(&st, argv);
+	if (ft_tokens(st) == 1)
+		st->status = 1;
 	else
-		codeexec(&st);
-	return (ft_free_end(&st));
+	{
+		if (st->tokens)
+			ft_cleantokens(st);
+		if (ft_command(st) == 1)
+			return (1);
+	}
+	close(st->fdout);
+	if (st->fdout == 0)
+		st->fdout = dup2(st->fdone, 0);
+	else
+		st->fdout = dup2(st->fdone, 1);
+	return (0);
+}
+
+int		mainprocess(shell *st)
+{
+	ft_cutline(st);
+	while (st->cutline)
+	{
+		ft_cutpipe(st);
+		st->fdone = dup(st->fdout);
+		while (st->pipe)
+		{
+			if (ft_pipe(st) == 1)
+				return (1);
+			ft_free_command(st);
+			st->pipe = st->pipe->next;
+		}
+		ft_free_list(st->pipe, st->firstpipe);
+		st->cutline = st->cutline->next;
+	}
+	ft_free_list(st->cutline, st->firstcut);
+	return (0);
 }

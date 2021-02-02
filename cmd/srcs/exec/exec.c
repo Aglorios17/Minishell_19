@@ -52,17 +52,8 @@ int		ft_error(shell *st, struct stat b)
 	char	*tmp;
 	int		i;
 
-	tmp = NULL;
+	tmp = recupexp(st);
 	i = 0;
-	while (st->envv)
-	{
-		tmp = (char *)st->envv->content;
-		if (!ft_strncmp("PATH=", tmp, 5))
-			break ;
-		st->envv = st->envv->next;
-		tmp = NULL;
-	}
-	st->envv = st->envv;
 	if (tmp != NULL)
 	{
 		while (tmp[i] && tmp[i] != '=')
@@ -80,7 +71,7 @@ int		ft_error(shell *st, struct stat b)
 		return (0);
 }
 
-void	ft_exec2(shell *st, int a)
+void	ft_exec2(shell *st, int a, char **ar, char **en)
 {
 	if (st->cutline->next)
 		nc = 1;
@@ -90,6 +81,8 @@ void	ft_exec2(shell *st, int a)
 		wait(&a);
 		st->status = a / 256;
 	}
+	ft_freetab(ar);
+	ft_freetab(en);
 }
 
 int		ft_exec(shell *st)
@@ -115,8 +108,6 @@ int		ft_exec(shell *st)
 		ft_permission_error(st, 126, st->cmdexec);
 		return (0);
 	}
-	ft_exec2(st, a);
-	ft_freetab(ar);
-	ft_freetab(en);
+	ft_exec2(st, a, ar, en);
 	return (i);
 }

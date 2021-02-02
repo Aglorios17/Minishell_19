@@ -171,7 +171,8 @@ int	ft_malloc_tab2(char const *str, char c, int a);
 ////////// exec ////////////////
 
 int 	ft_exec(shell *st);
-void	ft_exec2(shell *st, int a);
+char	*recupexp(shell *st);
+void	ft_exec2(shell *st, int a, char **ar, char **en);
 int		ft_error(shell *st, struct stat b);
 int		ft_error2(shell *st, char *tmp, int i, struct stat b);
 int		ft_error3(shell *st, char *tmp, int i, struct stat b);
@@ -224,8 +225,12 @@ int		ft_syntax_pipe3(shell *st, int a, int flagspace);
 void	signalhandler(int signum);
 void	signalhandler2(int signum);
 void	ft_init_struct(shell *st);
-void	ft_free_list(t_list *list, t_list *first);
+int		ft_pipe(shell *st);
+int		mainprocess(shell *st);
+int		commandline(shell *st);
+////////////// free ////////////////
 int		ft_free_end(shell *st);
 int		ft_free_command(shell *st);
+void	ft_free_list(t_list *list, t_list *first);
 
 #endif
