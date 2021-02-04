@@ -59,7 +59,8 @@ int		ft_free_command(t_shell *st)
 	st->tmpq = NULL;
 	free(st->pat);
 	st->pat = NULL;
-	ft_free_list(st->tokens, st->firsttok);
+	if (st->tokens)
+		ft_free_list(st->tokens, st->firsttok);
 	st->tokens = NULL;
 	return (st->status);
 }
