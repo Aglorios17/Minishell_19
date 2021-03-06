@@ -42,6 +42,7 @@ int	cderror(t_shell *st, char *tmp)
 	write(1, "minishell: ", 11);
 	write(1, "cd: ", 4);
 	write(1, "too many arguments\n", 19);
+	st->status = 1;
 	return (0);
 }
 
@@ -77,6 +78,7 @@ int	docd(t_shell *st, char *line, char *tmp)
 		st->oldpwd = tmp;
 		if (line)
 			free(line);
+		st->status = 1;
 		return (0);
 	}
 	if (line)

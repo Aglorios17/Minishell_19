@@ -21,6 +21,8 @@
 # include <sys/stat.h>
 # include <sys/wait.h>
 # include <dirent.h>
+# include <curses.h>
+# include <term.h>
 # include "../libft/libft.h"
 
 typedef struct	s_mini
