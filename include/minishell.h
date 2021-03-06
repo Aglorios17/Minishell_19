@@ -199,7 +199,7 @@ int				ft_error2(t_shell *st, char *tmp, int i, struct stat b);
 int				ft_error3(t_shell *st, char *tmp, int i, struct stat b);
 int				ft_error4(t_shell *st, char *cmd, struct stat b);
 int				check_path(t_shell *st, char *dollars);
-char			**recuppath(t_shell *st, char **tab);
+char			**recuppath(t_shell *st, char **tabs);
 int				open_pathcd(t_shell *st, char *path);
 int				ft_directory_error(t_shell *st, int nb);
 int				ft_directory_error2(t_shell *st, int nb);
@@ -226,7 +226,7 @@ int				ft_isinstring(char *str, char c);
 
 int				lstcmd(t_shell *st, char *line);
 char			**ft_tabreturn(t_list *list);
-void			ft_freetab(char **tab);
+void			ft_freetab(char **tabs);
 int				ft_verif_syntax(t_shell *st);
 int				ft_verif_syntax2(t_shell *st);
 int				ft_skip_quotes(t_shell *st, int a);

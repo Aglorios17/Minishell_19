@@ -48,6 +48,8 @@ int		mainprocess(t_shell *st)
 		ft_free_list(st->pipe, st->firstpipe);
 		st->cutline = st->cutline->next;
 	}
-	ft_free_list(st->cutline, st->firstcut);
+	if (st->status != 2)
+		ft_free_list(st->cutline, st->firstcut);
+	free(st->line);
 	return (0);
 }

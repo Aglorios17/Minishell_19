@@ -12,7 +12,7 @@
 
 #include "../../include/minishell.h"
 
-char	*ft_write2(const char *str, char c, char **tab)
+char	*ft_write2(const char *str, char c, char **tabs)
 {
 	int		a;
 	char	*dest;
@@ -35,7 +35,7 @@ char	*ft_write2(const char *str, char c, char **tab)
 	}
 	dest = ft_substr(str, 0, a);
 	if (dest == NULL)
-		ft_freetab(tab);
+		ft_freetab(tabs);
 	return (dest);
 }
 
@@ -59,20 +59,20 @@ int		ft_write_norme2(const char *str, char c, int a)
 	return (a);
 }
 
-void	ft_write_norme(const char *str, int d, int a, char **tab)
+void	ft_write_norme(const char *str, int d, int a, char **tabs)
 {
 	char	*fri;
 
 	fri = NULL;
-	tab[d] = NULL;
+	tabs[d] = NULL;
 	if (str[a] == ';')
 		fri = ft_strdup("minishell: syntax error near unexpected token `;\'\n");
 	write(1, fri, ft_strlen(fri));
 	free(fri);
-	ft_freetab(tab);
+	ft_freetab(tabs);
 }
 
-char	**ft_write(const char *str, char c, char **tab, t_shell *st)
+char	**ft_write(const char *str, char c, char **tabs, t_shell *st)
 {
 	int		a;
 	int		d;
@@ -85,28 +85,28 @@ char	**ft_write(const char *str, char c, char **tab, t_shell *st)
 			a++;
 		if (str[a] && str[a] == ';')
 		{
-			ft_write_norme(str, d, a, tab);
+			ft_write_norme(str, d, a, tabs);
 			st->status = 2;
-			return (tab);
+			return (tabs);
 		}
 		if (str[a] && str[a] != c)
-			tab[d++] = ft_write2(&str[a], c, tab);
+			tabs[d++] = ft_write2(&str[a], c, tabs);
 		a = ft_write_norme2(str, c, a);
 		if (!str[a])
 			break ;
 		a++;
 	}
-	tab[d] = NULL;
-	return (tab);
+	tabs[d] = NULL;
+	return (tabs);
 }
 
 char	**ft_splitms(char const *s, char c, t_shell *st)
 {
-	char	**tab;
+	char	**tabs;
 
 	if (s == NULL)
 		return (NULL);
-	if (!(tab = malloc((ft_malloc_tab(s, c) + 1) * sizeof(char*))))
+	if (!(tabs = malloc((ft_malloc_tab(s, c) + 1) * sizeof(char*))))
 		return (NULL);
-	return (ft_write(s, c, tab, st));
+	return (ft_write(s, c, tabs, st));
 }

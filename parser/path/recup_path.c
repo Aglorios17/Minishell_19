@@ -12,19 +12,19 @@
 
 #include "../../include/minishell.h"
 
-void	ft_freetab(char **tab)
+void	ft_freetab(char **tabs)
 {
 	int a;
 
 	a = 0;
-	while (tab[a])
+	while (tabs[a])
 	{
-		free(tab[a]);
-		tab[a] = NULL;
+		free(tabs[a]);
+		tabs[a] = NULL;
 		a++;
 	}
-	free(tab);
-	tab = NULL;
+	free(tabs);
+	tabs = NULL;
 }
 
 char	*ft_path(t_shell *st, char *tmp)
@@ -67,13 +67,13 @@ char	*pathenv(t_shell *st)
 	return (path);
 }
 
-char	**recuppath(t_shell *st, char **tab)
+char	**recuppath(t_shell *st, char **tabs)
 {
 	char	*path;
 
 	path = NULL;
 	path = pathenv(st);
-	tab = ft_split(path, ':');
+	tabs = ft_split(path, ':');
 	free(path);
-	return (tab);
+	return (tabs);
 }

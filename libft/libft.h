@@ -93,7 +93,7 @@ char				*ft_substr_gnl(char const *s, int start, int len);
 int					ft_strlen_gnl(const char *str);
 int					get_next_line3d(const int fd, char **line);
 char				*ft_charjoin(char const *s1, char c);
-char				**ft_tabjoin(char **tab, char **tab2);
+char				**ft_tabjoin(char **tabs, char **tab2);
 int					get_next_linesh(const int fd, char **line);
 char				*ft_strchr_gnlsh(const char *s, int c);
 char				*ft_strdup_gnlsh(const char *s1);

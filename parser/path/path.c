@@ -22,7 +22,7 @@ int	ft_errorcmd(char *cmd)
 	return (0);
 }
 
-int	ft_cmdexec(t_shell *st, char *cmd, struct stat b, char *tab)
+int	ft_cmdexec(t_shell *st, char *cmd, struct stat b, char *tabs)
 {
 	char	*tmp;
 	char	*fri;
@@ -33,7 +33,7 @@ int	ft_cmdexec(t_shell *st, char *cmd, struct stat b, char *tab)
 	{
 		if (ft_errorcmd(cmd) == 1)
 			return (0);
-		tmp = ft_strjoin(tab, "/");
+		tmp = ft_strjoin(tabs, "/");
 		fri = tmp;
 		tmp = ft_strjoin(tmp, cmd);
 		free(fri);
@@ -53,25 +53,25 @@ int	check_path(t_shell *st, char *dollars)
 {
 	int			i;
 	struct stat	b;
-	char		**tab;
+	char		**tabs;
 
-	tab = NULL;
+	tabs = NULL;
 	i = 0;
 	if (dollars)
 		dollars = NULL;
-	if ((tab = recuppath(st, tab)) == NULL)
+	if ((tabs = recuppath(st, tabs)) == NULL)
 		return (0);
 	free(st->cmdexec);
 	st->cmdexec = ft_strdup((char *)st->tokens->content);
-	while (tab[i])
+	while (tabs[i])
 	{
-		if (ft_cmdexec(st, (char *)st->tokens->content, b, tab[i++]) == 1)
+		if (ft_cmdexec(st, (char *)st->tokens->content, b, tabs[i++]) == 1)
 		{
-			ft_freetab(tab);
+			ft_freetab(tabs);
 			return (1);
 		}
 	}
-	ft_freetab(tab);
+	ft_freetab(tabs);
 	if (stat(st->cmdexec, &b) == -1)
 		return (0);
 	return (1);

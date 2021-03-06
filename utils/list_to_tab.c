@@ -15,23 +15,23 @@
 char	**ft_tabreturn(t_list *list)
 {
 	t_list	*tmp;
-	char	**tab;
+	char	**tabs;
 	int		i;
 
-	tab = NULL;
+	tabs = NULL;
 	i = 0;
 	tmp = list;
-	if ((tab = malloc(sizeof(char *) * (ft_lstsize(list) + 1))) == NULL)
+	if ((tabs = malloc(sizeof(char *) * (ft_lstsize(list) + 1))) == NULL)
 		return (0);
 	while (list)
 	{
-		tab[i] = ft_strdup((char *)list->content);
+		tabs[i] = ft_strdup((char *)list->content);
 		i++;
 		list = list->next;
 	}
-	tab[i] = NULL;
+	tabs[i] = NULL;
 	list = tmp;
-	return (tab);
+	return (tabs);
 }
 
 int		ft_checkcommand(t_shell *st)
