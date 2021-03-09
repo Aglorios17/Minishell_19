@@ -6,7 +6,7 @@
 /*   By: aglorios <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/04 12:52:08 by aglorios          #+#    #+#             */
-/*   Updated: 2020/03/04 12:53:38 by aglorios         ###   ########.fr       */
+/*   Updated: 2021/03/09 15:03:34 by aglorios         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,10 +194,10 @@ int				ft_malloc_tab2(char const *str, char c, int a);
 int				ft_exec(t_shell *st);
 char			*recupexp(t_shell *st);
 void			ft_exec2(t_shell *st, int a, char **ar, char **en);
-int				ft_error(t_shell *st, struct stat b);
-int				ft_error2(t_shell *st, char *tmp, int i, struct stat b);
-int				ft_error3(t_shell *st, char *tmp, int i, struct stat b);
-int				ft_error4(t_shell *st, char *cmd, struct stat b);
+int				ft_error(t_shell *st);
+int				ft_error2(t_shell *st, char *tmp, int i);
+int				ft_error3(t_shell *st, char *tmp, int i);
+int				ft_error4(t_shell *st, char *cmd);
 int				check_path(t_shell *st, char *dollars);
 char			**recuppath(t_shell *st, char **tabs);
 int				open_pathcd(t_shell *st, char *path);

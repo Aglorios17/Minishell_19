@@ -6,15 +6,16 @@
 /*   By: aglorios <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 15:42:11 by aglorios          #+#    #+#             */
-/*   Updated: 2019/10/22 16:43:58 by aglorios         ###   ########.fr       */
+/*   Updated: 2021/03/09 15:03:21 by aglorios         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
-int	ft_error4(t_shell *st, char *cmd, struct stat b)
+int	ft_error4(t_shell *st, char *cmd)
 {
-	DIR		*dir;
+	DIR			*dir;
+	struct stat b;
 
 	cmd = (char *)st->tokens->content;
 	dir = opendir(cmd);

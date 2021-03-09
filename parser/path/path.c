@@ -6,7 +6,7 @@
 /*   By: aglorios <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 15:42:11 by aglorios          #+#    #+#             */
-/*   Updated: 2019/10/22 16:43:58 by aglorios         ###   ########.fr       */
+/*   Updated: 2021/03/09 14:57:25 by aglorios         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,11 @@ int	ft_errorcmd(char *cmd)
 	return (0);
 }
 
-int	ft_cmdexec(t_shell *st, char *cmd, struct stat b, char *tabs)
+int	ft_cmdexec(t_shell *st, char *cmd, char *tabs)
 {
-	char	*tmp;
-	char	*fri;
+	char		*tmp;
+	char		*fri;
+	struct stat	b;
 
 	tmp = NULL;
 	fri = NULL;
@@ -65,7 +66,7 @@ int	check_path(t_shell *st, char *dollars)
 	st->cmdexec = ft_strdup((char *)st->tokens->content);
 	while (tabs[i])
 	{
-		if (ft_cmdexec(st, (char *)st->tokens->content, b, tabs[i++]) == 1)
+		if (ft_cmdexec(st, (char *)st->tokens->content, tabs[i++]) == 1)
 		{
 			ft_freetab(tabs);
 			return (1);

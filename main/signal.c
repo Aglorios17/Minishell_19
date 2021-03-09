@@ -6,7 +6,7 @@
 /*   By: aglorios <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 15:42:11 by aglorios          #+#    #+#             */
-/*   Updated: 2019/10/22 16:43:58 by aglorios         ###   ########.fr       */
+/*   Updated: 2021/03/09 14:51:31 by aglorios         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,9 @@ void	signalhandler(int signum)
 		sg->nc = 0;
 		sg->prompt = 1;
 	}
+//	sg->prompt = signum;
+//	close(0);
+//	dup2(stdin, 0);
 }
 
 void	ft_promtsign(t_sign *sg)

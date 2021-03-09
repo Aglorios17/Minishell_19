@@ -6,7 +6,7 @@
 /*   By: aglorios <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 15:42:11 by aglorios          #+#    #+#             */
-/*   Updated: 2019/10/22 16:43:58 by aglorios         ###   ########.fr       */
+/*   Updated: 2021/03/09 14:52:21 by aglorios         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,11 @@ int		codeexec(t_shell *st)
 	signal(SIGQUIT, signalhandler2);
 	while (1)
 	{
+//		signum = -1;
 		if (sg->prompt == 0)
 			write(2, ">>", 2);
 		sg->prompt = 0;
-		if (get_next_line3d(0, &st->line) != 1)
+		if (get_next_line3d(0, &st->line) != 1)//&& sg->prompt != -1
 		{
 			write(2, "exit\n", 5);
 			return (0);
