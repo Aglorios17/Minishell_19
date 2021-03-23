@@ -15,27 +15,20 @@
 void	signalhandler(int signum)
 {
 	t_sign	*sg;
+	t_shell	*st;
 
 	sg = initglobal();
-	(void)signum;
-	if (sg->pid == 0)
-	{
-		kill(0, 0);
-		sg->pid = 1;
-		sg->pid2 = 0;
-	}
+	st = globalstruct();
+	sg->prompt = signum;
+//	close(0);
+//	dup2(st->fdout, 0);
+	if (!st->line && sg->pid2 == 0)
+		write(2, "\n>>", 3);
 	else
 	{
-		if (sg->nc == 0)
-			write(2, "\n>>", 3);
-		else
-			write(2, "\n", 1);
-		sg->nc = 0;
-		sg->prompt = 1;
+		write(2, "\n", 1);
+		kill(0, 0);
 	}
-//	sg->prompt = signum;
-//	close(0);
-//	dup2(stdin, 0);
 }
 
 void	ft_promtsign(t_sign *sg)
@@ -51,11 +44,13 @@ void	ft_promtsign(t_sign *sg)
 void	signalhandler2(int signum)
 {
 	t_sign	*sg;
+	t_shell	*st;
 	char	*fri;
 
 	sg = initglobal();
+	st = globalstruct();
 	fri = NULL;
-	(void)signum;
+	sg->prompt = signum;
 	if (sg->pid2 > 0)
 	{
 		kill(0, 0);
@@ -64,13 +59,11 @@ void	signalhandler2(int signum)
 		write(2, fri, ft_strlen(fri));
 		write(2, " quit (core dumped)", 19);
 		free(fri);
-		if (sg->nc == 0)
-			write(2, "\n>>", 3);
-		else
-			write(2, "\n", 1);
-		sg->prompt = 1;
+		write(2, "\n", 1);
 		sg->pid2 = 0;
+//		close(0);
+//		dup2(st->fdout, 0);
 	}
 	else
-		ft_promtsign(sg);
+		write(2, "\n>>", 3);
 }

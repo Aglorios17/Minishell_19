@@ -76,6 +76,7 @@ int		ft_error(t_shell *st)
 void	ft_exec2(t_shell *st, int a, char **ar, char **en)
 {
 	t_sign	*sg;
+	char	str[200];
 
 	sg = initglobal();
 	if (st->cutline->next)
@@ -86,6 +87,8 @@ void	ft_exec2(t_shell *st, int a, char **ar, char **en)
 		wait(&a);
 		st->status = a / 256;
 	}
+	else
+		read(0, str, 100);
 	ft_freetab(ar);
 	ft_freetab(en);
 }
@@ -96,10 +99,12 @@ int		ft_exec(t_shell *st)
 	char		**en;
 	int			i;
 	int			a;
+	t_sign	*sg;
 
 	ar = NULL;
 	en = NULL;
 	i = 0;
+	sg = initglobal();
 	if (ft_error(st) == 0)
 		return (0);
 	a = fork();
@@ -107,13 +112,13 @@ int		ft_exec(t_shell *st)
 	en = ft_tabreturn(st->envv);
 	if (a == 0)
 		i = execve((char *)st->cmdexec, ar, en);
-//	else
-//	{
-//		if (signum != -1)
-//			kill(0, 0);
-//		if (signum == quit)
-//			write(dumped);
-//	}
+	else
+	{
+		if (sg->prompt != -1)
+			kill(0, 0);
+	//	if (sg->prompt == quit)
+	//		write(1, "dumped\n", 7);
+	}
 	if (errno == 13)
 	{
 		ft_permission_error(st, 126, st->cmdexec);

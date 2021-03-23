@@ -20,9 +20,9 @@ int		dopipe(t_shell *st)
 
 	sg = initglobal();
 	if (pipe(pop) > 0)
-		exit(1);
+		return (1);
 	if ((cpid = fork()) == -1)
-		exit(1);
+		return (1);
 	if (cpid == 0)
 	{
 		sg->pid = cpid;

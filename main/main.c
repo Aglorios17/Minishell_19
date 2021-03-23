@@ -26,6 +26,7 @@ int		test(t_shell *st, char **argv)
 int		codeexec(t_shell *st)
 {
 	t_sign	*sg;
+//	char	str[200];
 
 	sg = initglobal();
 	signal(SIGINT, signalhandler);
@@ -33,10 +34,11 @@ int		codeexec(t_shell *st)
 	while (1)
 	{
 //		signum = -1;
-		if (sg->prompt == 0)
-			write(2, ">>", 2);
-		sg->prompt = 0;
-		if (get_next_line3d(0, &st->line) != 1)//&& sg->prompt != -1
+//		if (sg->pid2 > 0)
+//			read(0, str, 100);
+		write(2, ">>", 2);
+//		sg->prompt = 0;
+		if (get_next_line3d(0, &st->line) != 1 && sg->prompt != -1)
 		{
 			write(2, "exit\n", 5);
 			return (0);
@@ -54,21 +56,29 @@ t_sign	*initglobal(void)
 	return (&sg);
 }
 
+t_shell	*globalstruct(void)
+{
+	static t_shell	st;
+
+	return (&st);
+}
+
 int		main(int argc, char **argv, char **envp)
 {
-	t_shell	st;
+	t_shell	*st;
 	t_sign	*sg;
 
-	ft_init_struct(&st);
+	st = globalstruct();
+	ft_init_struct(st);
 	sg = initglobal();
 	sg->pid = 1;
 	sg->pid2 = 0;
-	sg->prompt = 0;
+	sg->prompt = -1;
 	sg->nc = 0;
-	ft_envv(&st, envp);
+	ft_envv(st, envp);
 	if (argc > 1 && !ft_strncmp(argv[1], "-c", 2))
-		test(&st, argv);
+		test(st, argv);
 	else
-		codeexec(&st);
-	return (ft_free_end(&st));
+		codeexec(st);
+	return (ft_free_end(st));
 }

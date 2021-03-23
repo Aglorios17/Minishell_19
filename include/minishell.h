@@ -245,6 +245,7 @@ void			ft_init_struct(t_shell *st);
 int				ft_pipe(t_shell *st);
 int				mainprocess(t_shell *st);
 int				commandline(t_shell *st);
+t_shell			*globalstruct(void);
 
 int				ft_free_end(t_shell *st);
 int				ft_free_command(t_shell *st);
