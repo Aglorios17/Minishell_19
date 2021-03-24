@@ -59,7 +59,9 @@ int	ft_verif_syntax(t_shell *st)
 	int		a;
 
 	a = 0;
-	while (st->line[a] == ' ')
+//	if (!st->line)
+//		return (0);
+	while (st->line[a] && st->line[a] == ' ')
 		a++;
 	if (st->line[a] && (st->line[a] == '<' || st->line[a] == '>'))
 	{

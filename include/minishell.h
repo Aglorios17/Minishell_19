@@ -119,11 +119,15 @@ typedef struct	s_termcap
 	char		*line;
 	char		**history;
 	int			fdhist;
+	int			recupterm;
+	char		*term;
 }				t_termcap;
+
+t_termcap			*initglobalterm();
 
 int				ft_putchar2(int c);
 void			init_struct_tc(t_termcap *tc);
-void			init_term(void);
+int				init_term(void);
 char			**ft_split_line(char *line, char *line2, int fd);
 char			**get_tab();
 void			get_history(t_termcap *tc);
@@ -135,6 +139,7 @@ int				ft_newline_history(t_termcap *tc, char **add);
 int				ft_key_up(t_termcap *tc, char **add);
 int				ft_loop(t_termcap *tc, char **add, char *str);
 char			*ft_termcap(void);
+char			*get_env_term(void);
 
 t_sign			*initglobal();
 

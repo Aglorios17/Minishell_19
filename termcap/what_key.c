@@ -37,6 +37,7 @@ void	ft_write_line(t_termcap *tc, char *str)
 {
 	char	*fri;
 
+				
 	fri = NULL;
 	fri = tc->line;
 	tc->line = ft_strjoin(tc->line, str);

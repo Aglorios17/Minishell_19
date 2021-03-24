@@ -105,6 +105,7 @@ int		ft_exec(t_shell *st)
 	en = NULL;
 	i = 0;
 	sg = initglobal();
+	(void)sg;
 	if (ft_error(st) == 0)
 		return (0);
 	a = fork();
@@ -112,13 +113,13 @@ int		ft_exec(t_shell *st)
 	en = ft_tabreturn(st->envv);
 	if (a == 0)
 		i = execve((char *)st->cmdexec, ar, en);
-	else
-	{
-		if (sg->prompt != -1)
-			kill(0, 0);
+//	else
+//	{
+//		if (sg->prompt != -1)
+//			kill(0, 0);
 	//	if (sg->prompt == quit)
 	//		write(1, "dumped\n", 7);
-	}
+//	}
 	if (errno == 13)
 	{
 		ft_permission_error(st, 126, st->cmdexec);

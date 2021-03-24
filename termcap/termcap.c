@@ -37,6 +37,11 @@ int		ft_newline_history(t_termcap *tc, char **add)
 		tc->y++;
 		tc->a = 1;
 	}
+	if (tc->i + 1 == tc->y && tc->a == 1)
+	{
+		free(tc->history[tc->i]);
+		tc->history[tc->i] = ft_strdup(tc->line);
+	}
 	return (1);
 }
 
@@ -102,8 +107,9 @@ char	*ft_termcap(void)
 	t_termcap	tc;
 
 	add = NULL;
-	init_term();
 	init_struct_tc(&tc);
+	if (!init_term())
+		return (NULL);
 	i = 0;
 	if ((tc.fdhist = open(".minishell_history", O_WRONLY |
 		O_APPEND | O_CREAT, 0644)) < 0)

@@ -53,6 +53,7 @@ SRCS 			= main/main.c \
 					cmd/srcs/pwd/pwd.c \
 					termcap/termcap.c \
 					termcap/utils_termcap.c \
+					termcap/utils_termcap_env.c \
 					termcap/what_key.c \
 					utils/dollars/cmdcommand.c \
 					utils/dollars/dollars.c \

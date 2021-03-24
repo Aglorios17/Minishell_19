@@ -29,12 +29,13 @@ void	init_struct_tc(t_termcap *tc)
 	tc->fdhist = 0;
 }
 
-void	init_term(void)
+int		init_term(void)
 {
 	t_termios	term;
 	t_termios	term_backup;
 
-	tgetent(0, getenv("TERM"));
+	if (!tgetent(0, "xterm-256color"))
+		return (0);
 	tcgetattr(0, &term);
 	tcgetattr(0, &term_backup);
 	term.c_lflag = term.c_lflag & ~ICANON;
@@ -42,6 +43,7 @@ void	init_term(void)
 	term.c_cc[VMIN] = 1;
 	term.c_cc[VTIME] = 0;
 	tcsetattr(0, TCSANOW, &term);
+	return (1);
 }
 
 char	**ft_split_line(char *line, char *line2, int fd)
