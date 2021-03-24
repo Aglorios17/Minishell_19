@@ -49,6 +49,7 @@ void	signalhandler2(int signum)
 
 	sg = initglobal();
 	st = globalstruct();
+	(void)st;
 	fri = NULL;
 	sg->prompt = signum;
 	if (sg->pid2 > 0)

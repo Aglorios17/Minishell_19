@@ -51,6 +51,9 @@ SRCS 			= main/main.c \
 					cmd/srcs/cd/cd_error.c \
 					cmd/srcs/echo/echo.c \
 					cmd/srcs/pwd/pwd.c \
+					termcap/termcap.c \
+					termcap/utils_termcap.c \
+					termcap/what_key.c \
 					utils/dollars/cmdcommand.c \
 					utils/dollars/dollars.c \
 					utils/dollars/dollars_utils.c \
@@ -79,11 +82,11 @@ LIBFLAGS 		= -I ./libft -L ./libft -L . ./libft/*.c
 
 all:			libft_all ${NAME}
 $(NAME):		${OBJS} 
-				@$(CC) $(LIBFLAGS) libft/libft.a -I./ $(OBJS) -o $@ 
+				@$(CC) $(LIBFLAGS) libft/libft.a -I./ $(OBJS) -ltermcap -o $@ 
 clean:			libft_clean
 				@${RM} ${OBJS}
 fclean:			libft_fclean clean
-				@${RM} ${NAME} 
+				@${RM} ${NAME} ./.minishell_history
 				rm -rf ./minishell.dSYM
 re:				fclean all
 
