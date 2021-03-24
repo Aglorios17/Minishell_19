@@ -76,7 +76,7 @@ int		ft_error(t_shell *st)
 void	ft_exec2(t_shell *st, int a, char **ar, char **en)
 {
 	t_sign	*sg;
-	char	str[200];
+//	char	str[200];
 
 	sg = initglobal();
 	if (st->cutline->next)
@@ -87,8 +87,8 @@ void	ft_exec2(t_shell *st, int a, char **ar, char **en)
 		wait(&a);
 		st->status = a / 256;
 	}
-	else
-		read(0, str, 100);
+//	else
+//		read(0, str, 100);
 	ft_freetab(ar);
 	ft_freetab(en);
 }
