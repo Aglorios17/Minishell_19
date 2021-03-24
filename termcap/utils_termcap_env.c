@@ -48,3 +48,12 @@ char		*get_env_term(void)
 	st->envv = st->firstenv;
 	return (ret);
 }
+
+void		default_term()
+{
+	t_termios		term;
+
+	tcgetattr(0, &term);
+	term.c_lflag |= (ICANON | ECHO);
+	tcsetattr(0, TCSANOW, &term);
+}

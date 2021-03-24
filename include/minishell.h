@@ -128,7 +128,7 @@ t_termcap			*initglobalterm();
 int				ft_putchar2(int c);
 void			init_struct_tc(t_termcap *tc);
 int				init_term(void);
-char			**ft_split_line(char *line, char *line2, int fd);
+char			**ft_split_line(char *line, char *line2);
 char			**get_tab();
 void			get_history(t_termcap *tc);
 void			ft_write_in_history(t_termcap *tc);
@@ -138,8 +138,9 @@ void			ft_key_down(t_termcap *tc);
 int				ft_newline_history(t_termcap *tc, char **add);
 int				ft_key_up(t_termcap *tc, char **add);
 int				ft_loop(t_termcap *tc, char **add, char *str);
-char			*ft_termcap(void);
+char			*ft_termcap(t_shell *st);
 char			*get_env_term(void);
+void			default_term(void);
 
 t_sign			*initglobal();
 

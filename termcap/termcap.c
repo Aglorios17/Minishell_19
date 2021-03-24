@@ -77,6 +77,7 @@ int		ft_loop(t_termcap *tc, char **add, char *str)
 	{
 		write(1, "\n", 1);
 		tc->a = 0;
+		default_term();
 		return (1);
 	}
 	else if (!ft_strcmp(str, key_backspace))
@@ -99,13 +100,14 @@ char	*return_termcap(t_termcap *tc, int i)
 	return (tc->line);
 }
 
-char	*ft_termcap(void)
+char	*ft_termcap(t_shell *st)
 {
 	char		str[2000];
 	char		**add;
 	int			i;
 	t_termcap	tc;
 
+	(void)st;
 	add = NULL;
 	init_struct_tc(&tc);
 	if (!init_term())
@@ -113,9 +115,9 @@ char	*ft_termcap(void)
 	i = 0;
 	if ((tc.fdhist = open(".minishell_history", O_WRONLY |
 		O_APPEND | O_CREAT, 0644)) < 0)
-		return (NULL);
+		return (NULL);	
 	get_history(&tc);
-	while (((tc.len = read(0, str, 100)) != 0))
+	while (((tc.len = read(0, str, 100)) > 0))
 	{
 		i = ft_loop(&tc, add, str);
 		if (i == -1)

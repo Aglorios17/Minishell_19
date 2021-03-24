@@ -38,15 +38,15 @@ int		init_term(void)
 		return (0);
 	tcgetattr(0, &term);
 	tcgetattr(0, &term_backup);
-	term.c_lflag = term.c_lflag & ~ICANON;
-	term.c_lflag = term.c_lflag & ~ECHO;
+	term.c_lflag &= ~(ICANON);
+	term.c_lflag &= ~(ECHO);
 	term.c_cc[VMIN] = 1;
 	term.c_cc[VTIME] = 0;
 	tcsetattr(0, TCSANOW, &term);
 	return (1);
 }
 
-char	**ft_split_line(char *line, char *line2, int fd)
+char	**ft_split_line(char *line, char *line2)
 {
 	char	**str;
 
@@ -54,7 +54,6 @@ char	**ft_split_line(char *line, char *line2, int fd)
 	free(line);
 	str = ft_split(line2, '\n');
 	free(line2);
-	close(fd);
 	return (str);
 }
 
@@ -79,5 +78,6 @@ char	**get_tab(void)
 		free(fri);
 		free(line);
 	}
-	return (ft_split_line(line, line2, fd));
+	close(fd);
+	return (ft_split_line(line, line2));
 }
