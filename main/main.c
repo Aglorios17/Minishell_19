@@ -40,7 +40,7 @@ int		codeexec(t_shell *st)
 		write(2, ">>", 2);
 //		sg->prompt = 0;
 //		if (get_next_line3d(0, &st->line) != 1 && sg->prompt != -1)
-		if (((st->line = ft_termcap(st)) == NULL) && sg->prompt != -1)
+		if (((st->line = ft_termcap(st)) == NULL)) //&& sg->prompt != -1)
 		{
 			write(2, "exit\n", 5);
 			return (0);

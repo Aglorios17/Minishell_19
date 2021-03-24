@@ -82,7 +82,7 @@ int		ft_loop(t_termcap *tc, char **add, char *str)
 	}
 	else if (!ft_strcmp(str, key_backspace))
 		ft_key_backspace(tc);
-	else // (ft_strcmp(str, "\e[D") && ft_strcmp(str, "\e[C"))
+	else if (ft_strcmp(str, "\e[D") && ft_strcmp(str, "\e[C"))
 		ft_write_line(tc, str);
 	return (0);
 }
