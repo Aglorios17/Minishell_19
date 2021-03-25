@@ -78,7 +78,7 @@ int		ft_loop(t_termcap *tc, char **add, char *str)
 		return (1);
 	}
 	else if (!ft_strcmp(str, key_backspace))
-		ft_key_backspace(tc);
+			ft_key_backspace(tc);
 	else
 		print_else(tc, str);
 	return (0);

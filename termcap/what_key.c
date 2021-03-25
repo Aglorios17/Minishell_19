@@ -12,27 +12,6 @@
 
 #include "../include/minishell.h"
 
-void	get_history(t_termcap *tc)
-{
-	tc->line = ft_strdup("");
-	if ((tc->history = get_tab()))
-	{
-		tc->i = 0;
-		while (tc->history[tc->i])
-			tc->i++;
-		tc->y = tc->i;
-	}
-}
-
-void	ft_write_in_history(t_termcap *tc)
-{
-	if (tc->line[0] != '\0')
-	{
-		write(tc->fdhist, tc->line, ft_strlen(tc->line));
-		write(tc->fdhist, "\n", 1);
-	}
-}
-
 void	ft_write_line(t_termcap *tc, char *str)
 {
 	char	*fri;
@@ -59,17 +38,37 @@ void	ft_write_line(t_termcap *tc, char *str)
 	write(1, str, tc->len);
 }
 
+void	ft_backspace_inline(t_termcap *tc)
+{
+	char	*fri;
+	char	*tmp;
+
+	fri = NULL;
+	tmp = NULL;
+	tmp = ft_substr(tc->line, 0, tc->cursor - 1);
+	fri = ft_strdup(&tc->line[tc->cursor]);
+	free(tc->line);
+	tc->line = ft_strjoin(tmp, fri);
+	free(tmp);
+	free(fri);
+}
+
 void	ft_key_backspace(t_termcap *tc)
 {
 	char	*fri;
 
 	fri = NULL;
-	if (tc->dist == 0 || tc->line[0] == '\0')
+	if (tc->dist == 0 || tc->cursor == 0)
 		return ;
-	fri = ft_substr(tc->line, 0, ft_strlen(tc->line) - 1);
-	free(tc->line);
-	tc->line = ft_strdup(fri);
-	free(fri);
+	if (tc->dist == tc->cursor)
+	{
+		fri = ft_substr(tc->line, 0, ft_strlen(tc->line) - 1);
+		free(tc->line);
+		tc->line = ft_strdup(fri);
+		free(fri);
+	}
+	else
+		ft_backspace_inline(tc);
 	tputs(cursor_left, 1, ft_putchar2);
 	tputs(tgetstr("dc", NULL), 1, ft_putchar2);
 	tc->cursor--;
