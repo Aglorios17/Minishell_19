@@ -102,25 +102,26 @@ char	*ft_termcap(t_shell *st)
 	char		str[2000];
 	char		**add;
 	int			i;
-	t_termcap	tc;
+	t_termcap	*tc;
 
 	(void)st;
 	add = NULL;
-	init_struct_tc(&tc);
+	tc = initglobalterm();
+	init_struct_tc(tc);
 	if (!init_term())
 		return (NULL);
 	i = 0;
-	if ((tc.fdhist = open(".minishell_history", O_WRONLY |
+	if ((tc->fdhist = open(".minishell_history", O_WRONLY |
 		O_APPEND | O_CREAT, 0644)) < 0)
 		return (NULL);
-	get_history(&tc);
-	while (((tc.len = read(0, str, 100)) > 0))
+	get_history(tc);
+	while (((tc->len = read(0, str, 100)) > 0))
 	{
-		i = ft_loop(&tc, add, str);
+		i = ft_loop(tc, add, str);
 		if (i == -1)
 			break ;
 		else if (i == 1)
 			break ;
 	}
-	return (return_termcap(&tc, i));
+	return (return_termcap(tc, i));
 }

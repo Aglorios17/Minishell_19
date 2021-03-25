@@ -14,11 +14,13 @@
 
 void	signalhandler(int signum)
 {
-	t_sign	*sg;
-	t_shell	*st;
+	t_sign		*sg;
+	t_shell		*st;
+	t_termcap	*tc;
 
 	sg = initglobal();
 	st = globalstruct();
+	tc = initglobalterm();
 	sg->prompt = signum;
 //	close(0);
 //	dup2(st->fdout, 0);
@@ -29,6 +31,8 @@ void	signalhandler(int signum)
 		write(2, "\n", 1);
 		kill(0, 0);
 	}
+	free(tc->line);
+	tc->line = ft_strdup("");
 }
 
 void	ft_promtsign(t_sign *sg)
@@ -43,12 +47,14 @@ void	ft_promtsign(t_sign *sg)
 
 void	signalhandler2(int signum)
 {
-	t_sign	*sg;
-	t_shell	*st;
+	t_sign		*sg;
+	t_shell		*st;
+	t_termcap	*tc;
 	char	*fri;
 
 	sg = initglobal();
 	st = globalstruct();
+	tc = initglobalterm();
 	(void)st;
 	fri = NULL;
 	sg->prompt = signum;
@@ -67,4 +73,6 @@ void	signalhandler2(int signum)
 	}
 	else
 		write(2, "^\\\n>>", 5);
+	free(tc->line);
+	tc->line = ft_strdup("");
 }
