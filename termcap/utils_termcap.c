@@ -68,7 +68,8 @@ char	**get_tab(void)
 
 	line = NULL;
 	line2 = ft_strdup("");
-	if ((fd = open(".minishell_history", O_RDONLY)) < 0)
+	if ((fd = open("/home/user42/.minishell_history"
+		, O_RDONLY)) < 0)
 		return (NULL);
 	while (get_next_line3d(fd, &line) > 0)
 	{

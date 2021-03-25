@@ -89,3 +89,21 @@ void	ft_key_down(t_termcap *tc)
 		tc->cursor = tc->dist;
 	}
 }
+
+int		ft_key_up(t_termcap *tc, char **add)
+{
+	if (!ft_newline_history(tc, add))
+		return (0);
+	if (tc->i != 0)
+	{
+		tc->i--;
+		tputs(tgetstr("dl", NULL), 1, ft_putchar2);
+		tputs(">>", 1, ft_putchar2);
+		tputs(tc->history[tc->i], 1, ft_putchar2);
+		free(tc->line);
+		tc->line = ft_strdup(tc->history[tc->i]);
+		tc->dist = ft_strlen(tc->line);
+		tc->cursor = tc->dist;
+	}
+	return (1);
+}

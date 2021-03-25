@@ -29,8 +29,11 @@ void	signalhandler(int signum)
 		write(2, "\n", 1);
 		kill(0, 0);
 	}
-	free(tc->line);
-	tc->line = ft_strdup("");
+	if (sg->pid2 == 0)
+	{
+		free(tc->line);
+		tc->line = ft_strdup("");
+	}
 }
 
 void	ft_promtsign(t_sign *sg)
@@ -59,13 +62,15 @@ void	signalhandler2(int signum)
 		fri = ft_itoa(sg->pid2);
 		write(2, "\n[1]    ", 8);
 		write(2, fri, ft_strlen(fri));
-		write(2, " quit (core dumped)", 19);
+		write(2, " quit (core dumped)\n", 20);
 		free(fri);
-		write(2, "\n", 1);
-		sg->pid2 = 0;
 	}
 	else
 		write(2, "^\\\n>>", 5);
-	free(tc->line);
-	tc->line = ft_strdup("");
+	if (sg->pid2 == 0)
+	{
+		free(tc->line);
+		tc->line = ft_strdup("");
+	}
+	sg->pid2 = 0;
 }

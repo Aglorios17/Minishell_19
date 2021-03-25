@@ -50,6 +50,5 @@ int		mainprocess(t_shell *st)
 	}
 	if (st->status != 2)
 		ft_free_list(st->cutline, st->firstcut);
-	free(st->line);
 	return (0);
 }

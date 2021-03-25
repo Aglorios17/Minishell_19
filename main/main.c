@@ -41,6 +41,11 @@ int		codeexec(t_shell *st)
 		}
 		if (mainprocess(st) == 1)
 			break ;
+		if (st->line)
+		{
+			free(st->line);
+			st->line = NULL;
+		}
 	}
 	return (0);
 }

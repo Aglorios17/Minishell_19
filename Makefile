@@ -88,7 +88,7 @@ $(NAME):		${OBJS}
 clean:			libft_clean
 				@${RM} ${OBJS}
 fclean:			libft_fclean clean
-				@${RM} ${NAME} ./.minishell_history
+				@${RM} ${NAME} /home/user42/.minishell_history
 				rm -rf ./minishell.dSYM
 re:				fclean all
 

@@ -12,22 +12,27 @@
 
 #include "../include/minishell.h"
 
-int		ft_key_up(t_termcap *tc, char **add)
+void	tab_or_other(t_termcap *tc, char *str)
 {
-	if (!ft_newline_history(tc, add))
-		return (0);
-	if (tc->i != 0)
+	int i;
+
+	i = 0;
+	if (!ft_strcmp(str, "\t"))
 	{
-		tc->i--;
-		tputs(tgetstr("dl", NULL), 1, ft_putchar2);
-		tputs(">>", 1, ft_putchar2);
-		tputs(tc->history[tc->i], 1, ft_putchar2);
-		free(tc->line);
-		tc->line = ft_strdup(tc->history[tc->i]);
-		tc->dist = ft_strlen(tc->line);
-		tc->cursor = tc->dist;
+		(void)i;
+		return ;
+		i = 6;
+		while (i-- != 0)
+			ft_write_line(tc, " ");
+		tc->cursor += 6;
+		tc->dist += 6;
 	}
-	return (1);
+	else
+	{
+		ft_write_line(tc, str);
+		tc->cursor++;
+		tc->dist++;
+	}
 }
 
 int		print_else(t_termcap *tc, char *str)
@@ -50,11 +55,7 @@ int		print_else(t_termcap *tc, char *str)
 				!ft_strcmp(str, "\e[C")) && tc->dist == 0)
 		return (0);
 	else
-	{
-		ft_write_line(tc, str);
-		tc->cursor++;
-		tc->dist++;
-	}
+		tab_or_other(tc, str);
 	return (0);
 }
 
@@ -92,6 +93,7 @@ char	*return_termcap(t_termcap *tc, int i)
 	if (i == -1)
 	{
 		free(tc->line);
+		tc->line = NULL;
 		return (NULL);
 	}
 	return (tc->line);
@@ -111,8 +113,8 @@ char	*ft_termcap(t_shell *st)
 	if (!init_term())
 		return (NULL);
 	i = 0;
-	if ((tc->fdhist = open(".minishell_history", O_WRONLY |
-		O_APPEND | O_CREAT, 0644)) < 0)
+	if ((tc->fdhist = open("/home/user42/.minishell_history",
+		O_WRONLY | O_APPEND | O_CREAT, 0644)) < 0)
 		return (NULL);
 	get_history(tc);
 	while (((tc->len = read(0, str, 100)) > 0))
