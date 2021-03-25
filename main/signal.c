@@ -23,7 +23,7 @@ void	signalhandler(int signum)
 //	close(0);
 //	dup2(st->fdout, 0);
 	if (!st->line && sg->pid2 == 0)
-		write(2, "\n>>", 3);
+		write(2, "^C\n>>", 5);
 	else
 	{
 		write(2, "\n", 1);
@@ -66,5 +66,5 @@ void	signalhandler2(int signum)
 //		dup2(st->fdout, 0);
 	}
 	else
-		write(2, "\n>>", 3);
+		write(2, "^\\\n>>", 5);
 }

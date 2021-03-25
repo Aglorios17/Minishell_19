@@ -79,12 +79,13 @@ void	ft_exec2(t_shell *st, int a, char **ar, char **en)
 //	char	str[200];
 
 	sg = initglobal();
+	sg->pid2 = a;
 	if (st->cutline->next)
 		sg->nc = 1;
 	if (!st->pipe->next)
 	{
-		sg->pid2 = a;
 		wait(&a);
+		sg->pid2 = 0;
 		st->status = a / 256;
 	}
 //	else
