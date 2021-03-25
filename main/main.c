@@ -26,7 +26,6 @@ int		test(t_shell *st, char **argv)
 int		codeexec(t_shell *st)
 {
 	t_sign	*sg;
-//	char	str[200];
 
 	sg = initglobal();
 	(void)sg;
@@ -34,13 +33,8 @@ int		codeexec(t_shell *st)
 	signal(SIGQUIT, signalhandler2);
 	while (1)
 	{
-//		signum = -1;
-//		if (sg->pid2 > 0)
-//			read(0, str, 100);
 		write(2, ">>", 2);
-//		sg->prompt = 0;
-//		if (get_next_line3d(0, &st->line) != 1 && sg->prompt != -1)
-		if (((st->line = ft_termcap(st)) == NULL)) //&& sg->prompt != -1)
+		if (((st->line = ft_termcap(st)) == NULL))
 		{
 			write(2, "\nexit\n", 6);
 			return (0);

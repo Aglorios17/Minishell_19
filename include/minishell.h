@@ -125,7 +125,7 @@ typedef struct	s_termcap
 	int			cursor;
 }				t_termcap;
 
-t_termcap			*initglobalterm();
+t_termcap		*initglobalterm();
 
 int				ft_putchar2(int c);
 void			init_struct_tc(t_termcap *tc);
