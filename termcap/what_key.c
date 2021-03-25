@@ -36,12 +36,26 @@ void	ft_write_in_history(t_termcap *tc)
 void	ft_write_line(t_termcap *tc, char *str)
 {
 	char	*fri;
+	char	*tmp;
 
-				
 	fri = NULL;
-	fri = tc->line;
-	tc->line = ft_strjoin(tc->line, str);
-	free(fri);
+	tmp = NULL;
+	if (tc->cursor == tc->dist)
+	{
+		fri = tc->line;
+		tc->line = ft_strjoin(tc->line, str);
+		free(fri);
+	}
+	else
+	{
+		tmp = ft_substr(tc->line, 0, tc->cursor);
+		fri = ft_strjoin(str, &tc->line[tc->cursor + 1]);
+		free(tc->line);
+		tc->line = ft_strjoin(tmp, fri);
+		free(fri);
+		free(tmp);
+		tc->dist--;
+	}
 	write(1, str, tc->len);
 }
 
@@ -50,12 +64,16 @@ void	ft_key_backspace(t_termcap *tc)
 	char	*fri;
 
 	fri = NULL;
+	if (tc->dist == 0 || tc->line[0] == '\0')
+		return ;
 	fri = ft_substr(tc->line, 0, ft_strlen(tc->line) - 1);
 	free(tc->line);
 	tc->line = ft_strdup(fri);
 	free(fri);
 	tputs(cursor_left, 1, ft_putchar2);
 	tputs(tgetstr("dc", NULL), 1, ft_putchar2);
+	tc->cursor--;
+	tc->dist--;
 }
 
 void	ft_key_down(t_termcap *tc)
@@ -68,5 +86,7 @@ void	ft_key_down(t_termcap *tc)
 		tputs(tc->history[tc->i], 1, ft_putchar2);
 		free(tc->line);
 		tc->line = ft_strdup(tc->history[tc->i]);
+		tc->dist = ft_strlen(tc->line);
+		tc->cursor = tc->dist;
 	}
 }

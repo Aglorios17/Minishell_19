@@ -27,6 +27,8 @@ void	init_struct_tc(t_termcap *tc)
 	tc->len = 0;
 	tc->a = 0;
 	tc->fdhist = 0;
+	tc->dist = 0;
+	tc->cursor = 0;
 }
 
 int		init_term(void)

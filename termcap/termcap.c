@@ -12,39 +12,6 @@
 
 #include "../include/minishell.h"
 
-int		ft_newline_history(t_termcap *tc, char **add)
-{
-	char **fri;
-
-	fri = NULL;
-	if (tc->a == 0)
-	{
-		if (tc->line[0] == '\0')
-		{
-			if (!(add = malloc(sizeof(char*) * 2)))
-				return (0);
-			add[0] = ft_strdup("");
-			add[1] = NULL;
-		}
-		else
-		{
-			add = ft_split(tc->line, '\n');
-		}
-		fri = tc->history;
-		tc->history = ft_tabjoin(tc->history, add);
-		ft_freetab(fri);
-		ft_freetab(add);
-		tc->y++;
-		tc->a = 1;
-	}
-	if (tc->i + 1 == tc->y && tc->a == 1)
-	{
-		free(tc->history[tc->i]);
-		tc->history[tc->i] = ft_strdup(tc->line);
-	}
-	return (1);
-}
-
 int		ft_key_up(t_termcap *tc, char **add)
 {
 	if (!ft_newline_history(tc, add))
@@ -57,8 +24,38 @@ int		ft_key_up(t_termcap *tc, char **add)
 		tputs(tc->history[tc->i], 1, ft_putchar2);
 		free(tc->line);
 		tc->line = ft_strdup(tc->history[tc->i]);
+		tc->dist = ft_strlen(tc->line);
+		tc->cursor = tc->dist;
 	}
 	return (1);
+}
+
+int		print_else(t_termcap *tc, char *str)
+{
+	if (!ft_strcmp(str, "\e[C"))
+	{
+		if (tc->cursor == tc->dist)
+			return (0);
+		tputs(cursor_right, 1, ft_putchar2);
+		tc->cursor++;
+	}
+	else if (!ft_strcmp(str, "\e[D"))
+	{
+		if (tc->cursor < 1)
+			return (0);
+		tc->cursor--;
+		tputs(cursor_left, 1, ft_putchar2);
+	}
+	else if ((!ft_strcmp(str, "\e[D") ||
+				!ft_strcmp(str, "\e[C")) && tc->dist == 0)
+		return (0);
+	else
+	{
+		ft_write_line(tc, str);
+		tc->cursor++;
+		tc->dist++;
+	}
+	return (0);
 }
 
 int		ft_loop(t_termcap *tc, char **add, char *str)
@@ -82,8 +79,8 @@ int		ft_loop(t_termcap *tc, char **add, char *str)
 	}
 	else if (!ft_strcmp(str, key_backspace))
 		ft_key_backspace(tc);
-	else if (ft_strcmp(str, "\e[D") && ft_strcmp(str, "\e[C"))
-		ft_write_line(tc, str);
+	else
+		print_else(tc, str);
 	return (0);
 }
 
@@ -115,7 +112,7 @@ char	*ft_termcap(t_shell *st)
 	i = 0;
 	if ((tc.fdhist = open(".minishell_history", O_WRONLY |
 		O_APPEND | O_CREAT, 0644)) < 0)
-		return (NULL);	
+		return (NULL);
 	get_history(&tc);
 	while (((tc.len = read(0, str, 100)) > 0))
 	{

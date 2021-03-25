@@ -121,6 +121,8 @@ typedef struct	s_termcap
 	int			fdhist;
 	int			recupterm;
 	char		*term;
+	int			dist;
+	int			cursor;
 }				t_termcap;
 
 t_termcap			*initglobalterm();
