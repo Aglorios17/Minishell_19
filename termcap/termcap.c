@@ -27,7 +27,7 @@ void	tab_or_other(t_termcap *tc, char *str)
 		tc->cursor += 6;
 		tc->dist += 6;
 	}
-	else if (ft_strcmp(str[0]))
+	else if (ft_isprint(str[0]))
 	{
 		ft_write_line(tc, str);
 		tc->cursor++;
